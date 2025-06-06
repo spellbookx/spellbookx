@@ -4,6 +4,18 @@
   "[plaintext]": {
     "editor.formatOnSave": false
   },
+  "conventionalCommits.promptScopes": true,
+  "conventionalCommits.promptBody": true,
+  "conventionalCommits.promptFooter": true,
+  "conventionalCommits.storeScopesGlobally": false,
+  "conventionalCommits.showNewVersionNotes": true,
+  "conventionalCommits.gitmoji": false,
+  "conventionalCommits.emojiFormat": "emoji",
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.inputValidation": true,
+  "git.inputValidationSubjectLength": 100,
+  "git.inputValidationLength": 200,
   "files.associations": {
     "LICENSE": "plaintext"
   }
