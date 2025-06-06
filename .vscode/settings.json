@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.detectIndentation": false,
+  "[plaintext]": {
+    "editor.formatOnSave": false
+  },
+  "files.associations": {
+    "LICENSE": "plaintext"
+  }
+}
