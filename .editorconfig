@@ -1,0 +1,50 @@
+# spellbookx: cross-platform config hygiene
+root = true
+
+# Global defaults
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown: allow trailing whitespace (used for line breaks)
+[*.md]
+trim_trailing_whitespace = false
+
+# Shell scripts: 2-space indents
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# PowerShell: 4-space indents (convention)
+[*.ps1]
+indent_style = space
+indent_size = 4
+
+# YAML: 2-space
+[*.yml]
+indent_style = space
+indent_size = 2
+
+# JSON, TOML, JSONC
+[*.json]
+indent_size = 2
+
+[*.jsonc]
+indent_size = 2
+
+[*.toml]
+indent_size = 2
+
+# License: do not touch
+[LICENSE]
+insert_final_newline = false
+trim_trailing_whitespace = false
+
+# Git commit templates or message previews
+[.gitmessage*]
+trim_trailing_whitespace = false
+insert_final_newline = true
