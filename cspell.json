@@ -1,0 +1,11 @@
+{
+  "dictionaryDefinitions": [
+    {
+      "name": "spellbookx",
+      "path": "./.config/dictionaries/spellbookx.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["spellbookx"],
+  "languageSettings": [{ "languageId": "*", "dictionaries": ["spellbookx"] }]
+}

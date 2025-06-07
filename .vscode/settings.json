@@ -1,9 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
-  "[plaintext]": {
-    "editor.formatOnSave": false
-  },
+  "editor.formatOnSave": true,
   "conventionalCommits.promptScopes": true,
   "conventionalCommits.promptBody": true,
   "conventionalCommits.promptFooter": true,
@@ -17,6 +15,25 @@
   "git.inputValidationSubjectLength": 100,
   "git.inputValidationLength": 200,
   "files.associations": {
-    "LICENSE": "plaintext"
+    "**/*LICENSE": "plaintext"
+  },
+  "prettier.ignorePath": ".prettierignore",
+  "prettier.prettierPath": "./node_modules/prettier",
+  "prettier.useEditorConfig": true,
+  "markdown.validate.enabled": true,
+  "cSpell.language": "en",
+  "cSpell.caseSensitive": true,
+  "cSpell.allowCompoundWords": false,
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "[plaintext]": {
+    "editor.formatOnSave": false
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": null,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false
   }
 }

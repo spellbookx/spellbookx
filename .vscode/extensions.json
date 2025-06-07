@@ -3,6 +3,17 @@
     "esbenp.prettier-vscode",
     "vivaxy.vscode-conventional-commits",
     "joshbolduc.commitlint",
-    "github.remotehub"
+    "github.remotehub",
+    "ldez.ignore-files",
+    "maciejdems.add-to-gitignore",
+    "bierner.markdown-emoji",
+    "davidanson.vscode-markdownlint",
+    "bierner.markdown-yaml-preamble",
+    "bierner.markdown-preview-github-styles",
+    "bierner.markdown-mermaid",
+    "bierner.markdown-footnotes",
+    "bierner.markdown-checkbox",
+    "bierner.github-markdown-preview",
+    "streetsidesoftware.code-spell-checker"
   ]
 }

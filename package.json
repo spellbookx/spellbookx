@@ -1,0 +1,6 @@
+{
+  "name": "@spellbookx/spellbookx",
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}
