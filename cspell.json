@@ -4,8 +4,15 @@
       "name": "spellbookx",
       "path": "./.config/dictionaries/spellbookx.txt",
       "addWords": true
+    },
+    {
+      "name": "devtools",
+      "path": "./.config/dictionaries/devtools.txt",
+      "addWords": true
     }
   ],
-  "dictionaries": ["spellbookx"],
-  "languageSettings": [{ "languageId": "*", "dictionaries": ["spellbookx"] }]
+  "dictionaries": ["spellbookx", "devtools"],
+  "languageSettings": [
+    { "languageId": "*", "dictionaries": ["spellbookx", "devtools"] }
+  ]
 }

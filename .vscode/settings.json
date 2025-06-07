@@ -2,9 +2,10 @@
   // Language-specific settings (highest precedence)
   "[ignore]": {
     "editor.defaultFormatter": null,
-    "editor.formatOnPaste": false,
-    "editor.formatOnSave": false,
-    "editor.formatOnType": false
+    "editor.formatOnSave": false
+  },
+  "[ini]": {
+    "editor.formatOnSave": false
   },
   "[markdown]": {
     "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
@@ -94,10 +95,6 @@
     "arguments": "on",
     "commands": "on",
     "unknown": "off"
-  },
-  "workbench.editor.autoLockGroups": {
-    "default": true,
-    "mainThreadWebview-markdown.preview": true
   },
   "workbench.navigationControl.enabled": false,
   "workbench.settings.openDefaultKeybindings": true,
