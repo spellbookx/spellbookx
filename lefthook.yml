@@ -3,6 +3,8 @@ pre-commit:
     prettier:
       run: pnpm prettier --ignore-unknown --write {staged_files}
       stage_fixed: true
+      exclude:
+        - '*.md'
 
 commit-msg:
   commands:
@@ -15,3 +17,5 @@ pre-push:
     # run: pnpm test
     lint:
       run: pnpm prettier --check .
+      exclude:
+        - '*.md'
