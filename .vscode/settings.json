@@ -1,22 +1,94 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.detectIndentation": false,
+  // Language-specific settings (highest precedence)
+  "[ignore]": {
+    "editor.defaultFormatter": null,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
   "[plaintext]": {
     "editor.formatOnSave": false
   },
-  "conventionalCommits.promptScopes": true,
+
+  // Workspace settings (alphabetically sorted)
+  "breadcrumbs.enabled": true,
+  "chat.agent.enabled": false,
+  "conventionalCommits.emojiFormat": "emoji",
+  "conventionalCommits.gitmoji": false,
   "conventionalCommits.promptBody": true,
   "conventionalCommits.promptFooter": true,
-  "conventionalCommits.storeScopesGlobally": false,
+  "conventionalCommits.promptScopes": true,
   "conventionalCommits.showNewVersionNotes": true,
-  "conventionalCommits.gitmoji": false,
-  "conventionalCommits.emojiFormat": "emoji",
-  "git.confirmSync": false,
-  "git.autofetch": true,
-  "git.inputValidation": true,
-  "git.inputValidationSubjectLength": 100,
-  "git.inputValidationLength": 200,
+  "conventionalCommits.storeScopesGlobally": false,
+  "cSpell.allowCompoundWords": false,
+  "cSpell.caseSensitive": true,
+  "cSpell.language": "en",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.detectIndentation": false,
+  "editor.fontFamily": "'Hack FN', Consolas, 'Courier New', monospace",
+  "editor.formatOnSave": true,
+  "editor.inlineSuggest.edits.renderSideBySide": "never",
+  "editor.inlineSuggest.showToolbar": "always",
+  "editor.quickSuggestions": {
+    "comments": "on",
+    "strings": "on"
+  },
+  "editor.renderWhitespace": "all",
+  "editor.suggest.snippetsPreventQuickSuggestions": true,
   "files.associations": {
-    "LICENSE": "plaintext"
-  }
+    "**/*LICENSE": "plaintext"
+  },
+  "files.autoGuessEncoding": false,
+  "files.eol": "auto",
+  "geminicodeassist.codeGenerationPaneViewEnabled": true,
+  "geminicodeassist.enable": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.inputValidation": true,
+  "git.inputValidationLength": 200,
+  "git.inputValidationSubjectLength": 100,
+  "github.copilot.chat.agent.runTasks": false,
+  "github.copilot.enable": {
+    "*": false
+  },
+  "markdown.validate.enabled": true,
+  "prettier.ignorePath": ".prettierignore",
+  "prettier.prettierPath": "./node_modules/prettier",
+  "prettier.useEditorConfig": true,
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "icon": "terminal-bash",
+      "path": "bash"
+    },
+    "fish": {
+      "path": "fish"
+    },
+    "pwsh": {
+      "icon": "terminal-powershell",
+      "path": "pwsh"
+    },
+    "tmux": {
+      "icon": "terminal-tmux",
+      "path": "tmux"
+    },
+    "zsh": {
+      "path": "zsh"
+    }
+  },
+  "terminal.integrated.suggest.quickSuggestions": {
+    "arguments": "on",
+    "commands": "on",
+    "unknown": "off"
+  },
+  "workbench.editor.autoLockGroups": {
+    "default": true,
+    "mainThreadWebview-markdown.preview": true
+  },
+  "workbench.navigationControl.enabled": false,
+  "workbench.settings.openDefaultKeybindings": true,
+  "workbench.settings.openDefaultSettings": true,
+  "workbench.settings.useSplitJSON": true
 }
