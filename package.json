@@ -1,5 +1,47 @@
 {
   "name": "@spellbookx/spellbookx",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Source-of-truth configuration repository for the spellbookx organization. Defines standards, tooling, and developer workflows.",
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "Davide Di Criscito",
+    "email": "davide.dicriscito@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Davide Di Criscito",
+      "email": "davide.dicriscito@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spellbookx/spellbookx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/spellbookx/spellbookx/issues"
+  },
+  "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "keywords": [
+    "spellbookx",
+    "dx",
+    "infrastructure",
+    "dotfiles",
+    "vscode",
+    "standardization",
+    "cli",
+    "cross-platform",
+    "config-management"
+  ],
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
   "devDependencies": {
     "prettier": "^3.5.3"
   }

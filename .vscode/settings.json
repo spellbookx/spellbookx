@@ -25,6 +25,9 @@
   "cSpell.allowCompoundWords": false,
   "cSpell.caseSensitive": true,
   "cSpell.ignorePaths": [
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "yarn.lock",
     "package-lock.json",
     "node_modules",
     "vscode-extension",
