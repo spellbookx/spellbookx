@@ -8,18 +8,18 @@ This document outlines the branching model adopted for the `spellbookx` organiza
 
 ## Branch Types
 
-| Branch Name         | Purpose                                              | Naming Convention                  |
-|---------------------|------------------------------------------------------|------------------------------------|
-| `main`              | Latest **stable** production-ready release           | _Protected_                        |
-| `nightly`           | Rolling WIP, all current dev work targeting `main`   | _Protected_                        |
-| `dev/*`             | Feature bootstrapping, scaffolding, or prep work     | `dev/<scope>`                      |
-| `feat/*`            | New features                                         | `feat/<scope>`                     |
-| `fix/*`             | Bug fixes                                            | `fix/<scope>`                      |
-| `chore/*`           | Infra, tooling, maintenance                          | `chore/<scope>`                    |
-| `docs/*`            | Documentation only changes                           | `docs/<scope>`                     |
-| `refactor/*`        | Code restructuring (no new features/fixes)           | `refactor/<scope>`                 |
-| `test/*`            | Tests and test coverage                              | `test/<scope>`                     |
-| `ci/*`, `build/*`   | CI/CD configuration and build tasks                  | `ci/<provider>`, `build/<scope>`   |
+| Branch Name       | Purpose                                            | Naming Convention                |
+| ----------------- | -------------------------------------------------- | -------------------------------- |
+| `main`            | Latest **stable** production-ready release         | _Protected_                      |
+| `nightly`         | Rolling WIP, all current dev work targeting `main` | _Protected_                      |
+| `dev/*`           | Feature bootstrapping, scaffolding, or prep work   | `dev/<scope>`                    |
+| `feat/*`          | New features                                       | `feat/<scope>`                   |
+| `fix/*`           | Bug fixes                                          | `fix/<scope>`                    |
+| `chore/*`         | Infra, tooling, maintenance                        | `chore/<scope>`                  |
+| `docs/*`          | Documentation only changes                         | `docs/<scope>`                   |
+| `refactor/*`      | Code restructuring (no new features/fixes)         | `refactor/<scope>`               |
+| `test/*`          | Tests and test coverage                            | `test/<scope>`                   |
+| `ci/*`, `build/*` | CI/CD configuration and build tasks                | `ci/<provider>`, `build/<scope>` |
 
 ---
 
