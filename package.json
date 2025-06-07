@@ -39,10 +39,13 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
+    "commit": "cz",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },
   "devDependencies": {
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "prettier": "^3.5.3"
   }
 }
