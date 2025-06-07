@@ -1,5 +1,4 @@
 pre-commit:
-  piped: true
   commands:
     prettier:
       run: pnpm prettier --ignore-unknown --write {staged_files}
