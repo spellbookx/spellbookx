@@ -16,6 +16,7 @@ pre-push:
     # test:
     # run: pnpm test
     lint:
-      run: pnpm prettier --check .
+      glob: '*'
       exclude:
         - '*.md'
+      run: pnpm prettier --check .
