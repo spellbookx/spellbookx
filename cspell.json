@@ -6,13 +6,13 @@
       "addWords": true
     },
     {
-      "name": "devtools",
-      "path": "./.config/dictionaries/devtools.txt",
+      "name": "devenvs",
+      "path": "./.config/dictionaries/devenvs.txt",
       "addWords": true
     }
   ],
-  "dictionaries": ["spellbookx", "devtools"],
+  "dictionaries": ["spellbookx", "devenvs"],
   "languageSettings": [
-    { "languageId": "*", "dictionaries": ["spellbookx", "devtools"] }
+    { "languageId": "*", "dictionaries": ["spellbookx", "devenvs"] }
   ]
 }

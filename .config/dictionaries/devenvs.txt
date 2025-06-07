@@ -1,0 +1,17 @@
+bwplotka
+commitlint
+devenvs
+github
+gocache
+GOCACHE
+gomod
+gopath
+GOPATH
+lefthook
+linux
+mvdan
+noconfirm
+nvmrc
+pacman
+subshell
+TARFILE

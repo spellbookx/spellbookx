@@ -13,6 +13,12 @@
   "[plaintext]": {
     "editor.formatOnSave": false
   },
+  "[shellscript]": {
+    "files.eol": "\n",
+    "editor.defaultColorDecorators": "never",
+    "editor.defaultFormatter": "foxundermoon.shell-format",
+    "editor.formatOnSave": true
+  },
   // Workspace settings (alphabetically sorted)
   "breadcrumbs.enabled": true,
   "chat.agent.enabled": false,
@@ -39,6 +45,7 @@
     ".github/workflows/*"
   ],
   "cSpell.language": "en",
+  "shellformat.path": "/opt/gomod/bin/shfmt",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
   "editor.fontFamily": "'Hack FN', Consolas, 'Courier New', monospace",
@@ -52,7 +59,8 @@
   "editor.renderWhitespace": "all",
   "editor.suggest.snippetsPreventQuickSuggestions": true,
   "files.associations": {
-    "**/*LICENSE": "plaintext"
+    "**/*LICENSE": "plaintext",
+    "**/.lefthookrc": "shellscript"
   },
   "files.autoGuessEncoding": false,
   "files.eol": "auto",

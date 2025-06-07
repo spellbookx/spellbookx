@@ -5,7 +5,7 @@
 # - dependency checks & installation orchestration
 # - uninstall prompt if Go detected
 # - latest Go version detection via node-jq
-# - automatic PATH update to /usr/local/go/bin
+# - automatic PATH + GOPATH + GOCACHE setup
 # ==========================
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
@@ -15,6 +15,9 @@ DEPENDENCIES="curl wget tar node pnpm"
 INSTALL_DIR="/usr/local"
 GO_DIR="$INSTALL_DIR/go"
 TEMP_DIR=$(mktemp -d)
+
+CUSTOM_GOPATH="/opt/gomod"
+CUSTOM_GOCACHE="/opt/gocache"
 
 fail() {
   printf "Error: %s\n" "$1" >&2
@@ -54,32 +57,28 @@ detect_go() {
     printf "Do you want to uninstall it? [y/N] "
     read -r ans
     case "$ans" in
-    y | Y)
-      if [ -f "$UNINSTALLER" ]; then
-        # shellcheck source=../uninstallers/go-linux.sh
-        . "$UNINSTALLER"
-        if ! go_uninstall; then
-          fail "Failed to uninstall the existing Go version. Please check errors above."
+      y | Y)
+        if [ -f "$UNINSTALLER" ]; then
+          # shellcheck source=../uninstallers/go-linux.sh
+          . "$UNINSTALLER"
+          if ! go_uninstall; then
+            fail "Failed to uninstall existing Go version."
+          fi
+        else
+          fail "Uninstaller not found at $UNINSTALLER"
         fi
-      else
-        fail "Uninstaller not found at $UNINSTALLER"
-      fi
-      ;;
-    *)
-      fail "Installation aborted by user."
-      ;;
+        ;;
+      *)
+        fail "Installation aborted by user."
+        ;;
     esac
   fi
 }
 
 fetch_latest_go_version() {
-  printf "Fetching latest Go version information...\n"
-
+  printf "Fetching latest Go version...\n"
   GO_VERSION=$(curl -s "https://go.dev/dl/?mode=json" | pnpm dlx node-jq -r '.[0].version')
-
-  if [ -z "$GO_VERSION" ]; then
-    fail "Failed to determine latest Go version."
-  fi
+  [ -z "$GO_VERSION" ] && fail "Failed to determine latest Go version."
 
   GO_VERSION_NUMBER="${GO_VERSION#go}"
   TAR_NAME="${GO_VERSION}.linux-amd64.tar.gz"
@@ -88,48 +87,45 @@ fetch_latest_go_version() {
 
 download_and_install_go() {
   printf "Downloading %s...\n" "$TAR_NAME"
-  if ! wget -P "$TEMP_DIR" "$DOWNLOAD_URL"; then
-    fail "Download failed."
-  fi
+  wget -P "$TEMP_DIR" "$DOWNLOAD_URL" || fail "Download failed."
 
-  printf "Removing any existing Go installation in %s...\n" "$GO_DIR"
+  printf "Removing existing Go installation in %s...\n" "$GO_DIR"
   sudo rm -rf "$GO_DIR"
 
   printf "Extracting Go to %s...\n" "$INSTALL_DIR"
-  if ! sudo tar -C "$INSTALL_DIR" -xzf "$TEMP_DIR/$TAR_NAME"; then
-    fail "Extraction failed."
-  fi
+  sudo tar -C "$INSTALL_DIR" -xzf "$TEMP_DIR/$TAR_NAME" || fail "Extraction failed."
 
   printf "Go %s installed successfully.\n" "$GO_VERSION_NUMBER"
 }
 
-add_path_to_profile() {
-  GO_PATH="/usr/local/go/bin"
-  EXPORT_LINE="export PATH=\$PATH:$GO_PATH"
+setup_go_environment() {
+  printf "Setting up GOPATH and GOCACHE directories...\n"
+  sudo mkdir -p "$CUSTOM_GOPATH" "$CUSTOM_GOCACHE"
+  sudo chown -R "$USER":"$USER" "$CUSTOM_GOPATH" "$CUSTOM_GOCACHE"
+
+  GOPATH_LINE="export GOPATH=$CUSTOM_GOPATH"
+  GOCACHE_LINE="export GOCACHE=$CUSTOM_GOCACHE"
+  PATH_LINE="export PATH=\$PATH:$GO_DIR/bin:$CUSTOM_GOPATH/bin"
 
   case "$SHELL" in
-  */bash)
-    PROFILE="$HOME/.bashrc"
-    ;;
-  */zsh)
-    PROFILE="$HOME/.zshrc"
-    ;;
-  */fish)
-    printf "Please add %s to your fish shell PATH manually.\n" "$GO_PATH"
-    return 1
-    ;;
-  *)
-    PROFILE="$HOME/.profile"
-    ;;
+    */bash) PROFILE="$HOME/.bashrc" ;;
+    */zsh)  PROFILE="$HOME/.zshrc" ;;
+    */fish)
+      echo "Please manually add the following to your fish config:"
+      echo "$GOPATH_LINE"; echo "$GOCACHE_LINE"; echo "$PATH_LINE"
+      return
+      ;;
+    *) PROFILE="$HOME/.profile" ;;
   esac
 
-  if ! grep -qF "$GO_PATH" "$PROFILE" 2>/dev/null; then
-    printf "\n# Added by spellbookx go installer\n%s\n" "$EXPORT_LINE" >>"$PROFILE"
-    printf "Added %s to PATH in %s\n" "$GO_PATH" "$PROFILE"
-    printf "Please reload your shell or run: source %s\n" "$PROFILE"
-  else
-    printf "%s is already in PATH (checked in %s)\n" "$GO_PATH" "$PROFILE"
-  fi
+  for LINE in "$GOPATH_LINE" "$GOCACHE_LINE" "$PATH_LINE"; do
+    if ! grep -qF "$LINE" "$PROFILE" 2>/dev/null; then
+      printf "\n# spellbookx Go setup\n%s\n" "$LINE" >> "$PROFILE"
+    fi
+  done
+
+  echo "Added Go environment to $PROFILE"
+  echo "Please run: source $PROFILE"
 }
 
 cleanup() {
@@ -141,7 +137,7 @@ main() {
   detect_go
   fetch_latest_go_version
   download_and_install_go
-  add_path_to_profile
+  setup_go_environment
   cleanup
 }
 

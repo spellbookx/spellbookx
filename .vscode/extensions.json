@@ -16,6 +16,8 @@
     "bierner.github-markdown-preview",
     "streetsidesoftware.code-spell-checker",
     "google.geminicodeassist",
-    "github.vscode-pull-request-github"
+    "github.vscode-pull-request-github",
+    "foxundermoon.shell-format",
+    "timonwong.shellcheck"
   ]
 }

@@ -40,8 +40,10 @@
   },
   "scripts": {
     "commit": "cz",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "make:scripts:executable": "find scripts/ -type f -exec chmod +x {} +",
+    "go:install": "./scripts/installers/go-linux.sh",
+    "go:uninstall": "./scripts/uninstallers/go-linux.sh",
+    "shfmt:install": "./scripts/installers/shfmt-linux.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

@@ -1,3 +1,4 @@
+# lefthook.yml
 pre-commit:
   commands:
     prettier:
@@ -12,11 +13,7 @@ commit-msg:
       run: pnpm exec commitlint --edit {1}
 
 pre-push:
+  files: pnpm prettier --check . --ignore-path .prettierignore
   commands:
-    # test:
-    # run: pnpm test
-    lint:
-      glob: '*'
-      exclude:
-        - '*.md'
-      run: pnpm prettier --check .
+    check-write-format:
+      run: pnpm prettier --write . --ignore-path .prettierignore
