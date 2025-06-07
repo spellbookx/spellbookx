@@ -15,7 +15,6 @@
     "bierner.markdown-checkbox",
     "bierner.github-markdown-preview",
     "streetsidesoftware.code-spell-checker",
-    "google.geminicodeassist",
-    "github.vscode-pull-request-github"
+    "google.geminicodeassist"
   ]
 }
