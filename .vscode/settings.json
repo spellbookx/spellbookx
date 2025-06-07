@@ -12,7 +12,6 @@
   "[plaintext]": {
     "editor.formatOnSave": false
   },
-
   // Workspace settings (alphabetically sorted)
   "breadcrumbs.enabled": true,
   "chat.agent.enabled": false,
@@ -25,6 +24,16 @@
   "conventionalCommits.storeScopesGlobally": false,
   "cSpell.allowCompoundWords": false,
   "cSpell.caseSensitive": true,
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/{info,lfs,logs,refs,objects}/**",
+    ".git/{index,*refs,*HEAD}",
+    ".vscode",
+    ".vscode-insiders",
+    ".github/wokflows/*"
+  ],
   "cSpell.language": "en",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
