@@ -32,7 +32,7 @@
     ".git/{index,*refs,*HEAD}",
     ".vscode",
     ".vscode-insiders",
-    ".github/wokflows/*"
+    ".github/workflows/*"
   ],
   "cSpell.language": "en",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
