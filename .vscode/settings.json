@@ -1,6 +1,6 @@
 {
   "[dotenv]": {
-    "editor.defaultFormatter": "mikestead.dotenv"
+    "editor.defaultFormatter": "dotenv.dotenv-vscode"
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -18,7 +18,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[ini]": {
-    "editor.defaultFormatter": "redhat.vscode-ini"
+    "editor.defaultFormatter": "lkrms.inifmt"
   },
   "[python]": {
     "editor.codeActionsOnSave": {
