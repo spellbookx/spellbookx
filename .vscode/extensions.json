@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "editorconfig.editorconfig",
+    "joshbolduc.commitlint",
+    "vivaxy.vscode-conventional-commits",
+    "pshaddel.conventional-branch"
+  ]
+}
