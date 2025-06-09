@@ -5,6 +5,7 @@
     "vivaxy.vscode-conventional-commits",
     "pshaddel.conventional-branch",
     "dotenv.dotenv-vscode",
-    "lkrms.inifmt"
+    "lkrms.inifmt",
+    "streetsidesoftware.code-spell-checker"
   ]
 }

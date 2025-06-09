@@ -1,0 +1,37 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "dictionaries": [
+    "en-US",
+    "softwareTerms",
+    "typescript",
+    "node",
+    "npm",
+    "html",
+    "css",
+    "python",
+    "bash",
+    "json",
+    "yaml",
+    "markdown",
+    "filetypes",
+    "companies",
+    "fonts",
+    "devenv",
+    "workspace"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "devenv",
+      "path": "./.config/cspell/devenv.txt",
+      "addWords": true
+    },
+    {
+      "name": "workspace",
+      "path": "./.config/cspell/workspace.txt",
+      "addWords": true
+    }
+  ],
+  "ignorePaths": ["node_modules/**", "pnpm-lock.yaml", "*.log", "LICENSE"],
+  "words": []
+}
