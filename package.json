@@ -18,7 +18,7 @@
   "keywords": [],
   "author": "Davide Di Criscito <davide.dicriscito@gmail.com>",
   "license": "MIT",
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.1",
   "engines": {
     "node": ">=22.16.0",
     "pnpm": ">=10.11.1"
@@ -27,7 +27,9 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "cz-conventional-changelog": "^3.3.0",
-    "lefthook": "^1.11.13"
+    "eslint-plugin-prettier": "^5.4.1",
+    "lefthook": "^1.11.13",
+    "prettier": "^3.5.3"
   },
   "config": {
     "commitizen": {
