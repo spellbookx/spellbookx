@@ -5,7 +5,12 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "commit": "cz"
+    "commit": "cz",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "fmt": "prettier --write .",
+    "check:fmt": "prettier --check .",
+    "ci:check": "pnpm lint && pnpm check:fmt",
+    "ci:fix": "pnpm lint --fix && pnpm fmt"
   },
   "repository": {
     "type": "git",
