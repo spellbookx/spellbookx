@@ -2,6 +2,9 @@
   "[dotenv]": {
     "editor.defaultFormatter": "dotenv.dotenv-vscode"
   },
+  "[ini]": {
+    "editor.defaultFormatter": "lkrms.inifmt"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -15,10 +18,16 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "comments": false,
+      "other": false,
+      "strings": false
+    }
   },
-  "[ini]": {
-    "editor.defaultFormatter": "lkrms.inifmt"
+  "[properties]": {
+    "editor.defaultFormatter": "jasonlhy.vscode-properties-sorter"
   },
   "[python]": {
     "editor.codeActionsOnSave": {
@@ -27,8 +36,9 @@
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true
   },
-  "[properties]": {
-    "editor.defaultFormatter": "jasonlhy.vscode-properties-sorter"
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format",
+    "editor.formatOnSave": true
   },
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
@@ -42,6 +52,8 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "cSpell.allowCompoundWords": true,
+  "cSpell.language": "en,en-US",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "files.associations": {
@@ -70,12 +82,12 @@
     "*.ipynb": "jupyter",
     "*.js": "javascript",
     "*.json": "json",
-    "*.properties": "properties",
     "*.jsonc": "jsonc",
     "*.jsx": "javascriptreact",
     "*.less": "less",
     "*.log": "log",
     "*.md": "markdown",
+    "*.properties": "properties",
     "*.ps1": "powershell",
     "*.pxd": "cython",
     "*.py": "python",

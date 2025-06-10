@@ -6,6 +6,7 @@
     "pshaddel.conventional-branch",
     "dotenv.dotenv-vscode",
     "lkrms.inifmt",
-    "streetsidesoftware.code-spell-checker"
+    "streetsidesoftware.code-spell-checker",
+    "esbenp.prettier-vscode"
   ]
 }
