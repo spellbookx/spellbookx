@@ -1,0 +1,14 @@
+{
+  "https://json.schemastore.org/docker-compose.json": [
+    "docker-compose.yml",
+    "docker-compose.*.yml",
+    "compose.yml",
+    "compose.*.yml"
+  ],
+  "https://json.schemastore.org/github-workflow.json": [
+    ".github/workflows/*.yml",
+    ".github/workflows/*.yaml"
+  ],
+  "https://json.schemastore.org/lefthook.json": ["lefthook.yml"],
+  "https://json.schemastore.org/pnpm-workspace.json": ["pnpm-workspace.yaml"]
+}

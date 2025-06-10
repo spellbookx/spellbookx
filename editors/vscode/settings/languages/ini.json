@@ -1,0 +1,5 @@
+{
+  "[ini]": {
+    "editor.defaultFormatter": "lkrms.inifmt"
+  }
+}

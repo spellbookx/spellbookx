@@ -1,0 +1,5 @@
+{
+  "[dotenv]": {
+    "editor.defaultFormatter": "dotenv.dotenv-vscode"
+  }
+}

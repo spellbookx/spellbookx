@@ -1,0 +1,45 @@
+[
+  {
+    "fileMatch": [".czrc"],
+    "url": "https://json.schemastore.org/czrc.json"
+  },
+  {
+    "fileMatch": ["pyproject.toml"],
+    "url": "https://json.schemastore.org/pyproject.json"
+  },
+  {
+    "fileMatch": ["Pipfile"],
+    "url": "https://json.schemastore.org/pipfile.json"
+  },
+  {
+    "fileMatch": ["Pipfile.lock"],
+    "url": "https://json.schemastore.org/pipfile-lock.json"
+  },
+  {
+    "fileMatch": [
+      "package.json",
+      "package-lock.json",
+      ".eslintrc.json",
+      ".babelrc",
+      ".babelrc.json",
+      "babel.config.json",
+      "jsconfig.json",
+      "tsconfig.json",
+      "tslint.json",
+      ".prettierrc",
+      ".prettierrc.json",
+      "lerna.json",
+      "typedoc.json"
+    ],
+    "url": "http://json.schemastore.org/package"
+  },
+  {
+    "fileMatch": [
+      "renovate.json",
+      "renovate.json5",
+      ".renovaterc",
+      ".renovaterc.json"
+    ],
+    "url": "https://docs.renovatebot.com/renovate-schema.json"
+  }
+]
