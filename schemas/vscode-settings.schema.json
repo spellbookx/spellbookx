@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/vscode-settings.schema.json",
+  "title": "VSCode Split Settings Schema",
+  "description": "Aggregated schema for all split VSCode settings files in the editors/vscode/settings hierarchy.",
+  "type": "object",
+  "properties": {
+    "files.associations": {
+      "$ref": "./vscode/settings/associations.schema.json"
+    },
+    "json.schemas": {
+      "$ref": "./vscode/settings/schemas/json.schema.json"
+    },
+    "yaml.schemas": {
+      "$ref": "./vscode/settings/schemas/yaml.schema.json"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/vscode/settings/yaml-schemas.schema.json",
+  "title": "VSCode YAML Schema Associations",
+  "description": "Defines schema associations for YAML files in VSCode.",
+  "type": "object",
+  "patternProperties": {
+    "^https?://.*\\.json$": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "File pattern (glob) for YAML file matching."
+      }
+    }
+  },
+  "additionalProperties": false
+}

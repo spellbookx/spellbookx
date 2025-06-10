@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/vscode/settings/json-schemas.schema.json",
+  "title": "VSCode JSON Schema Associations",
+  "description": "Defines file pattern matches and schema URLs for JSON files in VSCode.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["fileMatch", "url"],
+    "properties": {
+      "fileMatch": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "File globs or file names matched by this schema."
+      },
+      "url": {
+        "type": "string",
+        "format": "uri",
+        "description": "URL to a JSON Schema to apply to the matched files."
+      }
+    },
+    "additionalProperties": false
+  }
+}

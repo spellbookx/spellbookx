@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../../schemas/vscode/settings/language-settings.schema.json",
   "[dotenv]": {
     "editor.defaultFormatter": "dotenv.dotenv-vscode"
   }

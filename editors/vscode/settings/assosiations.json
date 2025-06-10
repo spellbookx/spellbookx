@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../schemas/vscode/settings/associations.schema.json",
   ".czrc": "json",
   ".dockerignore": "ignore",
   ".editorconfig": "editorconfig",

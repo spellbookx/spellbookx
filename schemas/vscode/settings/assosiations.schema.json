@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/vscode/settings/associations.schema.json",
+  "title": "VSCode File Associations",
+  "description": "Defines file extension or glob pattern to language ID associations for VSCode.",
+  "type": "object",
+  "propertyNames": {
+    "type": "string",
+    "description": "Glob pattern or exact filename (e.g., '*.sh', 'Dockerfile')."
+  },
+  "additionalProperties": {
+    "type": "string",
+    "description": "VSCode language identifier (e.g., 'shellscript', 'json', 'python')."
+  },
+  "examples": [
+    {
+      "*.sh": "shellscript",
+      "Dockerfile": "dockerfile",
+      "*.ts": "typescript"
+    }
+  ]
+}

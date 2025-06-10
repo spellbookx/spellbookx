@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../../schemas/vscode/settings/language-settings.schema.json",
   "[properties]": {
     "editor.defaultFormatter": "jasonlhy.vscode-properties-sorter"
   }

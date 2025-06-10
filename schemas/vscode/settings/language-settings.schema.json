@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/vscode/settings/language-settings.schema.json",
+  "title": "VSCode Per-Language Settings",
+  "description": "Schema for VSCode settings scoped to specific languages.",
+  "type": "object",
+  "patternProperties": {
+    "^\\[.*\\]$": {
+      "type": "object",
+      "properties": {
+        "editor.defaultFormatter": {
+          "type": "string",
+          "description": "Extension identifier to use as default formatter."
+        },
+        "editor.formatOnSave": {
+          "type": "boolean",
+          "description": "Enable format on save."
+        },
+        "editor.codeActionsOnSave": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": ["boolean", "string"]
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        }
+      }
+    }
+  ]
+}
