@@ -5,12 +5,13 @@ on:
     branches:
       - main
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   release:
     runs-on: ubuntu-latest
-    concurrency:
-      group: release-main
-      cancel-in-progress: true
 
     steps:
       - name: Checkout repository
@@ -32,13 +33,14 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+      - uses: nrwl/nx-set-shas@v4
 
       - name: Install global dependencies
         run: pnpm install --global nx
 
       - name: Nx affected build and test
         run: |
-          nx affected --target=build --base=origin/main~1 --head=HEAD
+          nx affected -t build
 
       - name: Release and eventually publish
         run: nx release publish
