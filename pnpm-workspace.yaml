@@ -1,9 +1,11 @@
 packages:
   - packages/*
+  - libs/*
 
 linkWorkspacePackages: true
 
 onlyBuiltDependencies:
+  - esbuild
   - lefthook
 
 sideEffectsCache: false
