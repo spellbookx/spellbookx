@@ -31,25 +31,48 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install dependencies and required tools
+        run: |
+          pnpm install
+          curl -sSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
+          chmod +x /usr/local/bin/yq
 
       - uses: nrwl/nx-set-shas@v4
 
       - name: Install global Nx CLI
         run: pnpm add -g nx
 
-      - name: Set up .npmrc for publish
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" >> ~/.npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      - name: Setup Git user
+        run: |
+          git config user.name "Davide Di Criscito"
+          git config user.email "davide.dicriscito@gmail.com"
 
-      - name: Nx affected build and test
-        run: nx affected -t build
+      - name: Detect if any project needs --first-release
+        id: detect
+        run: |
+          has_first_release=0
+          for pkg in $(yq '.packages[]' pnpm-workspace.yaml | tr -d '"'); do
+            for path in $(find $pkg -name package.json); do
+              name=$(jq -r '.name' "$path")
+              [[ "$name" == "null" ]] && continue
+              if ! git tag --list | grep -q "${name}@"; then
+                has_first_release=1
+                break
+              fi
+            done
+          done
+          echo "first_release=$has_first_release" >> $GITHUB_OUTPUT
 
-      - name: Release and eventually publish
-        run: nx release --yes
-        shell: bash
+      - name: Release with Nx
+        run: |
+          if [[ "${{ steps.detect.outputs.first_release }}" == "1" ]]; then
+            nx release --yes --first-release
+          else
+            nx release --yes
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
+
+      - name: Push Git tags
+        run: git push --follow-tags
