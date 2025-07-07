@@ -11,7 +11,10 @@
   },
   "nxCloudId": "686b31a8881ee245ec94847e",
   "release": {
-    "projectsRelationship": "independent"
+    "projectsRelationship": "independent",
+    "version": {
+      "conventionalCommits": true
+    }
   },
   "plugins": [
     {
