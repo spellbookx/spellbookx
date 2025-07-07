@@ -21,6 +21,7 @@
     "@nx/eslint-plugin": "21.2.2",
     "@nx/js": "21.2.2",
     "@spellbookx/cspell-config": "workspace:^",
+    "@spellbookx/eslint-plugin": "^0.1.4",
     "@swc-node/register": "~1.9.2",
     "@swc/core": "~1.5.29",
     "@swc/helpers": "~0.5.17",
