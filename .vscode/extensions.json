@@ -13,6 +13,11 @@
     "christian-kohler.npm-intellisense",
     "christian-kohler.path-intellisense",
     "rpinski.shebang-snippets",
-    "bierner.emojisense"
+    "bierner.emojisense",
+    "redhat.vscode-yaml",
+    "lkrms.inifmt",
+    "dotenv.dotenvx-vscode",
+    "dotenv.dotenv-vscode",
+    "tamasfe.even-better-toml"
   ]
 }
