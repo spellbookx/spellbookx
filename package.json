@@ -2,8 +2,16 @@
   "name": "@spellbookx/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spellbookx/spellbookx"
+  },
+  "bugs": {
+    "url": "https://github.com/spellbookx/spellbookx/issues"
+  },
+  "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "scripts": {},
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
