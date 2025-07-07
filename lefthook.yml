@@ -14,6 +14,17 @@ pre-commit:
       run: '{nx} format:write --files {staged_files}'
       stage_fixed: true
 
+pre-commit:
+  piped: true
+  jobs:
+    - name: lint
+      interactive: true
+      run: pnpm nx run-many -t lint --parallel=false
+      stage_fixed: true
+    - name: format-write
+      run: pnpm nx format:write --files {staged_files}
+      stage_fixed: true
+
 commit-msg:
   jobs:
     - name: commitlint
