@@ -13,7 +13,8 @@
   "release": {
     "projectsRelationship": "independent",
     "version": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "fallbackCurrentVersionResolver": "disk"
     }
   },
   "plugins": [
