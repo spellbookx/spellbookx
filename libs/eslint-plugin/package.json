@@ -28,6 +28,9 @@
     }
   },
   "nx": {
+    "tags": [
+      "type:config-plugin"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",

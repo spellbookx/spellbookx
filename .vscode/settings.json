@@ -1,4 +1,5 @@
 {
+  // Editor-specific file associations and formatters
   "[dotenv]": {
     "editor.defaultFormatter": "dotenv.dotenv-vscode"
   },
@@ -40,7 +41,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
-  // Editor configuration
+  // Editor behavior
   "editor.acceptSuggestionOnEnter": "smart",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -57,7 +58,7 @@
   "editor.suggest.preview": true,
   "editor.tabCompletion": "on",
 
-  // ESLint config
+  // ESLint integration
   "eslint.debug": true,
   "eslint.format.enable": true,
   "eslint.run": "onSave",
@@ -72,7 +73,7 @@
     "markdown"
   ],
 
-  // Watcher exclude for performance
+  // Filesystem watcher
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
@@ -86,6 +87,19 @@
     "**/.vite/**": true
   },
 
+  // Watcher to trigger Lefthook reinstall on YAML config change
+  "tasks.runOnSave": {
+    "enable": true,
+    "commands": [
+      {
+        "match": "lefthook\\.ya?ml$",
+        "command": "workbench.action.tasks.runTask",
+        "args": "lefthook install"
+      }
+    ]
+  },
+
+  // Search exclusions
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
@@ -97,7 +111,7 @@
     "**/.vite": true
   },
 
-  // Emojisense config
+  // Emojisense configuration
   "emojisense.languages": {
     "git-commit": true,
     "markdown": true,
@@ -107,7 +121,7 @@
   "emojisense.showOnColon": true,
   "emojisense.unicodeCompletionsEnabled": true,
 
-  // Conventional Commits
+  // Conventional Commits UX
   "conventionalCommits.emojiFormat": "emoji",
   "conventionalCommits.gitmoji": true,
   "conventionalCommits.promptBody": true,
@@ -117,13 +131,13 @@
   "conventionalCommits.showNewVersionNotes": true,
   "conventionalCommits.storeScopesGlobally": false,
 
-  // Nx support
+  // Nx developer tooling
   "nxConsole.generateAiAgentRules": true,
 
-  // Shellformat
+  // Shell script formatting
   "shellformat.useEditorConfig": true,
 
-  // File associations
+  // File language associations
   "files.associations": {
     ".czrc": "json",
     ".dockerignore": "ignore",
@@ -198,7 +212,7 @@
     "tsconfig*.json": "jsonc"
   },
 
-  // JSON schemas
+  // JSON Schemas
   "json.schemas": [
     {
       "fileMatch": [".czrc"],

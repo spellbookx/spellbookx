@@ -1,4 +1,18 @@
-# lefthook.yml
+templates:
+  pnpminstall: pnpm install
+  configplugin: pnpm run build:config-plugin
+  nx: pnpm nx
+
+pre-commit:
+  piped: true
+  jobs:
+    - name: lint
+      interactive: true
+      run: '{nx} run-many -t lint --parallel=false'
+      stage_fixed: true
+    - name: format-write
+      run: '{nx} format:write --files {staged_files}'
+      stage_fixed: true
 
 pre-commit:
   piped: true
@@ -19,4 +33,20 @@ commit-msg:
 pre-push:
   jobs:
     - name: format-check
-      run: pnpm nx format:check --all
+      run: '{nx} format:check --all'
+
+post-merge:
+  jobs:
+    - name: build configs and plugins
+      interactive: true
+      run: '{configplugin}'
+    - name: update lefthook hooks
+      run: '{pnpminstall} && pnpm lefthook install'
+
+post-checkout:
+  jobs:
+    - name: build configs and plugins
+      interactive: true
+      run: '{configplugin}'
+    - name: update lefthook hooks
+      run: '{pnpminstall} && pnpm lefthook install'

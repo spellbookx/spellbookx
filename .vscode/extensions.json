@@ -19,6 +19,7 @@
     "dotenv.dotenvx-vscode",
     "dotenv.dotenv-vscode",
     "tamasfe.even-better-toml",
-    "bierner.github-markdown-preview"
+    "bierner.github-markdown-preview",
+    "emeraldwalk.runonsave"
   ]
 }
