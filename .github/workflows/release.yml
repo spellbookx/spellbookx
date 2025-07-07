@@ -32,11 +32,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Install global dependencies
+        run: pnpm install --global nx
+
       - name: Nx affected build and test
         run: |
-          npx nx affected --target=build --base=origin/main~1 --head=HEAD
+          nx affected --target=build --base=origin/main~1 --head=HEAD
 
       - name: Release and eventually publish
+        run: nx release publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+
