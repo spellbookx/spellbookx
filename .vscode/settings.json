@@ -257,11 +257,9 @@
       ".github/workflows/*.yml",
       ".github/workflows/*.yaml"
     ],
-    "https://json.schemastore.org/lefthook.json": [
+    "https://raw.githubusercontent.com/evilmartians/lefthook/refs/heads/master/schema.json": [
       "lefthook.yml"
     ],
-    "https://json.schemastore.org/pnpm-workspace.json": [
-      "pnpm-workspace.yaml"
-    ]
+    "https://json.schemastore.org/pnpm-workspace.json": ["pnpm-workspace.yaml"]
   }
 }

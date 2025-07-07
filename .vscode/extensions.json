@@ -18,6 +18,7 @@
     "lkrms.inifmt",
     "dotenv.dotenvx-vscode",
     "dotenv.dotenv-vscode",
-    "tamasfe.even-better-toml"
+    "tamasfe.even-better-toml",
+    "bierner.github-markdown-preview"
   ]
 }
