@@ -11,7 +11,10 @@
     "url": "https://github.com/spellbookx/spellbookx/issues"
   },
   "homepage": "https://github.com/spellbookx/spellbookx#readme",
-  "scripts": {},
+  "scripts": {
+    "build:config-plugin": "nx run-many -t build --projects=tag:type:config-plugin",
+    "prebuild:config-plugin": "pnpm install"
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",

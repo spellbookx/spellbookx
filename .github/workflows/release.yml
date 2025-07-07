@@ -48,7 +48,7 @@ jobs:
         run: nx affected -t build
 
       - name: Release and eventually publish
-        run: nx release publish
+        run: nx release --yes
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
