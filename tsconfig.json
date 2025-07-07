@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./libs/cspell-config"
+    },
+    {
+      "path": "./libs/eslint-plugin"
     }
   ]
 }
