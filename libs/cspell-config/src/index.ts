@@ -11,6 +11,7 @@ export default defineConfig({
   loadDefaultConfiguration: true,
 
   ignorePaths: [
+    '**/*LICENSE*',
     '**/node_modules/**',
     '**/dist/**',
     '**/build/**',
