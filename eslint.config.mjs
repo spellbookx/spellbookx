@@ -1,12 +1,28 @@
 import nx from '@nx/eslint-plugin';
+//import sbx from '@spellbookx/eslint-plugin';
 
 export default [
+  {
+    ignores: [
+      '**/dist',
+      '**/build',
+      '**/out',
+      '**/node_modules',
+      '**/.next',
+      '**/.turbo',
+      '**/.nx**',
+      '**/.cache',
+      '**/pnpm-lock.yaml',
+      '**/package-lock.json',
+      '**/yarn.lock',
+      '**/.yarn',
+      '**/.pnpm',
+    ],
+  },
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
-  {
-    ignores: ['**/dist'],
-  },
+  //...sbx.configs.polyglot,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {

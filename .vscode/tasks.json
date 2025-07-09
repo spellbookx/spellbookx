@@ -5,7 +5,7 @@
     {
       "label": "build:config-plugins",
       "type": "shell",
-      "command": "pnpm run build:config-plugin",
+      "command": "pnpm run build:config",
       "group": "build",
       "problemMatcher": [],
       "presentation": {

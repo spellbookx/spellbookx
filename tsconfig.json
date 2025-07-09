@@ -7,7 +7,7 @@
       "path": "./libs/cspell-config"
     },
     {
-      "path": "./libs/eslint-plugin"
+      "path": "./libs/eslint-config"
     }
   ]
 }

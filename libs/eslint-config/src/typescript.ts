@@ -1,15 +1,24 @@
-import tseslintPlugin from '@typescript-eslint/eslint-plugin';
-import tseslintParser from '@typescript-eslint/parser';
+import { type Linter } from 'eslint';
+import tseslint from 'typescript-eslint';
+import ignores from './lib/ignores.js';
 import js from '@eslint/js';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import importPlugin from 'eslint-plugin-import';
-import type { Linter } from 'eslint';
+import tseslintParser from '@typescript-eslint/parser';
 
-const configTypescript: Linter.Config = {
-  files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
+const configTypescript = tseslint.config({
+  files: ['**/*.ts', '**/*.mts', '**/*.cts'],
+  ignores: ignores,
+  extends: [
+    js.configs.recommended,
+    tseslint.configs.recommended,
+    importPlugin.flatConfigs.recommended,
+    importPlugin.flatConfigs.typescript,
+  ],
   plugins: {
     'simple-import-sort': simpleImportSort,
     import: importPlugin,
+    js,
   },
   languageOptions: {
     parser: tseslintParser,
@@ -20,14 +29,12 @@ const configTypescript: Linter.Config = {
     },
   },
   rules: {
-    ...js.configs.recommended.rules,
-    ...tseslintPlugin.configs.recommendedTypeChecked.rules,
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     'import/first': 'error',
     'import/newline-after-import': 'error',
     'import/no-duplicates': 'error',
   },
-};
+}) as unknown as Linter.Config[];
 
 export default configTypescript;

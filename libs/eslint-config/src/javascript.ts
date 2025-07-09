@@ -2,9 +2,13 @@ import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import type { Linter } from 'eslint';
 import js from '@eslint/js';
+import ignores from './lib/ignores.js';
+import { defineConfig } from 'eslint/config';
 
-const configJavascript: Linter.Config = {
+const configJavascript: Linter.Config[] = defineConfig({
   files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
+  ignores: ignores,
+  extends: [js.configs.recommended, importPlugin.flatConfigs.recommended],
   plugins: {
     import: importPlugin,
     'simple-import-sort': simpleImportSort,
@@ -14,9 +18,6 @@ const configJavascript: Linter.Config = {
     sourceType: 'module',
   },
   rules: {
-    // @eslint/js recommended rules
-    ...js.configs.recommended.rules,
-
     // eslint-plugin-import
     'import/no-unresolved': 'error',
     'import/named': 'error',
@@ -29,6 +30,6 @@ const configJavascript: Linter.Config = {
     'simple-import-sort/imports': 'warn',
     'simple-import-sort/exports': 'warn',
   },
-};
+});
 
 export default configJavascript;

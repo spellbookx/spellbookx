@@ -1,0 +1,103 @@
+{
+  "name": "@spellbookx/eslint-config",
+  "version": "0.0.1",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spellbookx/spellbookx",
+    "directory": "libs/eslint-config"
+  },
+  "bugs": {
+    "url": "https://github.com/spellbookx/spellbookx/issues"
+  },
+  "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./markdown.js": {
+      "development": "./src/markdown.ts",
+      "types": "./dist/markdown.d.ts",
+      "import": "./dist/markdown.js",
+      "default": "./dist/markdown.js"
+    },
+    "./json.js": {
+      "development": "./src/json.ts",
+      "types": "./dist/json.d.ts",
+      "import": "./dist/json.js",
+      "default": "./dist/json.js"
+    },
+    "./json5.js": {
+      "development": "./src/json5.ts",
+      "types": "./dist/json5.d.ts",
+      "import": "./dist/json5.js",
+      "default": "./dist/json5.js"
+    },
+    "./jsonc.js": {
+      "development": "./src/jsonc.ts",
+      "types": "./dist/jsonc.d.ts",
+      "import": "./dist/jsonc.js",
+      "default": "./dist/jsonc.js"
+    },
+    "./javascript.js": {
+      "development": "./src/javascript.ts",
+      "types": "./dist/javascript.d.ts",
+      "import": "./dist/javascript.js",
+      "default": "./dist/javascript.js"
+    },
+    "./typescript.js": {
+      "development": "./src/typescript.ts",
+      "types": "./dist/typescript.d.ts",
+      "import": "./dist/typescript.js",
+      "default": "./dist/typescript.js"
+    }
+  },
+  "nx": {
+    "tags": [
+      "type:config"
+    ],
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "libs/eslint-config/dist",
+          "main": "libs/eslint-config/src/index.ts",
+          "tsConfig": "libs/eslint-config/tsconfig.lib.json",
+          "format": [
+            "esm"
+          ],
+          "declarationRootDir": "libs/eslint-config/src"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@eslint/js": "^9.30.1",
+    "@eslint/json": "^0.12.0",
+    "@eslint/markdown": "^6.6.0",
+    "@typescript-eslint/parser": "^8.35.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "typescript-eslint": "^8.35.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.30.1"
+  },
+  "peerDependencies": {
+    "eslint": "^9.30.1"
+  }
+}

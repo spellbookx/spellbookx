@@ -29,7 +29,7 @@
   },
   "nx": {
     "tags": [
-      "type:config-plugin"
+      "type:config"
     ],
     "targets": {
       "build": {
