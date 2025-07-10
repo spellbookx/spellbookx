@@ -33,6 +33,8 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm add -g nx
+          # Install jq for JSON parsing if not already present on runner
+          sudo apt-get update && sudo apt-get install -y jq
 
       - name: Setup Git user
         run: |
@@ -40,6 +42,60 @@ jobs:
           git config user.email "davide.dicriscito@gmail.com"
 
       - uses: nrwl/nx-set-shas@v4
+
+      - name: Restore missing Git tags from npmjs
+        id: restore_tags
+        run: |
+          MISSING_GIT_TAGS_TO_PUSH=""
+
+          # Find all package.json files that could correspond to publishable projects.
+          # Adjust the find path if your publishable projects are not consistently under 'libs/' or 'apps/'.
+          for pkg_json_path in $(find . -name package.json -not -path "*/node_modules/*" -not -path "*/dist/*"); do
+            # Attempt to read name and version
+            PACKAGE_NAME=$(jq -r '.name // empty' "$pkg_json_path")
+            PACKAGE_VERSION=$(jq -r '.version // empty' "$pkg_json_path")
+
+            if [[ -z "$PACKAGE_NAME" || -z "$PACKAGE_VERSION" || "$PACKAGE_NAME" == "null" || "$PACKAGE_VERSION" == "null" ]]; then
+              continue # Skip if name or version are not found
+            fi
+
+            TAG_NAME="${PACKAGE_NAME}@${PACKAGE_VERSION}"
+
+            # Check if tag exists locally in Git
+            if ! git tag -l | grep -q "^${TAG_NAME}$"; then
+              # Tag does not exist locally in Git, now check npmjs
+              echo "Tag ${TAG_NAME} not found locally in Git. Checking npmjs..."
+
+              # Check if this exact version exists on npmjs
+              # Using npm view <package> versions --json to reliably get all published versions
+              NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json 2>/dev/null || echo "[]")
+
+              if echo "$NPM_VERSIONS" | jq -e ".[] == \"$PACKAGE_VERSION\"" > /dev/null; then
+                echo "Found ${TAG_NAME} on npmjs but not in Git. Will create and push tag."
+                MISSING_GIT_TAGS_TO_PUSH="$MISSING_GIT_TAGS_TO_PUSH $TAG_NAME"
+              else
+                echo "Tag ${TAG_NAME} not found on npmjs either. No action needed for this tag."
+              fi
+            else
+              echo "Tag ${TAG_NAME} already exists locally in Git. Skipping."
+            fi
+          done
+
+          # Create and push missing tags
+          if [[ -n "$MISSING_GIT_TAGS_TO_PUSH" ]]; then
+            echo "--- Pushing missing Git tags found on npmjs ---"
+            for tag in $MISSING_GIT_TAGS_TO_PUSH; do
+              echo "Creating local Git tag: $tag"
+              git tag "$tag"
+              echo "Pushing $tag to origin."
+              git push origin "$tag" || { echo "Failed to push tag $tag. Continuing with other tags."; }
+            done
+            echo "--- Finished pushing missing Git tags ---"
+          else
+            echo "No missing Git tags found that exist on npmjs."
+          fi
+
+          # This step sets no outputs as it directly performs git operations.
 
       - name: Determine projects to release
         id: determine_projects
@@ -49,26 +105,42 @@ jobs:
           publishable_projects=""
 
           for project in $changed_projects; do
-            # Check if the project has a package.json and is a publishable type.
-            # This example assumes all changed projects that are *not* applications are publishable.
-            # Adjust this logic based on your workspace conventions (e.g., specific tags in project.json,
-            # projects under a 'libs/' directory, or projects with a 'build' target that outputs to dist/).
+            # Validate if project is a directory before attempting to read project.json
+            if [ ! -d "libs/$project" ] && [ ! -d "apps/$project" ]; then
+              echo "Warning: Directory for project $project not found. Skipping."
+              continue
+            fi
 
-            # Get project type from project.json
-            PROJECT_TYPE=$(jq -r '.projectType // "unknown"' "libs/$project/project.json" 2>/dev/null || jq -r '.projectType // "unknown"' "apps/$project/project.json" 2>/dev/null || echo "unknown")
+            PROJECT_JSON_PATH=""
+            if [ -f "libs/$project/project.json" ]; then
+              PROJECT_JSON_PATH="libs/$project/project.json"
+            elif [ -f "apps/$project/project.json" ]; then
+              PROJECT_JSON_PATH="apps/$project/project.json"
+            fi
 
-            # Check if project.json exists and contains a 'build' target. This often implies publishability.
-            if [ -f "libs/$project/project.json" ] || [ -f "apps/$project/project.json" ]; then
-              if jq -e '.targets.build' "libs/$project/project.json" >/dev/null 2>&1 || jq -e '.targets.build' "apps/$project/project.json" >/dev/null 2>&1; then
-                # If it's a library or an application that you explicitly want to publish
-                if [[ "$PROJECT_TYPE" == "library" || ("$PROJECT_TYPE" == "application" && "$project" == "your-publishable-app-name") ]]; then # Customize "your-publishable-app-name" if you publish apps
-                  if [[ -z "$publishable_projects" ]]; then
-                    publishable_projects="$project"
-                  else
-                    publishable_projects="$publishable_projects,$project"
-                  fi
+            if [[ -z "$PROJECT_JSON_PATH" ]]; then
+              echo "Warning: project.json not found for project $project. Skipping publishability check."
+              continue
+            fi
+
+            # Check if project has a 'build' target and is explicitly marked as publishable (e.g., via a tag)
+            # Or if it's a library type by default.
+            if jq -e '.targets.build' "$PROJECT_JSON_PATH" >/dev/null 2>&1; then
+              PROJECT_TYPE=$(jq -r '.projectType // "unknown"' "$PROJECT_JSON_PATH")
+              PROJECT_TAGS=$(jq -r '.tags // [] | .[]' "$PROJECT_JSON_PATH" | tr '\n' ' ') # Get tags as space-separated string
+
+              # Example Logic: Project is publishable if it's a 'library' or has a 'publishable' tag.
+              if [[ "$PROJECT_TYPE" == "library" || "$PROJECT_TAGS" =~ "publishable" ]]; then
+                if [[ -z "$publishable_projects" ]]; then
+                  publishable_projects="$project"
+                else
+                  publishable_projects="$publishable_projects,$project"
                 fi
+              else
+                echo "Project $project (type: $PROJECT_TYPE, tags: $PROJECT_TAGS) is not identified as publishable."
               fi
+            else
+              echo "Project $project does not have a 'build' target. Skipping publishability check."
             fi
           done
 
@@ -88,9 +160,11 @@ jobs:
           PROJECTS="${{ steps.determine_projects.outputs.projects_to_release }}"
           echo "Bumping versions for projects: $PROJECTS"
 
+          # Using --yes to confirm actions, --git-tag and --git-commit are default but explicit
+          # --git-push=false because we'll handle pushing tags and commits separately at the end
           nx release version --project="$PROJECTS" --yes --git-push=false
 
-          LATEST_TAG=$(git tag --sort=-committerdate | head -n 1)
+          LATEST_TAG=$(git tag --sort=-committerdate | head -n 1) # Heuristic for the latest tag created
 
           echo "Latest tag created by Nx: $LATEST_TAG"
           echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
@@ -98,21 +172,19 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
-      - name: Check and push Git tags to GitHub
+      - name: Push new Git tags to GitHub
         if: steps.determine_projects.outputs.should_release == 'true' && steps.nx_version.outputs.latest_tag != ''
         run: |
           LATEST_TAG="${{ steps.nx_version.outputs.latest_tag }}"
 
-          if git ls-remote --tags origin | grep -q "refs/tags/$LATEST_TAG"; then
-            echo "Tag $LATEST_TAG already exists on remote. Skipping push."
-          else
-            echo "Pushing tag $LATEST_TAG to remote."
-            git push origin "$LATEST_TAG"
-          fi
+          # Push the specific tag created by nx release version
+          echo "Pushing tag $LATEST_TAG to remote."
+          git push origin "$LATEST_TAG" || { echo "Failed to push tag $LATEST_TAG. Continuing."; }
 
-          git push --follow-tags
+          # Ensure all other new local tags (e.g., if multiple projects got individual tags) are pushed.
+          git push --follow-tags || { echo "Failed to push remaining tags. Continuing."; }
 
-      - name: Verify npmjs presence and handle conflicts (if any)
+      - name: Verify npmjs presence and handle conflicts
         id: npm_check
         if: steps.determine_projects.outputs.should_release == 'true'
         run: |
@@ -134,10 +206,10 @@ jobs:
 
             echo "Checking $FULL_TAG on npmjs..."
 
-            NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json || echo "[]")
+            NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json 2>/dev/null || echo "[]")
 
             if echo "$NPM_VERSIONS" | jq -e ".[] == \"$PACKAGE_VERSION\"" > /dev/null; then
-              echo "Conflict: $FULL_TAG already exists on npmjs."
+              echo "Conflict: $FULL_TAG already exists on npmjs. This project will NOT be published."
               NEEDS_REBUMP="$NEEDS_REBUMP,$project"
             else
               echo "✅ $FULL_TAG is unique for npmjs."
@@ -151,8 +223,8 @@ jobs:
 
           if [[ -n "$NEEDS_REBUMP" ]]; then
             echo "::error::Detected npmjs version conflicts for projects: ${NEEDS_REBUMP#,}."
-            echo "These projects require a manual version bump before they can be published, as their current version already exists on npmjs."
-            echo "This workflow will proceed only with non-conflicting projects that have unique versions."
+            echo "These projects were identified as having versions that already exist on npmjs. They will not be published in this run."
+            echo "A manual version bump for these projects is required to release new versions."
           fi
 
           echo "publishable_projects_after_npm_check=$PUBLISH_CANDIDATES" >> $GITHUB_OUTPUT
