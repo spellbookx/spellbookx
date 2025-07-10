@@ -7,7 +7,7 @@
 # - Explicitly ignores the package and tag "@spellbookx/source"
 # - Checks for missing Git tags in the format "@spellbookx/pkg@version" and creates/pushes them
 # - Compares local package versions against the published npm versions
-# - Updates package.json version if it differs from npm and commits the change
+# - Updates package.json version if it differs from npm and the local version is older
 # - Commits and pushes Git tags and version updates automatically
 #
 # Usage:
@@ -109,23 +109,20 @@ pnpm m ls --json --depth=-1 | jq -c '.[]' | while read -r line; do
   [ ! -f "$pkg_json" ] && continue
 
   version=$(jq -r '.version' "$pkg_json")
-
-  if [ "$version" = "0.0.0" ]; then
+  [ "$version" = "0.0.0" ] && {
     log "⏭️ Skipping $name (version 0.0.0)"
     continue
-  fi
+  }
 
-  # Extract the short package name (after namespace)
+  # Extract short name and compute expected tag
   pkg_short=$(printf "%s\n" "$name" | sed "s|^$namespace/||")
   tag="$namespace/$pkg_short@$version"
 
-  # Skip the tag @spellbookx/source@version explicitly
-  if [ "$tag" = "$namespace/source@$version" ]; then
+  [ "$tag" = "$namespace/source@$version" ] && {
     log "⏭️ Skipping excluded tag $tag"
     continue
-  fi
+  }
 
-  # Check if Git tag exists
   if tag_exists "$tag"; then
     log "✔️ Git tag exists: $tag"
   else
@@ -133,13 +130,13 @@ pnpm m ls --json --depth=-1 | jq -c '.[]' | while read -r line; do
     create_and_push_tag "$tag"
   fi
 
-  # Compare with published npm version
   published_version=$(get_latest_npm_tag "$name")
+
   if [ "$published_version" = "$version" ]; then
     log "✔️ NPM version matches for $name: $version"
-  else
+  elif [ "$(printf '%s\n' "$version" "$published_version" | sort -V | head -n1)" = "$version" ]; then
     log "⚠️ Version mismatch: local=$version vs npm=$published_version"
-    log "🔁 Updating $name to $published_version"
+    log "🔁 Downgrade: syncing local to published version"
 
     update_package_json_version "$pkg_json" "$published_version"
     git add "$pkg_json"
@@ -147,6 +144,8 @@ pnpm m ls --json --depth=-1 | jq -c '.[]' | while read -r line; do
 
     new_tag="$namespace/$pkg_short@$published_version"
     create_and_push_tag "$new_tag"
+  else
+    log "🆙 Local version ($version) is ahead of npm ($published_version). No sync needed."
   fi
 done
 
