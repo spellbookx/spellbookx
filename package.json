@@ -12,7 +12,10 @@
   "homepage": "https://github.com/spellbookx/spellbookx#readme",
   "scripts": {
     "build:config-plugin": "nx run-many -t build --projects=tag:type:config",
-    "prebuild:config-plugin": "pnpm install"
+    "prebuild:config-plugin": "pnpm install",
+    "sync:tags": "./scripts/sync-tags.sh",
+    "release:version": "./scripts/release-affected.sh",
+    "release:publish": "./scripts/nx-publish-changed.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
