@@ -1,0 +1,123 @@
+name: Release Publishing
+
+on:
+  push:
+    tags:
+      - '*' # Trigger on any tag push
+
+permissions:
+  contents: write # To potentially create GitHub Releases later
+  id-token: write # For OIDC authentication with npmjs
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # Only run if a new tag was pushed
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history to ensure Nx can operate correctly
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies and global Nx CLI
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm add -g nx
+          sudo apt-get update && sudo apt-get install -y jq # jq for package.json parsing
+
+      - uses: nrwl/nx-set-shas@v4 # Essential for Nx commands
+
+      - name: Extract Tag Information and Identify Project
+        # Extract the package name and version from the Git tag
+        id: tag_info
+        run: |
+          # Git tag format is typically <package-name>@<version> or just <version> for workspace root
+          TAG_REF="${{ github.ref }}"
+          TAG_NAME="${TAG_REF##refs/tags/}" # Extracts the tag name (e.g., "my-package@1.2.3")
+
+          echo "Processing Git tag: $TAG_NAME"
+
+          # Determine if it's a project-specific tag or a workspace tag
+          # If it contains an '@', assume it's a project tag (e.g., my-lib@1.0.0)
+          if [[ "$TAG_NAME" == *"@"* ]]; then
+            PROJECT_NAME=$(echo "$TAG_NAME" | cut -d'@' -f1)
+            PROJECT_VERSION=$(echo "$TAG_NAME" | cut -d'@' -f2)
+            echo "Detected project-specific tag."
+            echo "project_to_publish=$PROJECT_NAME" >> $GITHUB_OUTPUT
+            echo "tag_version=$PROJECT_VERSION" >> $GITHUB_OUTPUT
+          else
+            # This is a workspace tag (e.g., 1.2.3). For workspace tags, Nx usually publishes
+            # all projects that are part of the release group or have been affected.
+            # In this case, we need to determine affected projects *again* at this commit.
+            # Or, more simply, just run `nx release publish` without `--projects` if it's a workspace release.
+            echo "Detected workspace-level tag."
+            echo "project_to_publish=all" >> $GITHUB_OUTPUT # Placeholder for 'publish all affected'
+            echo "tag_version=$TAG_NAME" >> $GITHUB_OUTPUT
+          fi
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Run Nx Release Publish
+        id: publish
+        # Only proceed if a specific project was identified or if it's a workspace publish.
+        if: steps.tag_info.outputs.project_to_publish != ''
+        run: |
+          PROJECT_TO_PUBLISH="${{ steps.tag_info.outputs.project_to_publish }}"
+          TAG_VERSION="${{ steps.tag_info.outputs.tag_version }}"
+          FULL_TAG_NAME="${{ steps.tag_info.outputs.tag_name }}"
+
+          echo "Attempting to publish for tag: $FULL_TAG_NAME"
+
+          if [[ "$PROJECT_TO_PUBLISH" == "all" ]]; then
+            # For workspace tags, run `nx release publish` which will figure out what to publish
+            # based on the last release. It's crucial that `nx release publish` aligns with how
+            # your Nx workspace handles publishing for workspace-level tags.
+            # You might need to specify a release group if you have one.
+            echo "Publishing all affected projects for workspace tag: $FULL_TAG_NAME"
+            nx release publish --yes
+          else
+            echo "Publishing project $PROJECT_TO_PUBLISH with version $TAG_VERSION (from tag $FULL_TAG_NAME)"
+            # Check if this version is already on npmjs to prevent errors.
+            # While the versioning workflow tries to prevent this, a race condition or manual publish could occur.
+            PACKAGE_NAME="$PROJECT_TO_PUBLISH"
+            NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json 2>/dev/null || echo "[]")
+
+            if echo "$NPM_VERSIONS" | jq -e ".[] == \"$TAG_VERSION\"" > /dev/null; then
+              echo "::warning::Version $TAG_VERSION for $PACKAGE_NAME already exists on npmjs. Skipping publish."
+              echo "published=false" >> $GITHUB_OUTPUT
+              exit 0 # Exit successfully, as the package is already published
+            fi
+
+            nx release publish --projects="$PROJECT_TO_PUBLISH" --yes
+          fi
+          echo "published=true" >> $GITHUB_OUTPUT
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true # Recommended for security on npm
+
+      - name: Create GitHub Release (Optional)
+        # This step creates a formal GitHub Release based on the pushed tag.
+        # This is a common post-publish step.
+        if: success() && steps.publish.outputs.published == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+          # body_path: ./.github/RELEASE_NOTES.md # Optional: point to a release notes file
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

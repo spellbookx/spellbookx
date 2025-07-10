@@ -1,0 +1,226 @@
+name: Release Versioning
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  id-token: write # Needed for OIDC if you use it, or for npm provenance
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history needed for Nx affected and git tag checks
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies and global Nx CLI
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm add -g nx
+          sudo apt-get update && sudo apt-get install -y jq # jq is essential for JSON parsing
+
+      - name: Setup Git user
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - uses: nrwl/nx-set-shas@v4 # Required for Nx affected commands
+
+      - name: Check and Restore Missing Git Tags from npmjs (Pre-versioning)
+        # This step handles cases where a version exists on npmjs but its corresponding Git tag is missing.
+        # It creates and pushes those missing tags to ensure Git history matches npmjs.
+        id: restore_tags
+        run: |
+          TAGS_TO_CREATE_AND_PUSH=""
+
+          echo "Scanning for package.json files to check for missing Git tags from npmjs..."
+          for pkg_json_path in $(find . -name package.json -not -path "*/node_modules/*" -not -path "*/dist/*"); do
+            PACKAGE_NAME=$(jq -r '.name // empty' "$pkg_json_path")
+            PACKAGE_VERSION=$(jq -r '.version // empty' "$pkg_json_path")
+
+            if [[ -z "$PACKAGE_NAME" || -z "$PACKAGE_VERSION" || "$PACKAGE_NAME" == "null" || "$PACKAGE_VERSION" == "null" ]]; then
+              continue
+            fi
+
+            TAG_NAME="${PACKAGE_NAME}@${PACKAGE_VERSION}"
+
+            if git ls-remote --tags origin | grep -q "refs/tags/${TAG_NAME}$"; then
+              echo "Tag ${TAG_NAME} already exists on remote Git. No action needed for this version."
+              continue
+            fi
+
+            echo "Tag ${TAG_NAME} not found on remote Git. Checking npmjs..."
+            NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json 2>/dev/null || echo "[]")
+
+            if echo "$NPM_VERSIONS" | jq -e ".[] == \"$PACKAGE_VERSION\"" > /dev/null; then
+              echo "Found ${TAG_NAME} on npmjs but not on remote Git. Adding to list for creation/push."
+              TAGS_TO_CREATE_AND_PUSH="$TAGS_TO_CREATE_AND_PUSH $TAG_NAME"
+            else
+              echo "Tag ${TAG_NAME} not found on npmjs either. No action needed."
+            fi
+          done
+
+          if [[ -n "$TAGS_TO_CREATE_AND_PUSH" ]]; then
+            echo "--- Creating and pushing missing Git tags found on npmjs ---"
+            for tag in $TAGS_TO_CREATE_AND_PUSH; do
+              echo "Creating local Git tag: $tag"
+              git tag "$tag"
+              echo "Pushing $tag to origin."
+              git push origin "$tag" || { echo "::warning::Failed to push tag $tag. Ensure Git credentials are correct."; }
+            done
+            echo "--- Finished processing missing Git tags ---"
+            # Set output to indicate a tag was pushed, potentially triggering the publish workflow
+            echo "tags_pushed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No missing Git tags found that exist on npmjs but not in Git."
+            echo "tags_pushed=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }} # Needed for npm view if private registry
+
+      - name: Determine Projects to Release and Versioning Strategy
+        # This step identifies projects with changes and decides if a --first-release or
+        # a standard version bump is needed. It also handles npmjs version conflicts by rebumping.
+        id: nx_version_strategy
+        run: |
+          # Use nx show projects --affected to find projects with changes
+          # The base=main~1 --head=main ensures we capture changes since the last commit on main
+          changed_projects=$(nx show projects --affected --base=main~1 --head=main)
+
+          projects_to_version=""
+          version_command="nx release version --yes --git-push=false"
+          should_run_version=false
+          needs_first_release=false
+
+          # Check if any tags exist in the repo. If not, it might be the very first release.
+          if [[ -z "$(git tag)" ]]; then
+            echo "No Git tags found in the repository. Considering --first-release for all changed projects."
+            needs_first_release=true
+            version_command="$version_command --first-release"
+          fi
+
+          for project in $changed_projects; do
+            # Add logic here to determine if a project is actually publishable to npm.
+            # This logic should match what you would eventually publish.
+            PROJECT_JSON_PATH=""
+            if [ -f "libs/$project/project.json" ]; then
+              PROJECT_JSON_PATH="libs/$project/project.json"
+            elif [ -f "apps/$project/project.json" ]; then
+              PROJECT_JSON_PATH="apps/$project/project.json"
+            fi
+
+            if [[ -z "$PROJECT_JSON_PATH" ]]; then
+              echo "Warning: project.json not found for project $project. Skipping versioning consideration."
+              continue
+            fi
+
+            if jq -e '.targets.build' "$PROJECT_JSON_PATH" >/dev/null 2>&1; then
+              PROJECT_TYPE=$(jq -r '.projectType // "unknown"' "$PROJECT_JSON_PATH")
+              PROJECT_TAGS=$(jq -r '.tags // [] | .[]' "$PROJECT_JSON_PATH" | tr '\n' ' ')
+
+              if [[ "$PROJECT_TYPE" == "library" || "$PROJECT_TAGS" =~ "publishable" ]]; then
+                if [[ -z "$projects_to_version" ]]; then
+                  projects_to_version="$project"
+                else
+                  projects_to_version="$projects_to_version,$project"
+                fi
+                should_run_version=true
+              else
+                echo "Project $project (type: $PROJECT_TYPE, tags: $PROJECT_TAGS) is not identified as publishable. Skipping versioning."
+              fi
+            else
+              echo "Project $project does not have a 'build' target. Skipping versioning consideration."
+            fi
+          done
+
+          if [[ "$should_run_version" == "true" ]]; then
+            echo "Executing: $version_command --projects=$projects_to_version"
+            # Run nx release version to bump versions and create local tags/commits
+            $version_command --projects="$projects_to_version"
+
+            # Now, check for npmjs conflicts for the newly bumped versions
+            # This is crucial: if Nx bumps to a version already on npmjs, we need to re-bump it.
+            NEEDS_REBUMP_PROJECTS=""
+            IFS=',' read -ra PROJ_ARRAY <<< "$projects_to_version"
+            for project in "${PROJ_ARRAY[@]}"; do
+              PACKAGE_PATH=$(find . -name "package.json" -path "*/$project/*" | head -n 1)
+              CURRENT_VERSION=$(jq -r '.version' "$PACKAGE_PATH")
+              PACKAGE_NAME=$(jq -r '.name' "$PACKAGE_PATH")
+
+              NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json 2>/dev/null || echo "[]")
+
+              if echo "$NPM_VERSIONS" | jq -e ".[] == \"$CURRENT_VERSION\"" > /dev/null; then
+                echo "Conflict detected for $PACKAGE_NAME@$CURRENT_VERSION on npmjs. Will attempt to re-bump."
+                NEEDS_REBUMP_PROJECTS="$NEEDS_REBUMP_PROJECTS,$project"
+              fi
+            done
+
+            if [[ -n "$NEEDS_REBUMP_PROJECTS" ]]; then
+              # Remove leading comma if present
+              NEEDS_REBUMP_PROJECTS="${NEEDS_REBUMP_PROJECTS#,}"
+              echo "Attempting to re-bump patch version for conflicting projects: $NEEDS_REBUMP_PROJECTS"
+
+              # Revert the changes from the previous nx release version for these specific projects
+              # This is simplified; in a complex scenario, you might need `git reset --hard HEAD~1`
+              # or `git restore` for specific files, then re-run.
+              # For this workflow, we assume `nx release` creates a single commit for the version bump.
+              # If it's a single workspace commit, we might revert the whole thing and re-run for all.
+              # A safer approach for project-specific re-bumps after a workspace bump might be to
+              # manually apply patches or use `npm version patch --no-git-tag-version` and manually commit.
+
+              # Simplest (but potentially destructive if not careful): Revert last commit by Nx and re-run for conflicts
+              # More robust: run `nx release version patch` with `--no-verify` and `--no-git-commit`
+              # then manually commit new changes.
+
+              # Given the complexity, let's make `nx release version` attempt to find a non-conflicting patch.
+              # This might be tricky if Nx's conventional commits logic doesn't support "try next available patch."
+              # A common strategy is to force a patch bump:
+
+              echo "Running nx release version patch for conflicting projects to ensure uniqueness."
+              nx release version patch --project="$NEEDS_REBUMP_PROJECTS" --yes --git-push=false || {
+                echo "::error::Failed to re-bump patch version for $NEEDS_REBUMP_PROJECTS. Manual intervention required."
+                exit 1
+              }
+              echo "Successfully re-bumped versions for conflicting projects."
+              echo "tags_pushed=true" >> $GITHUB_OUTPUT # New tag(s) will be created and need pushing
+            else
+              echo "No npmjs version conflicts detected after initial version bump."
+              echo "tags_pushed=true" >> $GITHUB_OUTPUT # Original tags pushed from initial bump
+            fi
+
+            echo "git_operations_performed=true" >> $GITHUB_OUTPUT # Indicate commits/tags were made
+          else
+            echo "No publishable projects require versioning. Skipping Nx release version."
+            echo "git_operations_performed=false" >> $GITHUB_OUTPUT
+            echo "tags_pushed=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true # Recommended for security on npm
+
+      - name: Push Git commits and newly created tags to main
+        # This step pushes the version bump commit(s) and any new tags created by Nx
+        if: steps.nx_version_strategy.outputs.git_operations_performed == 'true'
+        run: |
+          echo "Pushing main branch commits."
+          git push origin main || { echo "::warning::Failed to push main branch. Check permissions."; }
+
+          echo "Pushing all local tags to remote."
+          git push --tags || { echo "::warning::Failed to push tags. Check permissions."; }
+
+          echo "tags_pushed=true" >> $GITHUB_OUTPUT # Ensure this is always true if we reached this step successfully
