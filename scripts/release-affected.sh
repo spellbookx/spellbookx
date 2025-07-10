@@ -113,7 +113,7 @@ for project in $affected_projects; do
 
   name=$(jq -r '.name' "$pkg_json")
   case "$name" in
-  "$namespace"/*) ;; # Only process packages in the namespace
+  "$namespace"/*) ;;
   *)
     log "⏭️ Skipping $name (not in $namespace)"
     continue
@@ -123,8 +123,11 @@ for project in $affected_projects; do
   version=$(jq -r '.version' "$pkg_json")
   tag="$name@$version"
 
-  if ! tag_exists "$tag"; then
-    log "🆕 First release detected for $name"
+  if [ "$version" = "0.0.0" ]; then
+    log "🆕 First release required for $name (version 0.0.0)"
+    needs_first_release=1
+  elif ! tag_exists "$tag"; then
+    log "🆕 First release detected for $name (no existing tag $tag)"
     needs_first_release=1
   fi
 
