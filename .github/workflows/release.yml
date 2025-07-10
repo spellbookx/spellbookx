@@ -51,6 +51,7 @@ jobs:
           has_first_release=0
           should_publish=0
           needs_git_tag_restore=0
+          publishable_projects=()
 
           for pkg_json in $(find . -name package.json -not -path "*/node_modules/*"); do
             name=$(jq -r .name "$pkg_json")
@@ -66,24 +67,28 @@ jobs:
               echo "→ First release for $tag"
               has_first_release=1
               should_publish=1
+              publishable_projects+=("$name")
             elif [[ -z "$exists_git" && -n "$exists_npm" ]]; then
-              echo "→ $tag is on npm but missing from Git, will restore tag"
+              echo "→ $tag exists on npm but not Git, needs version bump"
               needs_git_tag_restore=1
               should_publish=1
+              publishable_projects+=("$name")
             elif [[ -n "$exists_git" && -n "$exists_npm" ]]; then
               echo "→ $tag already published, skipping"
               continue
             else
               echo "→ $tag ready to publish"
               should_publish=1
+              publishable_projects+=("$name")
             fi
           done
 
           echo "first_release=$has_first_release" >> $GITHUB_OUTPUT
           echo "should_publish=$should_publish" >> $GITHUB_OUTPUT
           echo "needs_git_tag_restore=$needs_git_tag_restore" >> $GITHUB_OUTPUT
+          echo "projects=$(IFS=','; echo "${publishable_projects[*]}")" >> $GITHUB_OUTPUT
 
-      - name: Restore Git tags and sync Nx version state
+      - name: Bump version if tag exists on npm but not Git
         if: steps.analyze.outputs.needs_git_tag_restore == '1'
         run: |
           for pkg_json in $(find . -name package.json -not -path "*/node_modules/*"); do
@@ -94,25 +99,15 @@ jobs:
             [[ "$name" == "null" || "$version" == "null" ]] && continue
 
             if npm view "$name@$version" version &>/dev/null && ! git tag --list | grep -q "$tag"; then
-              echo "Restoring Git tag: $tag"
-              git tag "$tag"
-              git push origin "$tag"
-
-              echo "Syncing Nx release version for $name to $version"
-              nx release version "$version" --projects="$name" \
-                --git-commit=false --git-tag=false --git-push=false
+              echo "⚠️ $tag exists on npm but not Git – running version bump to avoid forbidden publish"
+              nx release version patch --projects="$name" \
+                --git-commit=true --git-tag=true --git-push=false
             fi
           done
 
       - name: Skip if nothing to publish
         if: steps.analyze.outputs.should_publish == '0'
         run: echo "No packages to publish. Exiting." && exit 0
-
-      - name: Release version
-        if: steps.analyze.outputs.should_publish == '1' && steps.analyze.outputs.first_release != '1'
-        run: |
-          echo "Running Nx version phase"
-          nx release version --yes
 
       - name: First release
         if: steps.analyze.outputs.first_release == '1'
@@ -123,11 +118,22 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
+      - name: Release version
+        if: steps.analyze.outputs.first_release != '1'
+        run: |
+          echo "Running Nx version phase"
+          nx release version --yes
+
       - name: Release publish
         if: steps.analyze.outputs.should_publish == '1'
         run: |
-          echo "Running Nx release publish"
-          nx release publish
+          if [[ -z "${{ steps.analyze.outputs.projects }}" ]]; then
+            echo "No projects to publish. Skipping publish step."
+            exit 0
+          fi
+
+          echo "Publishing projects: ${{ steps.analyze.outputs.projects }}"
+          nx release publish --projects="${{ steps.analyze.outputs.projects }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
