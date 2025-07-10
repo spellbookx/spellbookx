@@ -96,7 +96,6 @@ jobs:
             name="${tag%@*}"
             version="${tag#*@}"
 
-            # Find if the package exists in repo
             pkg_dir=$(find . -name package.json -not -path "*/node_modules/*" -exec jq -r 'select(.name == "'"$name"'") | input_filename' {} \; | xargs -n1 dirname | head -n1)
 
             if [[ -z "$pkg_dir" ]]; then
@@ -110,9 +109,12 @@ jobs:
             fi
           done
 
-      - name: Skip if nothing to publish
-        if: steps.analyze.outputs.should_publish == '0'
-        run: echo "No packages to publish. Exiting." && exit 0
+      - name: Skip publish if no candidate projects
+        run: |
+          if [[ "${{ steps.analyze.outputs.should_publish }}" == "0" ]]; then
+            echo "No projects to publish. Exiting."
+            exit 0
+          fi
 
       - name: First release
         if: steps.analyze.outputs.first_release == '1'
@@ -126,23 +128,29 @@ jobs:
       - name: Release version
         if: steps.analyze.outputs.first_release != '1'
         run: |
-          echo "Running Nx version phase"
+          echo "Running Nx release version"
           nx release version --yes
-
-      - name: Release publish
-        if: steps.analyze.outputs.should_publish == '1'
-        run: |
-          if [[ -z "${{ steps.analyze.outputs.projects }}" ]]; then
-            echo "No projects to publish. Skipping publish step."
-            exit 0
-          fi
-
-          echo "Publishing projects: ${{ steps.analyze.outputs.projects }}"
-          nx release publish --projects="${{ steps.analyze.outputs.projects }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
-      - name: Push Git tags
+      - name: Release publish
         if: steps.analyze.outputs.should_publish == '1'
-        run: git push --follow-tags
+        run: |
+          projects="${{ steps.analyze.outputs.projects }}"
+          if [[ -z "$projects" ]]; then
+            echo "No publishable projects found. Skipping publish."
+            exit 0
+          fi
+
+          echo "Publishing projects: $projects"
+          nx release publish --projects="$projects"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Push Git tags and commits
+        if: steps.analyze.outputs.should_publish == '1'
+        run: |
+          git push origin main
+          git push --follow-tags
