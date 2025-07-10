@@ -18,4 +18,5 @@ const config: Linter.Config[] = defineConfig(
   configTypescript
 );
 
+export { ignores };
 export default config;

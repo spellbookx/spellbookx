@@ -4,7 +4,6 @@ import ignores from './lib/ignores.js';
 import js from '@eslint/js';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import importPlugin from 'eslint-plugin-import';
-import tseslintParser from '@typescript-eslint/parser';
 
 const configTypescript = tseslint.config({
   files: ['**/*.ts', '**/*.mts', '**/*.cts'],
@@ -18,10 +17,8 @@ const configTypescript = tseslint.config({
   plugins: {
     'simple-import-sort': simpleImportSort,
     import: importPlugin,
-    js,
   },
   languageOptions: {
-    parser: tseslintParser,
     ecmaVersion: 2022,
     sourceType: 'module',
     parserOptions: {

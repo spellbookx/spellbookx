@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-//import sbx from '@spellbookx/eslint-plugin';
+//import sbxConfig from '@spellbookx/eslint-config';
 
 export default [
   {
