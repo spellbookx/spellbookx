@@ -29,7 +29,7 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies and required tools
+      - name: Install dependencies and tools
         run: |
           pnpm install
           curl -sSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
@@ -45,32 +45,93 @@ jobs:
           git config user.name "Davide Di Criscito"
           git config user.email "davide.dicriscito@gmail.com"
 
-      - name: Detect if any project needs --first-release
-        id: detect
+      - name: Analyze packages for release state
+        id: analyze
         run: |
           has_first_release=0
-          for pkg in $(yq '.packages[]' pnpm-workspace.yaml | tr -d '"'); do
-            for path in $(find $pkg -name package.json); do
-              name=$(jq -r '.name' "$path")
-              [[ "$name" == "null" ]] && continue
-              if ! git tag --list | grep -q "${name}@"; then
-                has_first_release=1
-                break
-              fi
-            done
-          done
-          echo "first_release=$has_first_release" >> $GITHUB_OUTPUT
+          should_publish=0
+          needs_git_tag_restore=0
 
-      - name: Release with Nx
+          for pkg_json in $(find . -name package.json -not -path "*/node_modules/*"); do
+            name=$(jq -r .name "$pkg_json")
+            version=$(jq -r .version "$pkg_json")
+            tag="${name}@${version}"
+
+            [[ "$name" == "null" || "$version" == "null" ]] && continue
+
+            exists_git=$(git tag --list "$tag")
+            exists_npm=$(npm view "$name@$version" version || true)
+
+            if [[ -z "$exists_git" && -z "$exists_npm" ]]; then
+              echo "→ First release for $tag"
+              has_first_release=1
+              should_publish=1
+            elif [[ -z "$exists_git" && -n "$exists_npm" ]]; then
+              echo "→ $tag is on npm but missing from Git, will restore tag"
+              needs_git_tag_restore=1
+              should_publish=1
+            elif [[ -n "$exists_git" && -n "$exists_npm" ]]; then
+              echo "→ $tag already published, skipping"
+              continue
+            else
+              echo "→ $tag ready to publish"
+              should_publish=1
+            fi
+          done
+
+          echo "first_release=$has_first_release" >> $GITHUB_OUTPUT
+          echo "should_publish=$should_publish" >> $GITHUB_OUTPUT
+          echo "needs_git_tag_restore=$needs_git_tag_restore" >> $GITHUB_OUTPUT
+
+      - name: Restore Git tags and sync Nx version state
+        if: steps.analyze.outputs.needs_git_tag_restore == '1'
         run: |
-          if [[ "${{ steps.detect.outputs.first_release }}" == "1" ]]; then
-            nx release --yes --first-release
-          else
-            nx release --yes
-          fi
+          for pkg_json in $(find . -name package.json -not -path "*/node_modules/*"); do
+            name=$(jq -r .name "$pkg_json")
+            version=$(jq -r .version "$pkg_json")
+            tag="${name}@${version}"
+
+            [[ "$name" == "null" || "$version" == "null" ]] && continue
+
+            if npm view "$name@$version" version &>/dev/null && ! git tag --list | grep -q "$tag"; then
+              echo "Restoring Git tag: $tag"
+              git tag "$tag"
+              git push origin "$tag"
+
+              echo "Syncing Nx release version for $name to $version"
+              nx release version "$version" --projects="$name" \
+                --git-commit=false --git-tag=false --git-push=false
+            fi
+          done
+
+      - name: Skip if nothing to publish
+        if: steps.analyze.outputs.should_publish == '0'
+        run: echo "No packages to publish. Exiting." && exit 0
+
+      - name: Release version
+        if: steps.analyze.outputs.should_publish == '1' && steps.analyze.outputs.first_release != '1'
+        run: |
+          echo "Running Nx version phase"
+          nx release version --yes
+
+      - name: First release
+        if: steps.analyze.outputs.first_release == '1'
+        run: |
+          echo "Running Nx release with --first-release"
+          nx release --yes --first-release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Release publish
+        if: steps.analyze.outputs.should_publish == '1'
+        run: |
+          echo "Running Nx release publish"
+          nx release publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Push Git tags
+        if: steps.analyze.outputs.should_publish == '1'
         run: git push --follow-tags
