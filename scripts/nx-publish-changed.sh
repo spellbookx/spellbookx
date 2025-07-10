@@ -1,7 +1,8 @@
 #!/bin/sh
 # nx-publish-changed.sh
-# POSIX-compliant script to publish Nx projects that have a version change
-# Compares project versions against git tags and runs `nx release publish` only on changed projects
+# POSIX-compliant script to publish Nx projects that have a version change.
+# It compares project versions against git tags and runs `nx release publish` only
+# on projects where a version bump is detected (i.e., no existing matching git tag).
 #
 # Usage:
 #   ./nx-publish-changed.sh
@@ -11,7 +12,7 @@
 #   - jq
 #   - pnpm (for pnpm exec nx) or nx globally installed
 #
-# Automatically attempts to install missing commands if possible (via apt or corepack)
+# Automatically attempts to install missing commands if possible (via apt or corepack).
 
 set -eu
 

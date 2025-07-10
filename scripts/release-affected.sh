@@ -1,4 +1,29 @@
 #!/bin/sh
+# release-affected.sh
+# POSIX-compliant script to detect Nx workspace projects with version changes,
+# run `nx release version` accordingly, commit, and optionally push changes.
+#
+# It:
+# - Detects affected Nx projects based on git diff between origin/main and HEAD
+# - Checks if project tags exist and decides if a first release flag is needed
+# - Runs Nx release version command with appropriate flags
+# - Commits version bumps with a conventional commit message
+# - Pushes commits only if running in a CI environment (e.g., CI=true)
+#
+# Usage:
+#   ./release-affected.sh
+#
+# Requirements:
+#   - git
+#   - jq
+#   - pnpm (with nx available globally or via pnpm exec)
+#
+# Automatically attempts to install missing commands where possible (apt/corepack).
+#
+# Note:
+#   Ensure that your git environment is configured properly for push,
+#   and that NX CLI is installed or accessible via pnpm exec.
+
 set -eu
 
 namespace="@spellbookx"
@@ -13,7 +38,7 @@ log() {
   printf '%s\n' "$*" >&2
 }
 
-# Check command availability
+# Check command availability and optionally install it
 check_command_install() {
   cmd="$1"
   install_cmd="${2:-}"
