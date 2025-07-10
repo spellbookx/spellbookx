@@ -21,6 +21,8 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 8
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -29,128 +31,145 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies and tools
+      - name: Install dependencies and global Nx CLI
         run: |
-          pnpm install
-          curl -sSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
-          chmod +x /usr/local/bin/yq
-
-      - uses: nrwl/nx-set-shas@v4
-
-      - name: Install global Nx CLI
-        run: pnpm add -g nx
+          pnpm install --frozen-lockfile
+          pnpm add -g nx
 
       - name: Setup Git user
         run: |
           git config user.name "Davide Di Criscito"
           git config user.email "davide.dicriscito@gmail.com"
 
-      - name: Analyze packages for release state
-        id: analyze
+      - uses: nrwl/nx-set-shas@v4
+
+      - name: Determine projects to release
+        id: determine_projects
         run: |
-          has_first_release=0
-          should_publish=0
-          needs_git_tag_restore=0
-          publishable_projects=()
-          tags_to_restore=()
+          changed_projects=$(nx show projects --affected --base=main~1 --head=main)
 
-          for pkg_json in $(find . -name package.json -not -path "*/node_modules/*"); do
-            name=$(jq -r .name "$pkg_json")
-            version=$(jq -r .version "$pkg_json")
-            tag="${name}@${version}"
+          publishable_projects=""
 
-            [[ "$name" == "null" || "$version" == "null" ]] && continue
+          for project in $changed_projects; do
+            # Check if the project has a package.json and is a publishable type.
+            # This example assumes all changed projects that are *not* applications are publishable.
+            # Adjust this logic based on your workspace conventions (e.g., specific tags in project.json,
+            # projects under a 'libs/' directory, or projects with a 'build' target that outputs to dist/).
 
-            exists_git=$(git tag --list "$tag")
-            exists_npm=$(npm view "$name@$version" version || true)
+            # Get project type from project.json
+            PROJECT_TYPE=$(jq -r '.projectType // "unknown"' "libs/$project/project.json" 2>/dev/null || jq -r '.projectType // "unknown"' "apps/$project/project.json" 2>/dev/null || echo "unknown")
 
-            if [[ -z "$exists_git" && -z "$exists_npm" ]]; then
-              echo "→ First release for $tag"
-              has_first_release=1
-              should_publish=1
-              publishable_projects+=("$name")
-            elif [[ -z "$exists_git" && -n "$exists_npm" ]]; then
-              echo "→ $tag exists on npm but not in Git — tag needs to be restored or bumped"
-              needs_git_tag_restore=1
-              tags_to_restore+=("$tag")
-            elif [[ -n "$exists_git" && -n "$exists_npm" ]]; then
-              echo "→ $tag already published and tagged, skipping"
+            # Check if project.json exists and contains a 'build' target. This often implies publishability.
+            if [ -f "libs/$project/project.json" ] || [ -f "apps/$project/project.json" ]; then
+              if jq -e '.targets.build' "libs/$project/project.json" >/dev/null 2>&1 || jq -e '.targets.build' "apps/$project/project.json" >/dev/null 2>&1; then
+                # If it's a library or an application that you explicitly want to publish
+                if [[ "$PROJECT_TYPE" == "library" || ("$PROJECT_TYPE" == "application" && "$project" == "your-publishable-app-name") ]]; then # Customize "your-publishable-app-name" if you publish apps
+                  if [[ -z "$publishable_projects" ]]; then
+                    publishable_projects="$project"
+                  else
+                    publishable_projects="$publishable_projects,$project"
+                  fi
+                fi
+              fi
+            fi
+          done
+
+          if [[ -z "$publishable_projects" ]]; then
+            echo "No publishable projects found with changes. Skipping release."
+            echo "should_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found publishable projects to consider for release: $publishable_projects"
+            echo "projects_to_release=$publishable_projects" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Nx Release Version (to bump versions and create tags/commits)
+        id: nx_version
+        if: steps.determine_projects.outputs.should_release == 'true'
+        run: |
+          PROJECTS="${{ steps.determine_projects.outputs.projects_to_release }}"
+          echo "Bumping versions for projects: $PROJECTS"
+
+          nx release version --project="$PROJECTS" --yes --git-push=false
+
+          LATEST_TAG=$(git tag --sort=-committerdate | head -n 1)
+
+          echo "Latest tag created by Nx: $LATEST_TAG"
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Check and push Git tags to GitHub
+        if: steps.determine_projects.outputs.should_release == 'true' && steps.nx_version.outputs.latest_tag != ''
+        run: |
+          LATEST_TAG="${{ steps.nx_version.outputs.latest_tag }}"
+
+          if git ls-remote --tags origin | grep -q "refs/tags/$LATEST_TAG"; then
+            echo "Tag $LATEST_TAG already exists on remote. Skipping push."
+          else
+            echo "Pushing tag $LATEST_TAG to remote."
+            git push origin "$LATEST_TAG"
+          fi
+
+          git push --follow-tags
+
+      - name: Verify npmjs presence and handle conflicts (if any)
+        id: npm_check
+        if: steps.determine_projects.outputs.should_release == 'true'
+        run: |
+          PROJECTS="${{ steps.determine_projects.outputs.projects_to_release }}"
+          NEEDS_REBUMP=""
+          PUBLISH_CANDIDATES=""
+
+          IFS=',' read -ra ADDR <<< "$PROJECTS"
+          for project in "${ADDR[@]}"; do
+            PACKAGE_PATH=$(find . -name "package.json" -path "*/$project/*" | head -n 1)
+            if [[ -z "$PACKAGE_PATH" ]]; then
+              echo "Warning: package.json not found for project $project. Skipping npm check."
               continue
+            fi
+
+            PACKAGE_VERSION=$(jq -r .version "$PACKAGE_PATH")
+            PACKAGE_NAME=$(jq -r .name "$PACKAGE_PATH")
+            FULL_TAG="${PACKAGE_NAME}@${PACKAGE_VERSION}"
+
+            echo "Checking $FULL_TAG on npmjs..."
+
+            NPM_VERSIONS=$(npm view "$PACKAGE_NAME" versions --json || echo "[]")
+
+            if echo "$NPM_VERSIONS" | jq -e ".[] == \"$PACKAGE_VERSION\"" > /dev/null; then
+              echo "Conflict: $FULL_TAG already exists on npmjs."
+              NEEDS_REBUMP="$NEEDS_REBUMP,$project"
             else
-              echo "→ $tag ready to publish"
-              should_publish=1
-              publishable_projects+=("$name")
+              echo "✅ $FULL_TAG is unique for npmjs."
+              if [[ -z "$PUBLISH_CANDIDATES" ]]; then
+                PUBLISH_CANDIDATES="$project"
+              else
+                PUBLISH_CANDIDATES="$PUBLISH_CANDIDATES,$project"
+              fi
             fi
           done
 
-          echo "first_release=$has_first_release" >> $GITHUB_OUTPUT
-          echo "should_publish=$should_publish" >> $GITHUB_OUTPUT
-          echo "needs_git_tag_restore=$needs_git_tag_restore" >> $GITHUB_OUTPUT
-          echo "projects=$(IFS=','; echo "${publishable_projects[*]}")" >> $GITHUB_OUTPUT
-          echo "restore_tags=$(IFS=','; echo "${tags_to_restore[*]}")" >> $GITHUB_OUTPUT
-
-      - name: Restore missing Git tags or bump version if package in repo
-        if: steps.analyze.outputs.needs_git_tag_restore == '1'
-        run: |
-          for tag in $(echo "${{ steps.analyze.outputs.restore_tags }}" | tr ',' ' '); do
-            name="${tag%@*}"
-            version="${tag#*@}"
-
-            pkg_dir=$(find . -name package.json -not -path "*/node_modules/*" -exec jq -r 'select(.name == "'"$name"'") | input_filename' {} \; | xargs -n1 dirname | head -n1)
-
-            if [[ -z "$pkg_dir" ]]; then
-              echo "📦 $name@$version is not in this repo, restoring Git tag only"
-              git tag "$tag"
-              git push origin "$tag"
-            else
-              echo "⚠️ $name@$version is in repo but missing Git tag, bumping version to avoid conflicts"
-              nx release version patch --projects="$name" \
-                --git-commit=true --git-tag=true --git-push=false
-            fi
-          done
-
-      - name: Skip publish if no candidate projects
-        run: |
-          if [[ "${{ steps.analyze.outputs.should_publish }}" == "0" ]]; then
-            echo "No projects to publish. Exiting."
-            exit 0
+          if [[ -n "$NEEDS_REBUMP" ]]; then
+            echo "::error::Detected npmjs version conflicts for projects: ${NEEDS_REBUMP#,}."
+            echo "These projects require a manual version bump before they can be published, as their current version already exists on npmjs."
+            echo "This workflow will proceed only with non-conflicting projects that have unique versions."
           fi
 
-      - name: First release
-        if: steps.analyze.outputs.first_release == '1'
+          echo "publishable_projects_after_npm_check=$PUBLISH_CANDIDATES" >> $GITHUB_OUTPUT
+
+      - name: Run Nx Release Publish
+        if: steps.determine_projects.outputs.should_release == 'true' && steps.npm_check.outputs.publishable_projects_after_npm_check != ''
         run: |
-          echo "Running Nx release with --first-release"
-          nx release --yes --first-release
+          PROJECTS_TO_PUBLISH="${{ steps.npm_check.outputs.publishable_projects_after_npm_check }}"
+          echo "Publishing projects to npmjs: $PROJECTS_TO_PUBLISH"
+          nx release publish --projects="$PROJECTS_TO_PUBLISH" --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
-      - name: Release version
-        if: steps.analyze.outputs.first_release != '1'
-        run: |
-          echo "Running Nx release version"
-          nx release version --yes
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
-
-      - name: Release publish
-        if: steps.analyze.outputs.should_publish == '1'
-        run: |
-          projects="${{ steps.analyze.outputs.projects }}"
-          if [[ -z "$projects" ]]; then
-            echo "No publishable projects found. Skipping publish."
-            exit 0
-          fi
-
-          echo "Publishing projects: $projects"
-          nx release publish --projects="$projects"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
-
-      - name: Push Git tags and commits
-        if: steps.analyze.outputs.should_publish == '1'
+      - name: Push Git commits to main
+        if: steps.determine_projects.outputs.should_release == 'true'
         run: |
           git push origin main
-          git push --follow-tags
