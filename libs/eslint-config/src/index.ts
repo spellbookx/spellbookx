@@ -1,22 +1,25 @@
-import { type Linter } from 'eslint';
-import { defineConfig, globalIgnores } from 'eslint/config';
-import ignores from './lib/ignores.js';
-import configMarkdown from './config/markdown.js';
-import configJson from './config/json.js';
-import configJson5 from './config/json5.js';
-import configJsonc from './config/jsonc.js';
-import configJavascript from './config/javascript.js';
-import configTypescript from './config/typescript.js';
+import tseslint, { type ConfigArray } from 'typescript-eslint';
+import { baseConfig } from './configs/base.js';
+import { gitignoreConfig } from './configs/gitignore.js';
+import { javascriptConfig } from './configs/javascript.js';
+import { jsonConfig } from './configs/json.js';
+import { typescriptConfig } from './configs/typescript.js';
+import { json5Config } from './configs/json5.js';
+import { jsoncConfig } from './configs/jsonc.js';
 
-const config: Linter.Config[] = defineConfig(
-  globalIgnores(ignores),
-  configMarkdown,
-  configJson,
-  configJson5,
-  configJsonc,
-  configJavascript,
-  configTypescript
-);
+type Configs = Record<string, ConfigArray>;
 
-export { ignores, config as sbxConfig };
+const configs: Configs = {
+  base: baseConfig,
+  gitignore: gitignoreConfig,
+  javascript: javascriptConfig,
+  typescript: typescriptConfig,
+  json: jsonConfig,
+  json5: json5Config,
+  jsonc: jsoncConfig,
+};
+
+const config: ConfigArray = tseslint.config(configs);
+
+export { configs };
 export default config;

@@ -1,9 +1,19 @@
 import nx from '@nx/eslint-plugin';
-import { ignores } from '@spellbookx/eslint-config';
+import { defineConfig } from 'eslint/config';
 
-export default [
+export default defineConfig([
   {
-    ignores: [...ignores, './.github/instructions/nx.instructions.md'],
+    ignores: [
+      'node_modules/',
+      '**/node_modules/',
+      '*lock*',
+      '**/*lock*',
+      '*log*',
+      '**/*log*',
+      '.nx/',
+      'dist/',
+      '**/dist/',
+    ],
   },
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
@@ -40,4 +50,4 @@ export default [
     // Override or add rules here
     rules: {},
   },
-];
+]);

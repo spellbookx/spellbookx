@@ -1,8 +1,7 @@
 import json from '@eslint/json';
-import { Linter } from 'eslint';
-import { defineConfig } from 'eslint/config';
+import tseslint, { type ConfigArray } from 'typescript-eslint';
 
-const configJson5: Linter.Config[] = defineConfig({
+const json5Config: ConfigArray = tseslint.config({
   files: ['**/*.json5'],
   plugins: { json },
   language: 'json/json5',
@@ -12,5 +11,5 @@ const configJson5: Linter.Config[] = defineConfig({
   },
 });
 
-export { configJson5 };
-export default configJson5;
+export { json5Config };
+export default json5Config;

@@ -14,6 +14,10 @@
     "url": "https://github.com/spellbookx/spellbookx/issues"
   },
   "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "keywords": [
+    "eslint",
+    "eslint-config"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -26,41 +30,53 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./config/markdown.js": {
-      "development": "./src/config/markdown.ts",
-      "types": "./dist/config/markdown.d.ts",
-      "import": "./dist/config/markdown.js",
-      "default": "./dist/config/markdown.js"
+    "./configs/base.js": {
+      "development": "./src/configs/base.ts",
+      "types": "./dist/configs/base.d.ts",
+      "import": "./dist/configs/base.js",
+      "default": "./dist/configs/base.js"
     },
-    "./config/json.js": {
-      "development": "./src/config/json.ts",
-      "types": "./dist/config/json.d.ts",
-      "import": "./dist/config/json.js",
-      "default": "./dist/config/json.js"
+    "./configs/gitignore.js": {
+      "development": "./src/configs/gitignore.ts",
+      "types": "./dist/configs/gitignore.d.ts",
+      "import": "./dist/configs/gitignore.js",
+      "default": "./dist/configs/gitignore.js"
     },
-    "./config/json5.js": {
-      "development": "./src/config/json5.ts",
-      "types": "./dist/config/json5.d.ts",
-      "import": "./dist/config/json5.js",
-      "default": "./dist/config/json5.js"
+    "./configs/markdown.js": {
+      "development": "./src/configs/markdown.ts",
+      "types": "./dist/configs/markdown.d.ts",
+      "import": "./dist/configs/markdown.js",
+      "default": "./dist/configs/markdown.js"
     },
-    "./config/jsonc.js": {
-      "development": "./src/config/jsonc.ts",
-      "types": "./dist/config/jsonc.d.ts",
-      "import": "./dist/config/jsonc.js",
-      "default": "./dist/config/jsonc.js"
+    "./configs/json.js": {
+      "development": "./src/configs/json.ts",
+      "types": "./dist/configs/json.d.ts",
+      "import": "./dist/configs/json.js",
+      "default": "./dist/configs/json.js"
     },
-    "./config/javascript.js": {
-      "development": "./src/config/javascript.ts",
-      "types": "./dist/config/javascript.d.ts",
-      "import": "./dist/config/javascript.js",
-      "default": "./dist/config/javascript.js"
+    "./configs/json5.js": {
+      "development": "./src/configs/json5.ts",
+      "types": "./dist/configs/json5.d.ts",
+      "import": "./dist/configs/json5.js",
+      "default": "./dist/configs/json5.js"
     },
-    "./config/typescript.js": {
-      "development": "./src/config/typescript.ts",
-      "types": "./dist/config/typescript.d.ts",
-      "import": "./dist/config/typescript.js",
-      "default": "./dist/config/typescript.js"
+    "./configs/jsonc.js": {
+      "development": "./src/configs/jsonc.ts",
+      "types": "./dist/configs/jsonc.d.ts",
+      "import": "./dist/configs/jsonc.js",
+      "default": "./dist/configs/jsonc.js"
+    },
+    "./configs/javascript.js": {
+      "development": "./src/configs/javascript.ts",
+      "types": "./dist/configs/javascript.d.ts",
+      "import": "./dist/configs/javascript.js",
+      "default": "./dist/configs/javascript.js"
+    },
+    "./configs/typescript.js": {
+      "development": "./src/configs/typescript.ts",
+      "types": "./dist/configs/typescript.d.ts",
+      "import": "./dist/configs/typescript.js",
+      "default": "./dist/configs/typescript.js"
     }
   },
   "nx": {
@@ -74,22 +90,25 @@
           "{options.outputPath}"
         ],
         "options": {
-          "outputPath": "libs/eslint-config/dist",
           "main": "libs/eslint-config/src/index.ts",
-          "entryPoints": [
-            "libs/eslint-config/src/index.ts",
-            "libs/eslint-config/src/config/markdown.ts",
-            "libs/eslint-config/src/config/json.ts",
-            "libs/eslint-config/src/config/json5.ts",
-            "libs/eslint-config/src/config/jsonc.ts",
-            "libs/eslint-config/src/config/javascript.ts",
-            "libs/eslint-config/src/config/typescript.ts"
-          ],
+          "outputPath": "libs/eslint-config/dist",
           "tsConfig": "libs/eslint-config/tsconfig.lib.json",
+          "additionalEntryPoints": [
+            "libs/eslint-config/src/configs/base.ts",
+            "libs/eslint-config/src/configs/gitignore.ts",
+            "libs/eslint-config/src/configs/markdown.ts",
+            "libs/eslint-config/src/configs/json.ts",
+            "libs/eslint-config/src/configs/json5.ts",
+            "libs/eslint-config/src/configs/jsonc.ts",
+            "libs/eslint-config/src/configs/javascript.ts",
+            "libs/eslint-config/src/configs/typescript.ts"
+          ],
           "format": [
             "esm"
           ],
-          "declarationRootDir": "libs/eslint-config/src"
+          "declaration": true,
+          "declarationRootDir": "libs/eslint-config/src",
+          "deleteOutputPath": true
         }
       }
     }
@@ -100,7 +119,10 @@
     "@eslint/markdown": "^6.6.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "typescript-eslint": "^8.35.1"
+    "typescript-eslint": "^8.35.1",
+    "@eslint/compat": "^1.3.1",
+    "yaml": "^2.8.0",
+    "fast-glob": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^9.30.1"
