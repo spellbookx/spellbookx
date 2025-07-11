@@ -16,6 +16,7 @@ export default [
       '**/yarn.lock',
       '**/.yarn',
       '**/.pnpm',
+      '**/.github/instructions/nx.instructions.md',
     ],
   },
   ...nx.configs['flat/base'],
