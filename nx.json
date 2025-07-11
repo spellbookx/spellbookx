@@ -12,9 +12,13 @@
   "nxCloudId": "686b31a8881ee245ec94847e",
   "release": {
     "projectsRelationship": "independent",
+    "projects": ["*", "!@spellbookx/source"],
     "version": {
       "conventionalCommits": true,
-      "fallbackCurrentVersionResolver": "disk"
+      "currentVersionResolver": "registry",
+      "fallbackCurrentVersionResolver": "disk",
+      "logUnchangedProjects": true,
+      "updateDependents": "auto"
     }
   },
   "plugins": [
