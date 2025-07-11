@@ -1,6 +1,6 @@
 import { type Linter } from 'eslint';
 import tseslint from 'typescript-eslint';
-import ignores from './lib/ignores.js';
+import ignores from '../lib/ignores.js';
 import js from '@eslint/js';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import importPlugin from 'eslint-plugin-import';
@@ -34,4 +34,5 @@ const configTypescript = tseslint.config({
   },
 }) as unknown as Linter.Config[];
 
+export { configTypescript };
 export default configTypescript;

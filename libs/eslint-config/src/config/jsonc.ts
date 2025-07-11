@@ -2,14 +2,15 @@ import json from '@eslint/json';
 import type { Linter } from 'eslint';
 import { defineConfig } from 'eslint/config';
 
-const configJson: Linter.Config[] = defineConfig({
-  files: ['**/*.json'],
+const configJsonc: Linter.Config[] = defineConfig({
+  files: ['**/*.jsonc', '**/tsconfig*.json', '.vscode/*.json'],
   plugins: { json },
-  language: 'json/json',
+  language: 'json/jsonc',
   rules: {
     'no-irregular-whitespace': 'off',
     'json/no-duplicate-keys': 'error',
   },
 });
 
-export default configJson;
+export { configJsonc };
+export default configJsonc;

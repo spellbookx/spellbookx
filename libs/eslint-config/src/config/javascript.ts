@@ -2,7 +2,7 @@ import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import type { Linter } from 'eslint';
 import js from '@eslint/js';
-import ignores from './lib/ignores.js';
+import ignores from '../lib/ignores.js';
 import { defineConfig } from 'eslint/config';
 
 const configJavascript: Linter.Config[] = defineConfig({
@@ -32,4 +32,5 @@ const configJavascript: Linter.Config[] = defineConfig({
   },
 });
 
+export { configJavascript };
 export default configJavascript;

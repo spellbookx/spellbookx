@@ -26,41 +26,41 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./markdown.js": {
-      "development": "./src/markdown.ts",
-      "types": "./dist/markdown.d.ts",
-      "import": "./dist/markdown.js",
-      "default": "./dist/markdown.js"
+    "./config/markdown.js": {
+      "development": "./src/config/markdown.ts",
+      "types": "./dist/config/markdown.d.ts",
+      "import": "./dist/config/markdown.js",
+      "default": "./dist/config/markdown.js"
     },
-    "./json.js": {
-      "development": "./src/json.ts",
-      "types": "./dist/json.d.ts",
-      "import": "./dist/json.js",
-      "default": "./dist/json.js"
+    "./config/json.js": {
+      "development": "./src/config/json.ts",
+      "types": "./dist/config/json.d.ts",
+      "import": "./dist/config/json.js",
+      "default": "./dist/config/json.js"
     },
-    "./json5.js": {
-      "development": "./src/json5.ts",
-      "types": "./dist/json5.d.ts",
-      "import": "./dist/json5.js",
-      "default": "./dist/json5.js"
+    "./config/json5.js": {
+      "development": "./src/config/json5.ts",
+      "types": "./dist/config/json5.d.ts",
+      "import": "./dist/config/json5.js",
+      "default": "./dist/config/json5.js"
     },
-    "./jsonc.js": {
-      "development": "./src/jsonc.ts",
-      "types": "./dist/jsonc.d.ts",
-      "import": "./dist/jsonc.js",
-      "default": "./dist/jsonc.js"
+    "./config/jsonc.js": {
+      "development": "./src/config/jsonc.ts",
+      "types": "./dist/config/jsonc.d.ts",
+      "import": "./dist/config/jsonc.js",
+      "default": "./dist/config/jsonc.js"
     },
-    "./javascript.js": {
-      "development": "./src/javascript.ts",
-      "types": "./dist/javascript.d.ts",
-      "import": "./dist/javascript.js",
-      "default": "./dist/javascript.js"
+    "./config/javascript.js": {
+      "development": "./src/config/javascript.ts",
+      "types": "./dist/config/javascript.d.ts",
+      "import": "./dist/config/javascript.js",
+      "default": "./dist/config/javascript.js"
     },
-    "./typescript.js": {
-      "development": "./src/typescript.ts",
-      "types": "./dist/typescript.d.ts",
-      "import": "./dist/typescript.js",
-      "default": "./dist/typescript.js"
+    "./config/typescript.js": {
+      "development": "./src/config/typescript.ts",
+      "types": "./dist/config/typescript.d.ts",
+      "import": "./dist/config/typescript.js",
+      "default": "./dist/config/typescript.js"
     }
   },
   "nx": {
@@ -76,6 +76,15 @@
         "options": {
           "outputPath": "libs/eslint-config/dist",
           "main": "libs/eslint-config/src/index.ts",
+          "entryPoints": [
+            "libs/eslint-config/src/index.ts",
+            "libs/eslint-config/src/config/markdown.ts",
+            "libs/eslint-config/src/config/json.ts",
+            "libs/eslint-config/src/config/json5.ts",
+            "libs/eslint-config/src/config/jsonc.ts",
+            "libs/eslint-config/src/config/javascript.ts",
+            "libs/eslint-config/src/config/typescript.ts"
+          ],
           "tsConfig": "libs/eslint-config/tsconfig.lib.json",
           "format": [
             "esm"

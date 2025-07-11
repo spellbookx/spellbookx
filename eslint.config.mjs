@@ -1,5 +1,4 @@
 import nx from '@nx/eslint-plugin';
-//import sbxConfig from '@spellbookx/eslint-config';
 
 export default [
   {
@@ -22,7 +21,6 @@ export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
-  //...sbx.configs.polyglot,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {

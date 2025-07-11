@@ -12,4 +12,5 @@ const configJson5: Linter.Config[] = defineConfig({
   },
 });
 
+export { configJson5 };
 export default configJson5;

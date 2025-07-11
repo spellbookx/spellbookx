@@ -1,12 +1,12 @@
 import { type Linter } from 'eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import ignores from './lib/ignores.js';
-import configMarkdown from './markdown.js';
-import configJson from './json.js';
-import configJson5 from './json5.js';
-import configJsonc from './jsonc.js';
-import configJavascript from './javascript.js';
-import configTypescript from './typescript.js';
+import configMarkdown from './config/markdown.js';
+import configJson from './config/json.js';
+import configJson5 from './config/json5.js';
+import configJsonc from './config/jsonc.js';
+import configJavascript from './config/javascript.js';
+import configTypescript from './config/typescript.js';
 
 const config: Linter.Config[] = defineConfig(
   globalIgnores(ignores),
@@ -18,5 +18,5 @@ const config: Linter.Config[] = defineConfig(
   configTypescript
 );
 
-export { ignores };
+export { ignores, config as sbxConfig };
 export default config;

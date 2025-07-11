@@ -16,4 +16,5 @@ const configMarkdown: Linter.Config[] = defineConfig({
   },
 });
 
+export { configMarkdown };
 export default configMarkdown;
