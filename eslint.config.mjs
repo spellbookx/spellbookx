@@ -1,23 +1,9 @@
 import nx from '@nx/eslint-plugin';
+import { ignores } from '@spellbookx/eslint-config';
 
 export default [
   {
-    ignores: [
-      '**/dist',
-      '**/build',
-      '**/out',
-      '**/node_modules',
-      '**/.next',
-      '**/.turbo',
-      '**/.nx**',
-      '**/.cache',
-      '**/pnpm-lock.yaml',
-      '**/package-lock.json',
-      '**/yarn.lock',
-      '**/.yarn',
-      '**/.pnpm',
-      '**/.github/instructions/nx.instructions.md',
-    ],
+    ignores: [...ignores, './.github/instructions/nx.instructions.md'],
   },
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
