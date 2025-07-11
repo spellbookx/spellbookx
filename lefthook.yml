@@ -22,6 +22,8 @@ commit-msg:
 pre-push:
   jobs:
     - name: format-check
+      exclude:
+        - .github/instructions/nx.instructions.md
       run: '{nx} format:check --all'
 
 post-merge:
