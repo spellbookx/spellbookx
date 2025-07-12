@@ -14,11 +14,9 @@
     "projectsRelationship": "independent",
     "projects": ["*", "!@spellbookx/source"],
     "version": {
-      "conventionalCommits": true,
-      "currentVersionResolver": "registry",
       "fallbackCurrentVersionResolver": "disk",
-      "logUnchangedProjects": true,
-      "updateDependents": "auto"
+      "updateDependents": "auto",
+      "conventionalCommits": true
     }
   },
   "plugins": [
