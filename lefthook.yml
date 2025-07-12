@@ -20,11 +20,11 @@ commit-msg:
       run: pnpm commitlint --verbose --edit {1}
 
 pre-push:
-  jobs:
-    - name: format-check
+  commands:
+    format-check:
+      run: '{nx} format:check --all'
       exclude:
         - .github/instructions/nx.instructions.md
-      run: '{nx} format:check --all'
 
 post-merge:
   jobs:
