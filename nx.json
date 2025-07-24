@@ -9,7 +9,7 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/LICENSE"]
   },
-  "nxCloudId": "686b31a8881ee245ec94847e",
+  "nxCloudId": "688241b41155fb90002d3387",
   "release": {
     "projectsRelationship": "independent",
     "projects": ["*", "!@spellbookx/source"],
@@ -23,9 +23,7 @@
     {
       "plugin": "@nx/js/typescript",
       "options": {
-        "typecheck": {
-          "targetName": "typecheck"
-        },
+        "typecheck": { "targetName": "typecheck" },
         "build": {
           "targetName": "build",
           "configName": "tsconfig.lib.json",
@@ -34,12 +32,7 @@
         }
       }
     },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    }
+    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } }
   ],
   "targetDefaults": {
     "@nx/esbuild:esbuild": {
