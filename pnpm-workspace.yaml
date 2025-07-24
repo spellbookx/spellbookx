@@ -5,7 +5,10 @@ packages:
 linkWorkspacePackages: true
 
 onlyBuiltDependencies:
+  - '@swc/core'
   - esbuild
   - lefthook
+  - nx
+  - unrs-resolver
 
 sideEffectsCache: false

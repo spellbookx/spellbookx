@@ -7,9 +7,15 @@
       "!{projectRoot}/.eslintrc.json",
       "!{projectRoot}/eslint.config.mjs"
     ],
+    "lintInputs": [
+      "{projectRoot}/**/*",
+      "{projectRoot}/eslint.config.mjs",
+      "{projectRoot}/.eslintrc.json",
+      "sharedGlobals"
+    ],
     "sharedGlobals": ["{workspaceRoot}/LICENSE"]
   },
-  "nxCloudId": "686b31a8881ee245ec94847e",
+  "nxCloudId": "6882481f36ff0e66b999e028",
   "release": {
     "projectsRelationship": "independent",
     "projects": ["*", "!@spellbookx/source"],
@@ -46,6 +52,18 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "@nx/eslint:lint": {
+      "cache": true,
+      "inputs": ["lintInputs", "^lintInputs"]
+    },
+    "@nx/js:lint": {
+      "cache": true,
+      "inputs": ["lintInputs", "^lintInputs"]
+    },
+    "@nx/js:typescript-typecheck": {
+      "cache": true,
+      "inputs": ["default", "^default"]
     }
   }
 }

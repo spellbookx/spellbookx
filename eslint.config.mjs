@@ -2,38 +2,55 @@ import nx from '@nx/eslint-plugin';
 import sbx from '@spellbookx/eslint-config';
 import { defineConfig } from 'eslint/config';
 
-export default defineConfig([
-  // Ignore files patterns and gitignore integration
-  sbx.configs.ignores,
-  sbx.configs.gitignore,
+console.log(Object.keys(sbx.configs));
 
-  // Nx core base configs for flat ESLint setups
+export default defineConfig([
+  // Ignore patterns (custom + .gitignore)
+  ...sbx.configs.ignores,
+  ...sbx.configs.gitignore,
+
+  // Nx base rules
   {
     extends: [nx.configs['flat/base']],
     rules: {
-      'sort-imports': 'off', // Disable sort-imports for base config
+      'sort-imports': 'off',
     },
   },
 
-  // JavaScript files configuration
+  // JavaScript files
   {
     files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
     extends: [nx.configs['flat/javascript'], sbx.configs.javascript],
     rules: {
-      'sort-imports': 'off', // Disable sort-imports for JS files
+      'sort-imports': 'off',
     },
   },
 
-  // TypeScript files configuration (removed .mjs here for clarity)
+  // TypeScript files
   {
-    files: ['**/*.ts', '**/*.cts'],
+    files: ['**/*.ts', '**/*.cts', '**/*.mts'],
     extends: [nx.configs['flat/typescript'], sbx.configs.typescript],
     rules: {
-      'sort-imports': 'off', // Disable sort-imports for JS files
+      'sort-imports': 'off',
     },
   },
 
-  // Module boundary enforcement across JS/TS
+  // JSDoc/TSDoc linting
+  {
+    files: [
+      '**/*.ts',
+      '**/*.cts',
+      '**/*.mts',
+      '**/*.tsx',
+      '**/*.js',
+      '**/*.cjs',
+      '**/*.mjs',
+      '**/*.jsx',
+    ],
+    extends: [sbx.configs.jsdoc],
+  },
+
+  // Nx-specific module boundaries
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
@@ -53,24 +70,17 @@ export default defineConfig([
     },
   },
 
-  // JSDoc linting across all supported file extensions
-  {
-    files: [
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.cts',
-      '**/*.mts',
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.cjs',
-      '**/*.mjs',
-    ],
-    extends: [sbx.configs.jsdoc],
-  },
+  // JSON, JSON5 and JSONC (via SBX configs)
+  ...sbx.configs.json,
+  ...sbx.configs.json5,
+  ...sbx.configs.jsonc,
 
-  // Additional config blocks for JSON, YAML, Markdown, and Prettier
-  sbx.configs.json,
-  sbx.configs.yaml,
-  sbx.configs.markdown.githubYaml,
-  sbx.configs.prettier,
+  // YAML
+  ...sbx.configs.yaml,
+
+  // Markdown with GitHub-style fenced blocks
+  ...sbx.configs.markdownGithubYaml,
+
+  // Prettier integration (conflict-free with core rules)
+  ...sbx.configs.prettier,
 ]);
