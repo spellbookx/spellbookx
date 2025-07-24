@@ -1,6 +1,6 @@
 templates:
   pnpminstall: pnpm install
-  configplugin: pnpm run build:config-plugin
+  buildconfig: pnpm run build:config
   nx: pnpm nx
 
 # pre-commit:
@@ -27,7 +27,7 @@ post-merge:
   jobs:
     - name: build configs and plugins
       interactive: true
-      run: '{configplugin}'
+      run: '{buildconfig}'
     - name: update lefthook hooks
       run: '{pnpminstall} && pnpm lefthook install'
 
@@ -35,6 +35,6 @@ post-checkout:
   jobs:
     - name: build configs and plugins
       interactive: true
-      run: '{configplugin}'
+      run: '{buildconfig}'
     - name: update lefthook hooks
       run: '{pnpminstall} && pnpm lefthook install'
