@@ -1,3 +1,5 @@
+import jsoncParser from 'jsonc-eslint-parser';
+
 import baseConfig from '../../eslint.config.mjs';
 
 export default [
@@ -16,7 +18,7 @@ export default [
       ],
     },
     languageOptions: {
-      parser: await import('jsonc-eslint-parser'),
+      parser: jsoncParser,
     },
   },
 ];

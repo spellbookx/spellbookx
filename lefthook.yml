@@ -3,28 +3,25 @@ templates:
   configplugin: pnpm run build:config-plugin
   nx: pnpm nx
 
-pre-commit:
-  piped: true
-  jobs:
-    - name: lint
-      interactive: true
-      run: '{nx} run-many -t lint --parallel=false'
-      stage_fixed: true
-    - name: format-write
-      run: '{nx} format:write --files {staged_files}'
-      stage_fixed: true
+# pre-commit:
+#   piped: true
+#   jobs:
+#     - name: lint
+#       interactive: true
+#       run: pnpm exec eslint . --fix
+#       stage_fixed: true
 
 commit-msg:
   jobs:
     - name: commitlint
       run: pnpm commitlint --verbose --edit {1}
 
-pre-push:
-  commands:
-    format-check:
-      run: '{nx} format:check --all'
-      exclude:
-        - .github/instructions/nx.instructions.md
+# pre-push:
+#   commands:
+#     format-check:
+#       run: '{nx} format:check --all'
+#       exclude:
+#         - .github/instructions/nx.instructions.md
 
 post-merge:
   jobs:

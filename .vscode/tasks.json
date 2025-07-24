@@ -1,12 +1,14 @@
-// .vscode/tasks.json
 {
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build:config-plugins",
+      "label": "build:config",
       "type": "shell",
       "command": "pnpm run build:config",
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -18,19 +20,33 @@
       }
     },
     {
-      "label": "lefthook install",
+      "label": "lefthook:install",
       "type": "shell",
-      "command": "pnpm lefthook install",
+      "command": "pnpm run lefthook:install",
       "problemMatcher": [],
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
       "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "never",
         "focus": false,
         "panel": "dedicated"
+      }
+    },
+    {
+      "label": "watch:lefthook",
+      "type": "shell",
+      "command": "pnpm run watch:lefthook",
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "never",
+        "focus": false,
+        "panel": "shared"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
       }
     }
   ]

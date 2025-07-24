@@ -1,69 +1,76 @@
-import importPlugin from 'eslint-plugin-import';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import js from '@eslint/js';
+import eslintPluginSimpleImportSort from 'eslint-plugin-simple-import-sort';
+// @ts-expect-error: No types available for this plugin
+import sortImportRequires from 'eslint-plugin-sort-imports-requires';
 import tseslint, { type ConfigArray } from 'typescript-eslint';
 
 /**
- * ESLint configuration for modern JavaScript files (`.js`, `.cjs`, `.mjs`).
+ * ESLint configuration for modern JavaScript projects.
+ *
+ * Targets `.js`, `.cjs`, and `.mjs` files, supporting both CommonJS and ESM module formats.
  *
  * Features:
- * - Enables ECMAScript 2024 syntax
- * - Applies recommended rules from `@eslint/js` and `eslint-plugin-import`
- * - Integrates `simple-import-sort` for consistent import ordering
- * - Differentiates between CommonJS (`.cjs`) and ESM (`.mjs`) via `sourceType` overrides
+ * - Extends recommended rules from `@eslint/js`.
+ * - Enforces strict import and require ordering with:
+ * - `simple-import-sort` for static ES imports/exports.
+ * - `sort-imports-requires` for dynamic CommonJS require calls.
  *
- * Notes:
- * - Disables `import/order` to prevent conflict with `simple-import-sort`
- * - Requires Node.js ≥ 20 or equivalent runtime for full syntax support
+ * This combination ensures consistent import organization across mixed module systems.
+ * @example
+ * ```ts
+ * import tseslint from 'typescript-eslint';
+ * import sbx from '@spellbookx/eslint-config';
+ * export default tseslint.config(
+ *   ...sbx.configs.javascript
+ * );
+ * ```
+ * @example
+ * ```js
+ * import sbx from '@spellbookx/eslint-config';
+ * export default [sbx.configs.javascript];
+ * ```
  */
 const javascriptConfig: ConfigArray = tseslint.config(
   {
-    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
-    extends: [js.configs.recommended, importPlugin.flatConfigs.recommended],
-    plugins: {
-      import: importPlugin,
-      'simple-import-sort': simpleImportSort,
-    },
+    files: ['**/*.js', '**/*.mjs'],
+    extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+    plugins: {
+      'simple-import-sort': eslintPluginSimpleImportSort,
     },
     rules: {
-      // Core rules from eslint-plugin-import
-      'import/no-unresolved': 'error',
-      'import/named': 'error',
-      'import/default': 'error',
-      'import/namespace': 'error',
-      'import/no-duplicates': 'warn',
-      'import/order': 'off',
+      'sort-imports': 'off',
+      'sort-imports-requires/sort-imports': 'off',
+      'sort-imports-requires/sort-requires': 'off',
 
-      // Replacement rules from eslint-plugin-simple-import-sort
-      'simple-import-sort/imports': 'warn',
-      'simple-import-sort/exports': 'warn',
+      // ✅ Pure ESM import sorting
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
 
-  /**
-   * Override for CommonJS files (`.cjs`).
-   * Adjusts the `sourceType` to correctly parse CommonJS modules.
-   */
   {
     files: ['**/*.cjs'],
     languageOptions: {
+      ecmaVersion: 'latest',
       sourceType: 'commonjs',
     },
-  },
-
-  /**
-   * Override for ECMAScript Module files (`.mjs`).
-   * Ensures `sourceType` is set to `module` for proper ESM parsing.
-   */
-  {
-    files: ['**/*.mjs'],
-    languageOptions: {
-      sourceType: 'module',
+    plugins: {
+      'sort-imports-requires': sortImportRequires,
     },
-  }
+    rules: {
+      'sort-imports': 'off',
+      'simple-import-sort/imports': 'off',
+      'simple-import-sort/exports': 'off',
+
+      // ✅ Only apply to CommonJS
+      'sort-imports-requires/sort-requires': ['error', { unsafeAutofix: true }],
+      'sort-imports-requires/sort-imports': ['error', { unsafeAutofix: true }],
+    },
+  },
 );
 
-export { javascriptConfig };
-export default javascriptConfig;
+export { javascriptConfig as default, javascriptConfig };

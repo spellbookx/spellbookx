@@ -1,0 +1,351 @@
+{
+  "graph": {
+    "nodes": {
+      "@spellbookx/cspell-config": {
+        "name": "@spellbookx/cspell-config",
+        "type": "lib",
+        "data": {
+          "root": "libs/cspell-config",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "dependsOn": ["build", "^typecheck"],
+              "options": {
+                "cwd": "libs/cspell-config",
+                "command": "tsc --build --emitDeclarationOnly"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/package.json",
+                "{workspaceRoot}/tsconfig.base.json",
+                "{projectRoot}/tsconfig.json",
+                "{projectRoot}/tsconfig.lib.json",
+                "{projectRoot}/src/**/*.ts",
+                "^production",
+                {
+                  "externalDependencies": ["typescript"]
+                }
+              ],
+              "outputs": [
+                "{projectRoot}/dist/**/*.d.ts",
+                "{projectRoot}/dist/**/*.d.ts.map",
+                "{projectRoot}/dist/tsconfig.lib.tsbuildinfo"
+              ],
+              "syncGenerators": ["@nx/js:typescript-sync"],
+              "metadata": {
+                "technologies": ["typescript"],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc --build --help",
+                  "example": {
+                    "args": ["--force"]
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/esbuild:esbuild",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "outputPath": "libs/cspell-config/dist",
+                "main": "libs/cspell-config/src/index.ts",
+                "tsConfig": "libs/cspell-config/tsconfig.lib.json",
+                "format": ["esm"],
+                "declarationRootDir": "libs/cspell-config/src"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"]
+            },
+            "build-deps": {
+              "dependsOn": ["^build"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": ["build-deps"],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects @spellbookx/cspell-config --includeDependentProjects -- pnpm exec nx build-deps @spellbookx/cspell-config"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/cspell-config",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/cspell-config/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "@spellbookx/cspell-config",
+          "tags": ["npm:public", "type:config"],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@spellbookx/cspell-config",
+              "packageExports": {
+                "./package.json": "./package.json",
+                ".": {
+                  "development": "./src/index.ts",
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.js",
+                  "default": "./dist/index.js"
+                }
+              },
+              "packageMain": "./dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@spellbookx/eslint-config": {
+        "name": "@spellbookx/eslint-config",
+        "type": "lib",
+        "data": {
+          "root": "libs/eslint-config",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "dependsOn": ["build", "^typecheck"],
+              "options": {
+                "cwd": "libs/eslint-config",
+                "command": "tsc --build --emitDeclarationOnly"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/package.json",
+                "{workspaceRoot}/tsconfig.base.json",
+                "{projectRoot}/tsconfig.json",
+                "{projectRoot}/tsconfig.lib.json",
+                "{projectRoot}/src/**/*.ts",
+                "^production",
+                {
+                  "externalDependencies": ["typescript"]
+                }
+              ],
+              "outputs": [
+                "{projectRoot}/dist/**/*.d.ts",
+                "{projectRoot}/dist/**/*.d.ts.map",
+                "{projectRoot}/dist/tsconfig.lib.tsbuildinfo"
+              ],
+              "syncGenerators": ["@nx/js:typescript-sync"],
+              "metadata": {
+                "technologies": ["typescript"],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc --build --help",
+                  "example": {
+                    "args": ["--force"]
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/esbuild:esbuild",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "main": "libs/eslint-config/src/index.ts",
+                "outputPath": "libs/eslint-config/dist",
+                "tsConfig": "libs/eslint-config/tsconfig.lib.json",
+                "additionalEntryPoints": [
+                  "libs/eslint-config/src/configs/gitignore.ts",
+                  "libs/eslint-config/src/configs/ignores.ts",
+                  "libs/eslint-config/src/configs/javascript.ts",
+                  "libs/eslint-config/src/configs/jsdoc.ts",
+                  "libs/eslint-config/src/configs/json.ts",
+                  "libs/eslint-config/src/configs/markdown.ts",
+                  "libs/eslint-config/src/configs/prettier.ts",
+                  "libs/eslint-config/src/configs/typescript.ts"
+                ],
+                "format": ["esm"],
+                "declaration": true,
+                "declarationRootDir": "libs/eslint-config/src",
+                "deleteOutputPath": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": ["^build"],
+              "inputs": ["production", "^production"]
+            },
+            "build-deps": {
+              "dependsOn": ["^build"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": ["build-deps"],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects @spellbookx/eslint-config --includeDependentProjects -- pnpm exec nx build-deps @spellbookx/eslint-config"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/eslint-config",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/eslint-config/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "@spellbookx/eslint-config",
+          "tags": [
+            "npm:public",
+            "npm:eslint",
+            "npm:eslint-config",
+            "type:config"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@spellbookx/eslint-config",
+              "packageExports": {
+                "./package.json": "./package.json",
+                ".": {
+                  "development": "./src/index.ts",
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.js",
+                  "default": "./dist/index.js"
+                },
+                "./configs/ignores.js": {
+                  "development": "./src/configs/ignores.ts",
+                  "types": "./dist/configs/ignores.d.ts",
+                  "import": "./dist/configs/ignores.js",
+                  "default": "./dist/configs/ignores.js"
+                },
+                "./configs/gitignore.js": {
+                  "development": "./src/configs/gitignore.ts",
+                  "types": "./dist/configs/gitignore.d.ts",
+                  "import": "./dist/configs/gitignore.js",
+                  "default": "./dist/configs/gitignore.js"
+                },
+                "./configs/markdown.js": {
+                  "development": "./src/configs/markdown.ts",
+                  "types": "./dist/configs/markdown.d.ts",
+                  "import": "./dist/configs/markdown.js",
+                  "default": "./dist/configs/markdown.js"
+                },
+                "./configs/json.js": {
+                  "development": "./src/configs/json.ts",
+                  "types": "./dist/configs/json.d.ts",
+                  "import": "./dist/configs/json.js",
+                  "default": "./dist/configs/json.js"
+                },
+                "./configs/javascript.js": {
+                  "development": "./src/configs/javascript.ts",
+                  "types": "./dist/configs/javascript.d.ts",
+                  "import": "./dist/configs/javascript.js",
+                  "default": "./dist/configs/javascript.js"
+                },
+                "./configs/typescript.js": {
+                  "development": "./src/configs/typescript.ts",
+                  "types": "./dist/configs/typescript.d.ts",
+                  "import": "./dist/configs/typescript.js",
+                  "default": "./dist/configs/typescript.js"
+                },
+                "./configs/prettier.js": {
+                  "development": "./src/configs/prettier.ts",
+                  "types": "./dist/configs/prettier.d.ts",
+                  "import": "./dist/configs/prettier.js",
+                  "default": "./dist/configs/prettier.js"
+                }
+              },
+              "packageMain": "./dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "@spellbookx/cspell-config": [],
+      "@spellbookx/eslint-config": []
+    }
+  }
+}
