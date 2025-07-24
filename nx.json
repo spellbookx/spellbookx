@@ -9,7 +9,7 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/LICENSE"]
   },
-  "nxCloudId": "688241b41155fb90002d3387",
+  "nxCloudId": "6882481f36ff0e66b999e028",
   "release": {
     "projectsRelationship": "independent",
     "projects": ["*", "!@spellbookx/source"],
