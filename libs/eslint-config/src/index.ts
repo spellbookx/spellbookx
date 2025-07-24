@@ -1,18 +1,21 @@
 import tseslint, { type ConfigArray } from 'typescript-eslint';
 
-import { gitignoreConfig } from './configs/gitignore.js';
-import { ignoresConfig } from './configs/ignores.js';
-import { javascriptConfig } from './configs/javascript.js';
-import { jsdocConfig } from './configs/jsdoc.js';
-import { jsonConfig } from './configs/json.js';
-import {
-  type MarkdownConfigs,
-  markdownConfigs,
-  markdownGithubYamlConfig,
-} from './configs/markdown.js';
-import { prettierConfig } from './configs/prettier.js';
-import { typescriptConfig } from './configs/typescript.js';
-import { yamlConfig } from './configs/yaml.js';
+import gitignoreConfig from './configs/gitignore.js';
+import ignoresConfig from './configs/ignores.js';
+import javascriptConfig from './configs/javascript.js';
+import jsdocConfig from './configs/jsdoc.js';
+import jsonConfig from './configs/json.js';
+import json5Config from './configs/json5.js';
+import jsoncConfig from './configs/jsonc.js';
+import markdownCommonmarkJsonConfig from './configs/markdown/commonmarkJson.js';
+import markdownCommonmarkTomlConfig from './configs/markdown/commonmarkToml.js';
+import markdownCommonmarkYamlConfig from './configs/markdown/commonmarkYaml.js';
+import markdownGithubJsonConfig from './configs/markdown/githubJson.js';
+import markdownGithubTomlConfig from './configs/markdown/githubToml.js';
+import markdownGithubYamlConfig from './configs/markdown/githubYaml.js';
+import prettierConfig from './configs/prettier.js';
+import typescriptConfig from './configs/typescript.js';
+import yamlConfig from './configs/yaml.js';
 
 /**
  * Keys for top-level ESLint configuration categories.
@@ -25,17 +28,22 @@ type ConfigKey =
   | 'javascript'
   | 'jsdoc'
   | 'json'
+  | 'json5'
+  | 'jsonc'
+  | 'markdownCommonmarkJson'
+  | 'markdownCommonmarkToml'
+  | 'markdownCommonmarkYaml'
+  | 'markdownGithubJson'
+  | 'markdownGithubToml'
+  | 'markdownGithubYaml'
   | 'prettier'
   | 'typescript'
   | 'yaml';
 
 /**
- * Collection of ESLint configurations indexed by their keys,
- * including a nested set of Markdown-specific configurations.
+ * Collection of ESLint configurations
  */
-type Configs = Record<ConfigKey, ConfigArray> & {
-  markdown: MarkdownConfigs;
-};
+type Configs = Record<ConfigKey, ConfigArray>;
 
 /**
  * Root type for the exported SBX ESLint config namespace.
@@ -61,7 +69,14 @@ const configs: SBX['configs'] = {
   javascript: javascriptConfig,
   jsdoc: jsdocConfig,
   json: jsonConfig,
-  markdown: markdownConfigs,
+  json5: json5Config,
+  jsonc: jsoncConfig,
+  markdownCommonmarkJson: markdownCommonmarkJsonConfig,
+  markdownCommonmarkToml: markdownCommonmarkTomlConfig,
+  markdownCommonmarkYaml: markdownCommonmarkYamlConfig,
+  markdownGithubJson: markdownGithubJsonConfig,
+  markdownGithubToml: markdownGithubTomlConfig,
+  markdownGithubYaml: markdownGithubYamlConfig,
   prettier: prettierConfig,
   typescript: typescriptConfig,
   yaml: yamlConfig,
@@ -78,8 +93,10 @@ const recommendedConfig: SBX['config']['recommended'] = tseslint.config(
   ...typescriptConfig,
   ...jsdocConfig,
   ...jsonConfig,
-  ...yamlConfig,
+  ...json5Config,
+  ...jsoncConfig,
   ...markdownGithubYamlConfig,
+  ...yamlConfig,
   ...prettierConfig,
 );
 
@@ -106,4 +123,4 @@ const sbx: SBX = {
   },
 };
 
-export { sbx as default, sbx };
+export default sbx;

@@ -1,73 +1,182 @@
 import js from '@eslint/js';
+import eslintPluginImport from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
 import tseslint, { type ConfigArray } from 'typescript-eslint';
 
+import { findRealTsconfigPaths } from '../utils/find-real-tsconfig.js';
+import { hasPackage } from '../utils/has-package.js';
+
+type ImportResolversSettings = {
+  [key: string]: object | undefined;
+  typescript?: {
+    alwaysTryTypes?: boolean;
+    project?: string | string[];
+  };
+  node?: {
+    extensions?: string[];
+    moduleDirectory?: string[];
+  };
+  pnp?: object;
+  webpack?: {
+    config?: string | string[];
+  };
+};
+
+const OFF = 0;
+const WARN = 1;
+const ERROR = 2;
+
+const hasYarnPnp =
+  hasPackage('eslint-import-resolver-pnp') &&
+  process.env.NODE_LIFECYCLE_SCRIPT?.includes('yarn');
+
+const hasWebpack = hasPackage('webpack');
+
+const tsconfigPaths = findRealTsconfigPaths();
+
+const getImportResolvers = (): ImportResolversSettings => {
+  const resolvers: ImportResolversSettings = {};
+
+  if (hasYarnPnp) resolvers.pnp = {};
+
+  resolvers.typescript = {
+    alwaysTryTypes: true,
+    project: tsconfigPaths,
+  };
+
+  if (hasWebpack) {
+    const webpackConfigPath = [
+      './webpack.config.js',
+      './webpack.config.ts',
+      './config/webpack.config.js',
+      './config/webpack.config.ts',
+    ].find((path) => {
+      try {
+        require.resolve(path, { paths: [process.cwd()] });
+        return true;
+      } catch {
+        return false;
+      }
+    });
+
+    resolvers.webpack = {
+      config: webpackConfigPath || './webpack.config.js',
+    };
+  }
+
+  resolvers.node = {
+    extensions: [
+      '.js',
+      '.jsx',
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.cjs',
+      '.json',
+      '.node',
+    ],
+  };
+
+  return resolvers;
+};
+
+const isNx = hasPackage('@nx/eslint-plugin');
+
 /**
- * ESLint configuration tailored for TypeScript projects with strict import sorting.
- *
- * Key Features:
- * - Targets `.ts`, `.mts`, and `.cts` files exclusively.
- * - Extends robust base JavaScript recommended rules alongside TypeScript-specific best practices.
- * - Enforces consistent and deterministic import/export order via `eslint-plugin-simple-import-sort`.
- * - Enables type-aware linting leveraging `parserOptions.project` with glob patterns to discover `tsconfig.json` files in monorepo-relevant directories.
- * - Configured for modern ECMAScript syntax compliance (`ecmaVersion: 'latest'`).
- *
- * Requirements:
- * - Valid `tsconfig.json` files must exist at the specified paths to activate type-aware linting rules.
- *
- * Usage Example (TypeScript):
- * ```ts
- * import tseslint from 'typescript-eslint';
- * import sbx from '@spellbookx/eslint-config';
- *
- * export default tseslint.config(
- *   ...sbx.configs.typescript
- * );
- * ```
- *
- * Usage Example (JavaScript):
- * ```js
- * import sbx from '@spellbookx/eslint-config';
- *
- * export default [sbx.configs.typescript];
- * ```
+ * ESLint configuration for TypeScript projects.
+ * This config extends recommended rules and integrates with import resolver settings.
+ * @returns {ConfigArray} ESLint configuration array for TypeScript.
  */
-const typescriptConfig: ConfigArray = tseslint.config({
-  files: ['**/*.ts', '**/*.mts', '**/*.cts'],
-
-  extends: [
-    js.configs.recommended, // Base JavaScript recommended rules
-    tseslint.configs.recommended, // TypeScript-specific best practices
-  ],
-
-  plugins: {
-    'simple-import-sort': simpleImportSort, // Enforce import/export ordering
-  },
-
-  languageOptions: {
-    ecmaVersion: 'latest',
-    parser: tseslint.parser,
-    parserOptions: {
-      project: [
-        './tsconfig.*?.json',
-        './libs/**/tsconfig.*?.json',
-        './apps/**/tsconfig.*?.json',
-        './tools/**/tsconfig.*?.json',
+const typescriptConfig: ConfigArray = isNx
+  ? tseslint.config({
+      files: ['**/*.{js,jsx,ts,tsx,mjs,cjs}'],
+      extends: [
+        js.configs.recommended,
+        eslintPluginImport.flatConfigs.recommended,
+        eslintPluginImport.flatConfigs.typescript,
       ],
-      tsconfigRootDir: process.cwd(),
-    },
-  },
+      languageOptions: {
+        parser: tseslint.parser,
+        parserOptions: {
+          ecmaVersion: 'latest',
+          sourceType: 'module',
+          project: tsconfigPaths,
+          tsconfigRootDir: process.cwd(),
+          noWarnOnMultipleProjects: true,
+        },
+        globals: {
+          ...globals.node,
+        },
+      },
+      plugins: {
+        'simple-import-sort': simpleImportSort,
+      },
+      settings: {
+        'import/resolver': getImportResolvers(),
+        'import/extensions': ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'],
+        'import/parsers': {
+          '@typescript-eslint/parser': ['.ts', '.tsx', '.mts', '.cts'],
+        },
+      },
+      rules: {
+        'sort-imports': OFF,
+        'simple-import-sort/imports': ERROR,
+        'simple-import-sort/exports': ERROR,
+        'import/no-unresolved': ERROR,
+        'import/no-named-as-default-member': OFF,
+        'no-undef': WARN,
+        'no-use-before-define': OFF,
+        '@typescript-eslint/no-use-before-define': [
+          ERROR,
+          { functions: true, classes: true, variables: true },
+        ],
+      },
+    })
+  : tseslint.config({
+      files: ['**/*.{js,jsx,ts,tsx,mjs,cjs}'],
+      extends: [
+        js.configs.recommended,
+        tseslint.configs.recommended,
+        eslintPluginImport.flatConfigs.recommended,
+        eslintPluginImport.flatConfigs.typescript,
+      ],
+      languageOptions: {
+        parser: tseslint.parser,
+        parserOptions: {
+          ecmaVersion: 'latest',
+          sourceType: 'module',
+          project: tsconfigPaths,
+          tsconfigRootDir: process.cwd(),
+          noWarnOnMultipleProjects: true,
+        },
+        globals: {
+          ...globals.node,
+        },
+      },
+      plugins: {
+        'simple-import-sort': simpleImportSort,
+      },
+      settings: {
+        'import/resolver': getImportResolvers(),
+        'import/extensions': ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'],
+        'import/parsers': {
+          '@typescript-eslint/parser': ['.ts', '.tsx', '.mts', '.cts'],
+        },
+      },
+      rules: {
+        'sort-imports': OFF,
+        'simple-import-sort/imports': ERROR,
+        'simple-import-sort/exports': ERROR,
+        'import/no-unresolved': ERROR,
+        'import/no-named-as-default-member': OFF,
+        'no-undef': WARN,
+        'no-use-before-define': OFF,
+        '@typescript-eslint/no-use-before-define': [
+          ERROR,
+          { functions: true, classes: true, variables: true },
+        ],
+      },
+    });
 
-  rules: {
-    // Off native to avoid conflicts with simple-import-sort
-    'sort-imports': 'off',
-    'sort-imports-requires/sort-imports': 'off',
-    'sort-imports-requires/sort-requires': 'off',
-
-    // Enforce sorted imports and exports
-    'simple-import-sort/imports': 'error',
-    'simple-import-sort/exports': 'error',
-  },
-});
-
-export { typescriptConfig as default, typescriptConfig };
+export default typescriptConfig;

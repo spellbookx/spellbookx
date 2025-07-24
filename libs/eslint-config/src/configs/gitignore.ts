@@ -105,4 +105,4 @@ const gitignoreConfig: ConfigArray = tseslint.config(
   ),
 );
 
-export { gitignoreConfig as default, gitignoreConfig };
+export default gitignoreConfig;

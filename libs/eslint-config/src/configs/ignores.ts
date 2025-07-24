@@ -72,4 +72,4 @@ const ignoresConfig: ConfigArray = tseslint.config(
   globalIgnores(['yarn.lock', '**/yarn.lock'], 'Ignores yarn.lock'),
 );
 
-export { ignoresConfig as default, ignoresConfig };
+export default ignoresConfig;

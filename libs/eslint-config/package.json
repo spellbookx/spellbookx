@@ -5,6 +5,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/spellbookx/spellbookx",
@@ -18,10 +19,6 @@
     "eslint",
     "eslint-config"
   ],
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -29,48 +26,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    },
-    "./configs/ignores.js": {
-      "development": "./src/configs/ignores.ts",
-      "types": "./dist/configs/ignores.d.ts",
-      "import": "./dist/configs/ignores.js",
-      "default": "./dist/configs/ignores.js"
-    },
-    "./configs/gitignore.js": {
-      "development": "./src/configs/gitignore.ts",
-      "types": "./dist/configs/gitignore.d.ts",
-      "import": "./dist/configs/gitignore.js",
-      "default": "./dist/configs/gitignore.js"
-    },
-    "./configs/markdown.js": {
-      "development": "./src/configs/markdown.ts",
-      "types": "./dist/configs/markdown.d.ts",
-      "import": "./dist/configs/markdown.js",
-      "default": "./dist/configs/markdown.js"
-    },
-    "./configs/json.js": {
-      "development": "./src/configs/json.ts",
-      "types": "./dist/configs/json.d.ts",
-      "import": "./dist/configs/json.js",
-      "default": "./dist/configs/json.js"
-    },
-    "./configs/javascript.js": {
-      "development": "./src/configs/javascript.ts",
-      "types": "./dist/configs/javascript.d.ts",
-      "import": "./dist/configs/javascript.js",
-      "default": "./dist/configs/javascript.js"
-    },
-    "./configs/typescript.js": {
-      "development": "./src/configs/typescript.ts",
-      "types": "./dist/configs/typescript.d.ts",
-      "import": "./dist/configs/typescript.js",
-      "default": "./dist/configs/typescript.js"
-    },
-    "./configs/prettier.js": {
-      "development": "./src/configs/prettier.ts",
-      "types": "./dist/configs/prettier.d.ts",
-      "import": "./dist/configs/prettier.js",
-      "default": "./dist/configs/prettier.js"
     }
   },
   "nx": {
@@ -93,15 +48,20 @@
             "libs/eslint-config/src/configs/javascript.ts",
             "libs/eslint-config/src/configs/jsdoc.ts",
             "libs/eslint-config/src/configs/json.ts",
-            "libs/eslint-config/src/configs/markdown.ts",
+            "libs/eslint-config/src/configs/markdown/commonmarkJson.ts",
+            "libs/eslint-config/src/configs/markdown/commonmarkToml.ts",
+            "libs/eslint-config/src/configs/markdown/commonmarkYaml.ts",
+            "libs/eslint-config/src/configs/markdown/githubJson.ts",
+            "libs/eslint-config/src/configs/markdown/githubToml.ts",
+            "libs/eslint-config/src/configs/markdown/githubYaml.ts",
             "libs/eslint-config/src/configs/prettier.ts",
-            "libs/eslint-config/src/configs/typescript.ts"
+            "libs/eslint-config/src/configs/typescript.ts",
+            "libs/eslint-config/src/configs/yaml.ts"
           ],
           "format": [
             "esm"
           ],
           "declaration": true,
-          "declarationRootDir": "libs/eslint-config/src",
           "deleteOutputPath": true
         }
       }
@@ -113,22 +73,29 @@
     "@eslint/json": "^0.12.0",
     "@eslint/markdown": "^6.6.0",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-import-resolver-pnp": "^0.0.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-import-resolver-webpack": "^0.13.10",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsdoc": "^51.3.4",
     "eslint-plugin-prettier": "^5.5.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sort-imports-requires": "^2.0.0",
     "eslint-plugin-yaml": "^1.1.2",
     "fast-glob": "^3.3.3",
+    "glob": "^11.0.3",
+    "globals": "^16.3.0",
     "jsonc-eslint-parser": "^2.4.0",
-    "typescript-eslint": "^8.35.1",
     "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "eslint": "^9.30.1",
-    "eslint-plugin-sort-imports-requires": "^2.0.0",
+    "eslint": "^9.31.0",
     "prettier": "^3.6.2"
   },
   "peerDependencies": {
-    "eslint": "^9.30.1"
+    "eslint": "^9.31.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
