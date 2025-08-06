@@ -3,14 +3,6 @@ templates:
   buildconfig: pnpm run build:config
   nx: pnpm nx
 
-pre-commit:
-  piped: true
-  jobs:
-    - name: lint
-      interactive: true
-      run: pnpm exec eslint . --fix
-      stage_fixed: true
-
 commit-msg:
   jobs:
     - name: commitlint
