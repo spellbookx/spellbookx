@@ -2,8 +2,6 @@ import nx from '@nx/eslint-plugin';
 import sbx from '@spellbookx/eslint-config';
 import { defineConfig } from 'eslint/config';
 
-console.log(Object.keys(sbx.configs));
-
 export default defineConfig([
   // Ignore patterns (custom + .gitignore)
   ...sbx.configs.ignores,

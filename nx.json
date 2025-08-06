@@ -57,6 +57,10 @@
     "@nx/js:typescript-typecheck": {
       "cache": true,
       "inputs": ["default", "^default"]
+    },
+    "build": {
+      "dependsOn": ["^build", "!lint"],
+      "inputs": ["production", "^production"]
     }
   }
 }

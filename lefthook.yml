@@ -3,29 +3,29 @@ templates:
   buildconfig: pnpm run build:config
   nx: pnpm nx
 
-# pre-commit:
-#   piped: true
-#   jobs:
-#     - name: lint
-#       interactive: true
-#       run: pnpm exec eslint . --fix
-#       stage_fixed: true
+pre-commit:
+  piped: true
+  jobs:
+    - name: lint
+      interactive: true
+      run: pnpm exec eslint . --fix
+      stage_fixed: true
 
 commit-msg:
   jobs:
     - name: commitlint
       run: pnpm commitlint --verbose --edit {1}
 
-# pre-push:
-#   commands:
-#     format-check:
-#       run: '{nx} format:check --all'
-#       exclude:
-#         - .github/instructions/nx.instructions.md
+pre-push:
+  commands:
+    format-check:
+      run: '{nx} format:check --all'
+      exclude:
+        - .github/instructions/nx.instructions.md
 
 post-merge:
   jobs:
-    - name: build configs and plugins
+    - name: build configs
       interactive: true
       run: '{buildconfig}'
     - name: update lefthook hooks
@@ -33,7 +33,7 @@ post-merge:
 
 post-checkout:
   jobs:
-    - name: build configs and plugins
+    - name: build configs
       interactive: true
       run: '{buildconfig}'
     - name: update lefthook hooks

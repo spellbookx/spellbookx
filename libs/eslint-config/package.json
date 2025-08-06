@@ -38,6 +38,10 @@
         "outputs": [
           "{options.outputPath}"
         ],
+        "dependsOn": [
+          "^build",
+          "!lint"
+        ],
         "options": {
           "main": "libs/eslint-config/src/index.ts",
           "outputPath": "libs/eslint-config/dist",
@@ -54,7 +58,6 @@
             "libs/eslint-config/src/configs/markdown/githubJson.ts",
             "libs/eslint-config/src/configs/markdown/githubToml.ts",
             "libs/eslint-config/src/configs/markdown/githubYaml.ts",
-            "libs/eslint-config/src/configs/prettier.ts",
             "libs/eslint-config/src/configs/typescript.ts",
             "libs/eslint-config/src/configs/yaml.ts"
           ],
@@ -62,6 +65,7 @@
             "esm"
           ],
           "declaration": true,
+          "declarationRootDir": "libs/eslint-config/src",
           "deleteOutputPath": true
         }
       }
