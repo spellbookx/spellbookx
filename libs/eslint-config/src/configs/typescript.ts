@@ -65,6 +65,7 @@ const getImportResolvers = (): ImportResolversSettings => {
     };
   }
 
+  // ✅ Node resolver: fallback universale
   resolvers.node = {
     extensions: [
       '.js',
@@ -76,6 +77,7 @@ const getImportResolvers = (): ImportResolversSettings => {
       '.json',
       '.node',
     ],
+    moduleDirectory: ['node_modules', 'src'],
   };
 
   return resolvers;
