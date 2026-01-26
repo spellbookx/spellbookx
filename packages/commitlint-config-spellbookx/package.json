@@ -1,6 +1,6 @@
 {
   "name": "commitlint-config-spellbookx",
-  "version": "0.5.6",
+  "version": "0.7.0",
   "private": false,
   "description": "Shared Commitlint configuration and commit convention tooling for Spellbookx",
   "keywords": [
