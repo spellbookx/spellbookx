@@ -1,4 +1,4 @@
-## commitlint-config-spellbookx
+# commitlint-config-spellbookx
 
 Shared Commitlint configuration - standardizing commit message formatting across JS/TS projects.  
 Conventional commits, interactive prompts, and multi-scope support included.  
@@ -164,6 +164,6 @@ commit-msg:
 
 This project is licensed under the MIT License.
 
-**Copyright (c) 2025 Davide Di Criscito**
+**Copyright (c) 2026 Davide Di Criscito**
 
 For the full details, see the [LICENSE](LICENSE) file.
