@@ -1,0 +1,9 @@
+{
+  "name": "@spellbookx/typescript-config",
+  "version": "0.5.6",
+  "private": true,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
