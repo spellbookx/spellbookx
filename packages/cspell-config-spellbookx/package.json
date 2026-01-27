@@ -1,6 +1,6 @@
 {
   "name": "cspell-config-spellbookx",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": false,
   "description": "Shared cspell (spell checker) configuration for Spellbookx",
   "keywords": [

@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.2](https://github.com/spellbookx/spellbookx/compare/v0.7.1...v0.7.2) (2026-01-27)
+
+### Bug Fixes
+
+* edit build script ([bbf23ac](https://github.com/spellbookx/spellbookx/commit/bbf23ac43c170ffcc4124209cb1d90c8a893c735)), closes [#1](https://github.com/spellbookx/spellbookx/issues/1)
+
 ## [0.7.1](https://github.com/spellbookx/spellbookx/compare/v0.7.0...v0.7.1) (2026-01-27)
 
 ### Bug Fixes
