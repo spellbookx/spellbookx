@@ -32,8 +32,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c",
-    "postbuild": "tsc"
+    "build": "rolldown -c && tsc"
   },
   "dependencies": {
     "@commitlint/cli": "^20.3.1",

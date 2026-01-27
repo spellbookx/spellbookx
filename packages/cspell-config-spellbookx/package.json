@@ -33,8 +33,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c",
-    "postbuild": "tsc"
+    "build": "rolldown -c && tsc"
   },
   "dependencies": {
     "@cspell/cspell-types": "^9.6.2",

@@ -39,8 +39,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c",
-    "postbuild": "tsc"
+    "build": "rolldown -c && tsc"
   },
   "dependencies": {
     "@prettier/plugin-xml": "^3.4.2",
