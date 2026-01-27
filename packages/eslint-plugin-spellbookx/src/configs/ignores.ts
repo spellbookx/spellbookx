@@ -90,6 +90,9 @@ const configIgnores: Linter.Config[] = defineConfig([
     '**/pagefile.sys',
     '**/swapfile.sys',
     '**/hiberfil.sys',
+
+    // Other unsupported files
+    '**/*.hbs',
   ]),
 ]);
 
