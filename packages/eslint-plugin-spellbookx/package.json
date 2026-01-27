@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-spellbookx",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "private": false,
   "description": "Shared ESLint plugin and configs tuned for the Spellbookx monorepo and common JS/TS frameworks.",
   "keywords": [

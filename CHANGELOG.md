@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.1](https://github.com/spellbookx/spellbookx/compare/v0.7.0...v0.7.1) (2026-01-27)
+
+### Bug Fixes
+
+* ignore hbs ([871ddad](https://github.com/spellbookx/spellbookx/commit/871ddadb5e7fef81758dd725c73a8b69f107b79c))
+
 ## 0.7.0 (2026-01-26)
 
 ### Features
