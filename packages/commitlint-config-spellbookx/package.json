@@ -2,11 +2,14 @@
   "name": "commitlint-config-spellbookx",
   "version": "0.7.2",
   "private": false,
-  "description": "Shared Commitlint configuration and commit convention tooling for Spellbookx",
+  "description": "A shareable Commitlint configuration for enforcing conventional commits.",
   "keywords": [
-    "commitlint",
-    "conventional-commits",
     "commit-config",
+    "commitizen",
+    "commitlint",
+    "commitlint-config",
+    "conventional-commits",
+    "cz-git",
     "spellbookx"
   ],
   "homepage": "https://github.com/spellbookx/spellbookx#readme",

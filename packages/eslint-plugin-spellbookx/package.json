@@ -2,13 +2,15 @@
   "name": "eslint-plugin-spellbookx",
   "version": "0.7.2",
   "private": false,
-  "description": "Shared ESLint plugin and configs tuned for the Spellbookx monorepo and common JS/TS frameworks.",
+  "description": "A comprehensive ESLint plugin with shareable configs for JS/TS, React, JSON, and more.",
   "keywords": [
     "eslint",
+    "eslint-config",
     "eslint-plugin",
     "lint",
+    "prettier",
     "spellbookx",
-    "eslint-config"
+    "typescript"
   ],
   "homepage": "https://github.com/spellbookx/spellbookx#readme",
   "bugs": {

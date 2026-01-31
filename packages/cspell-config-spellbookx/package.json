@@ -2,13 +2,13 @@
   "name": "cspell-config-spellbookx",
   "version": "0.7.2",
   "private": false,
-  "description": "Shared cspell (spell checker) configuration for Spellbookx",
+  "description": "A shareable CSpell configuration for spell-checking in a monorepo.",
   "keywords": [
     "cspell",
-    "spellchecker",
-    "spellcheck",
     "cspell-config",
-    "spellbookx"
+    "spellbookx",
+    "spellcheck",
+    "spellchecker"
   ],
   "homepage": "https://github.com/spellbookx/spellbookx#readme",
   "bugs": {

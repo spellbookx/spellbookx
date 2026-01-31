@@ -1,120 +1,71 @@
 # cspell-config-spellbookx
 
-Shared configuration for [CSpell](https://cspell.org) - tuned for polyglot monorepos (Node, Rust, Go, Python, and more).  
-Clean. Opinionated. No junk, no false positives.
+Shared [CSpell](https://cspell.org/) configuration for the Spellbookx project. This package provides a consistent and robust spell-checking setup for all packages in the monorepo.
 
----
+## Description
 
-## Table of Content
+This package offers a comprehensive CSpell configuration that includes:
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Development](#development)
-- [License](#license)
+- A curated list of custom words and technical terms specific to the Spellbookx ecosystem.
+- An extensive list of ignored paths to prevent spell-checking in irrelevant files and directories (e.g., `node_modules`, `dist`, lock files).
+- A rich set of dictionaries for various languages and technologies, including English, Spanish, Italian, French, German, and numerous programming languages.
+- Support for multiple languages: English, Spanish, Italian, French, and German.
 
----
+## Why use this?
 
-## Features
+By using this shared configuration, we ensure that:
 
-- Pre-tuned dictionaries for:
-  - English (US/GB)
-  - Common programming languages (TypeScript, Node, Python, Go, PHP, etc.)
-  - Framework & tooling terms (npm, softwareTerms, misc)
-- Smart `ignorePaths` that skip all build artifacts, lock files, and temp directories:
-  - Node / JS / TS (`dist`, `node_modules`, `.next`, `.turbo`, etc.)
-  - Rust (`target/`, `.cargo/`, `Cargo.lock`)
-  - Go (`go.sum`, `vendor/`, etc.)
-  - Python (`__pycache__`, `.venv/`, `.tox/`, `.ruff_cache/`, etc.)
-  - Windows / WSL cruft (`:Zone.Identifier`, `Thumbs.db`, `desktop.ini`, etc.)
-- Works seamlessly with modern CSpell (`>=6.0`) using native ESM & `defineConfig`
-
----
+- Spell-checking is consistent across all packages.
+- False positives are minimized by maintaining a central list of accepted words.
+- The configuration is easily maintainable and extendable.
 
 ## Installation
 
-```bash
-npm install -g cspell
-npm install -D cspell @cspell/cspell-types cspell-config-spellbookx
-```
+Install the package using your favorite package manager:
 
-or
+**npm**
 
 ```bash
-pnpm add -g cspell
-pnpm add -D cspell @cspell/cspell-types cspell-config-spellbookx
+npm install --save-dev cspell-config-spellbookx cspell
 ```
 
-or
+**pnpm**
 
 ```bash
-yarn global add cspell
-yarn add -D cspell @cspell/cspell-types cspell-config-spellbookx
+pnpm add -D cspell-config-spellbookx cspell
 ```
 
-or
+**yarn**
 
 ```bash
-bun add -g cspell
-bun add -D cspell @cspell/cspell-types cspell-config-spellbookx
+yarn add -D cspell-config-spellbookx cspell
 ```
 
----
+**bun**
+
+```bash
+bun add -d cspell-config-spellbookx cspell
+```
 
 ## Usage
 
-Create a custom dictionary:
+To use this configuration, create a `cspell.config.cjs` file in your project's root and extend this package:
 
-```bash
-mkdir .cspell
-touch .cspell/custom-words.txt
+```javascript
+const config = require('cspell-config-spellbookx');
+
+module.exports = config;
 ```
 
-Then create or update your `cspell.config.cjs` at the root of your project:
+You can then add a script to your `package.json` to run the spell checker:
 
-```js
-const { defineConfig } = require('@cspell/cspell-types');
-
-module.exports = defineConfig({
-  version: '0.2',
-  import: ['cspell-config-spellbookx'],
-  words: [],
-  dictionaryDefinitions: [
-    {
-      name: 'custom-words',
-      path: './.cspell/custom-words.txt',
-      addWords: true,
-    },
-  ],
-  dictionaries: ['custom-words'],
-});
+```json
+{
+  "scripts": {
+    "spellcheck": "cspell \"**/*.{js,jsx,ts,tsx,md,json}\""
+  }
+}
 ```
-
-Then, run:
-
-```bash
-npx cspell lint '**/*.{ts,js,tsx,jsx,md}'
-```
-
-or integrate with Nx, Husky, Lefthook, or your CI.
-
----
-
-## Development
-
-If you are contributing inside the monorepo:
-
-```bash
-nx run cspell-config:build
-```
-
-Test the config locally:
-
-```bash
-npx cspell lint --config path-to/packages/cspell-config/dist/index.js .
-```
-
----
 
 ## License
 

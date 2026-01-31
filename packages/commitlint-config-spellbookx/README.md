@@ -1,164 +1,76 @@
 # commitlint-config-spellbookx
 
-Shared Commitlint configuration - standardizing commit message formatting across JS/TS projects.  
-Conventional commits, interactive prompts, and multi-scope support included.  
-Clean. Opinionated. Always consistent.
+Shared [Commitlint](https://commitlint.js.org/) configuration for the Spellbookx project. This package ensures that all commits adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
 
----
+## Description
 
-## Table of Content
+This package provides a base commitlint configuration that:
 
-- [Features](#features)
-- [Install](#installation)
-- [Usage](#usage)
-- [With CLI](#with-cli)
-- [With Lefthook](#with-lefthook)
-- [Resources](#resources)
-- [License](#license)
+- Extends the widely-used `@commitlint/config-conventional`.
+- Dynamically generates commit scopes based on the packages present in the `@spellbookx` monorepo.
+- Includes pre-defined commit types with emojis for better readability.
+- Offers a customized `commitizen` prompt for an enhanced commit experience.
 
----
+## Why use this?
 
-## Features
+Using this package ensures consistent and readable commit messages across the entire project. This helps in:
 
-- **Base Rules**
-  - Enforces [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) style.
-  - Supported commit types:
-    - `feat` -> A new feature
-    - `fix` -> A bug fix
-    - `docs` -> Documentation only changes
-    - `style` -> Code style changes without functional impact
-    - `refactor` -> Code refactoring (no feature or fix)
-    - `perf` -> Performance improvements
-    - `test` -> Adding or correcting tests
-    - `build` -> Changes affecting the build system or dependencies
-    - `ci` -> Changes to CI configuration
-    - `chore` -> Miscellaneous chores
-    - `revert` -> Reverts a previous commit
-  - `feat` -> A new feature
-  - `fix` -> A bug fix
-  - `docs` -> Documentation only changes
-  - `style` -> Code style changes without functional impact
-  - `refactor` -> Code refactoring (no feature or fix)
-  - `perf` -> Performance improvements
-  - `test` -> Adding or correcting tests
-  - `build` -> Changes affecting the build system or dependencies
-  - `ci` -> Changes to CI configuration
-  - `chore` -> Miscellaneous chores
-  - `revert` -> Reverts a previous commit
-  - Enforces:
-    - Scope case: `kebab-case`
-    - Subject cannot be empty
-    - Subject case: `sentence-case`
-    - No full stop at the end of subject
-    - Header max length: 72
-    - Body and footer max line length: 100
-
-- **Interactive Prompt**
-  - Multi-scope support enabled
-  - Scope separator: `,`
-  - Guided questions for type, scope, subject, body, breaking changes, and issues affected
-  - Emoji and title per commit type
-  - Uses `cz` for interactive commits (`npx cz`)
-
-- **Parser Preset**
-  - Uses `conventional-changelog-conventionalcommits`
-  - Supports multi-scope commit messages:
-    ```bash
-    type(scope1,scope2): subject
-    ```
-
----
+- Automatically generating changelogs.
+- Simplifying the release process.
+- Improving the readability of the project's history.
 
 ## Installation
 
-```bash
-npm install -g commitizen cz-git
-npm install -D commitizen cz-git conventional-changelog-conventionalcommits @commitlint/cli @commitlint/config-conventional commitlint-config-spellbookx
-```
+Install the package using your favorite package manager:
 
-or
+**npm**
 
 ```bash
-pnpm add -g commitizen cz-git
-pnpm add -D commitizen cz-git conventional-changelog-conventionalcommits @commitlint/cli @commitlint/config-conventional commitlint-config-spellbookx
+npm install --save-dev commitlint-config-spellbookx @commitlint/cli
 ```
 
-or
+**pnpm**
 
 ```bash
-yarn global add commitizen cz-git
-yarn add -D commitizen cz-git conventional-changelog-conventionalcommits @commitlint/cli @commitlint/config-conventional commitlint-config-spellbookx
+pnpm add -D commitlint-config-spellbookx @commitlint/cli
 ```
 
-or
+**yarn**
 
 ```bash
-bun add -g commitizen cz-git
-bun add -D commitizen cz-git conventional-changelog-conventionalcommits @commitlint/cli @commitlint/config-conventional commitlint-config-spellbookx
+yarn add -D commitlint-config-spellbookx @commitlint/cli
 ```
 
----
+**bun**
+
+```bash
+bun add -d commitlint-config-spellbookx @commitlint/cli
+```
 
 ## Usage
 
-Create a `commitlint.config.mjs` file at your project root:
+To use this configuration, create a `commitlint.config.mjs` file in your project's root and extend this package:
 
-```ts
-export default {
-  extends: ['spellbookx'],
-};
+```javascript
+import config from 'commitlint-config-spellbookx';
+
+export default config;
 ```
 
-Create a `.czrc` file at your project root:
+For an interactive commit experience, you can use `commitizen` with `cz-git`. Update your `package.json` with the following configuration:
 
 ```json
 {
-  "path": "cz-git"
-}
-```
-
-Add these properties to your root `package.json`:
-
-```json
-{
+  "scripts": {
+    "commit": "cz"
+  },
   "config": {
     "commitizen": {
-      "path": "git-cz"
+      "path": "cz-git"
     }
   }
 }
 ```
-
-### With CLI
-
-Interactive commits using Commitizen:
-
-```bash
-npx cz
-```
-
-### With Lefthook
-
-Configure a `lefthook.yml` in your project root:
-
-```yaml
-commit-msg:
-  commands:
-    lint-commit-msg:
-      run: npx commitlint --verbose --edit {1}
-```
-
-> Commitlint will automatically validate commit messages on each commit. Use `cz` to create commits interactively.
-
----
-
-## Resources
-
-- [Commitlint Documentation](https://commitlint.js.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [Commitizen](https://github.com/commitizen/cz-cli)
-
----
 
 ## License
 
