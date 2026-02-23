@@ -1,6 +1,6 @@
 {
   "name": "cspell-config-spellbookx",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "private": false,
   "description": "A shareable CSpell configuration for spell-checking in a monorepo.",
   "keywords": [

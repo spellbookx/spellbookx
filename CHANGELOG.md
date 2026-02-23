@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.5](https://github.com/spellbookx/spellbookx/compare/v0.9.4...v0.9.5) (2026-02-23)
+
+### Bug Fixes
+
+* **spellbookx:** add default selections and verify lefthook asset copy ([29ffe43](https://github.com/spellbookx/spellbookx/commit/29ffe431f1d46e8c277471bcbb40d9f9e71d44e2))
+
 ## [0.9.4](https://github.com/spellbookx/spellbookx/compare/v0.9.3...v0.9.4) (2026-02-23)
 
 ### Bug Fixes
