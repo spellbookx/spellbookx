@@ -35,6 +35,10 @@
     "sbx": "./dist/index.js",
     "spellbookx": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "assets"
+  ],
   "scripts": {
     "build": "rolldown -c && tsc"
   },
