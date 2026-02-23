@@ -12,6 +12,21 @@ import { writeConfig } from '../utils/write-config.js';
  * Sets up Commitlint and Git hooks.
  */
 export async function setupCommitlint() {
+  const { globalManager, localManager } = await askPackageManagers();
+
+  const { gitHook } = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'gitHook',
+      message: 'Select a git hook tool:',
+      choices: [
+        { name: 'Lefthook', value: 'lefthook' },
+        { name: 'Husky', value: 'husky' },
+        { name: 'None', value: 'none' },
+      ],
+    },
+  ]);
+
   const commitlintContent = `export default {
   extends: ['spellbookx'],
 };
@@ -28,21 +43,6 @@ export async function setupCommitlint() {
     },
   });
 
-  const { globalManager, localManager } = await askPackageManagers();
-
-  const { gitHook } = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'gitHook',
-      message: 'Select a git hook tool:',
-      choices: [
-        { name: 'Lefthook', value: 'lefthook' },
-        { name: 'Husky', value: 'husky' },
-        { name: 'None', value: 'none' },
-      ],
-    },
-  ]);
-
   const deps = [...TOOL_DEPENDENCIES.commitlint];
   if (gitHook === 'lefthook') {
     deps.push('lefthook');
@@ -58,10 +58,12 @@ export async function setupCommitlint() {
   await installDeps(deps, { pkgManager: localManager });
 
   // Install global tools
-  console.log(chalk.blue('\nInstalling global tools...'));
-  const globalTools = ['commitizen', 'eslint', 'lefthook', 'prettier'];
-  await installDeps(globalTools, {
-    pkgManager: globalManager,
-    isGlobal: true,
-  });
+  if (gitHook !== 'none') {
+    console.log(chalk.blue('\nInstalling global tools...'));
+    const globalTools = ['commitizen', 'eslint', 'lefthook', 'prettier'];
+    await installDeps(globalTools, {
+      pkgManager: globalManager,
+      isGlobal: true,
+    });
+  }
 }
