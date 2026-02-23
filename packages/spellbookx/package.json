@@ -1,6 +1,6 @@
 {
   "name": "spellbookx",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "private": false,
   "description": "CLI tool for the Spellbookx ecosystem to setup linting, formatting, and commit standards.",
   "keywords": [

@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.4](https://github.com/spellbookx/spellbookx/compare/v0.9.3...v0.9.4) (2026-02-23)
+
+### Bug Fixes
+
+* **spellbookx:** improve prompt visibility ([e5081ac](https://github.com/spellbookx/spellbookx/commit/e5081acb7be941ac97886c8b2219c4fcd1e532ac))
+
 ## [0.9.3](https://github.com/spellbookx/spellbookx/compare/v0.9.2...v0.9.3) (2026-02-23)
 
 ### Bug Fixes
