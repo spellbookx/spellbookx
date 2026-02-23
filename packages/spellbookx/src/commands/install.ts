@@ -3,10 +3,8 @@ import { execa } from 'execa';
 import inquirer from 'inquirer';
 
 import { copyAsset } from '../utils/copy-asset.js';
-import {
-  getPrettierDependencies,
-  TOOL_DEPENDENCIES,
-} from '../utils/dependencies.js';
+import { getPrettierDependencies } from '../utils/get-prettier-dependencies.js';
+import { TOOL_DEPENDENCIES } from '../utils/tool-dependencies.js';
 import { writeConfig } from '../utils/write-config.js';
 
 /**
@@ -110,8 +108,13 @@ export default {
   configContent += '};\n';
   writeConfig('prettier.config.mjs', configContent);
 
+  console.log(chalk.blue('\nInstalling prettier-config-spellbookx first...'));
+  await execa('pnpm', ['add', '-D', 'prettier-config-spellbookx'], {
+    stdio: 'inherit',
+  });
+
   const prettierDeps = getPrettierDependencies();
-  await installDeps([...TOOL_DEPENDENCIES.prettier, ...prettierDeps]);
+  await installDeps([...prettierDeps]);
 }
 
 /**

@@ -6,11 +6,9 @@ import { execa } from 'execa';
 import inquirer from 'inquirer';
 
 import { copyAsset } from '../utils/copy-asset.js';
-import {
-  getPrettierDependencies,
-  TOOL_DEPENDENCIES,
-} from '../utils/dependencies.js';
+import { getPrettierDependencies } from '../utils/get-prettier-dependencies.js';
 import { ASSETS_DIR } from '../utils/paths.js';
+import { TOOL_DEPENDENCIES } from '../utils/tool-dependencies.js';
 import { writeConfig } from '../utils/write-config.js';
 
 /**
@@ -83,7 +81,12 @@ export async function initAction() {
       },
     ]);
     setupPrettier(configs);
-    for (const d of TOOL_DEPENDENCIES.prettier) allDependencies.add(d);
+
+    console.log(chalk.blue('\nInstalling prettier-config-spellbookx...'));
+    await execa('pnpm', ['add', '-D', 'prettier-config-spellbookx'], {
+      stdio: 'inherit',
+    });
+
     for (const d of getPrettierDependencies()) allDependencies.add(d);
   }
 
