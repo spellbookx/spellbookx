@@ -1,6 +1,6 @@
 {
   "name": "spellbookx",
-  "version": "0.1.0",
+  "version": "0.7.3",
   "private": false,
   "description": "CLI tool for the Spellbookx ecosystem to setup linting, formatting, and commit standards.",
   "keywords": [
@@ -40,7 +40,8 @@
     "assets"
   ],
   "scripts": {
-    "build": "rolldown -c && tsc"
+    "build": "rolldown -c && tsc",
+    "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
     "chalk": "^5.4.1",
@@ -52,7 +53,9 @@
     "@dcdavidev/tsconfig": "^0.1.0",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^25.0.10",
+    "esmock": "^2.7.3",
     "rolldown": "1.0.0-rc.1",
+    "tsx": "^4.21.0",
     "typescript": "5.9.2"
   },
   "publishConfig": {

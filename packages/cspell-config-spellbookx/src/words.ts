@@ -10,6 +10,7 @@ export const words = [
   'davide',
   'distros',
   'dotenvx',
+  'esmock',
   'famiglio',
   'gopath',
   'hiberfil',
