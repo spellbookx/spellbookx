@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.1](https://github.com/spellbookx/spellbookx/compare/v0.8.0...v0.8.1) (2026-02-23)
+
+### Bug Fixes
+
+* **spellbookx:** fix __dirname conflict and dynamic version ([4ebf625](https://github.com/spellbookx/spellbookx/commit/4ebf625ae9555e8411aa4fe694ae1fbdbbbb9f6b))
+
 ## [0.8.0](https://github.com/spellbookx/spellbookx/compare/v0.7.3...v0.8.0) (2026-02-23)
 
 ### Features
