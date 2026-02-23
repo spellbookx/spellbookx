@@ -24,7 +24,7 @@ export async function askPackageManagers() {
         { name: 'yarn', value: 'yarn' },
         { name: 'bun', value: 'bun' },
       ],
-      default: 'pnpm',
+      default: ['pnpm'],
     },
     {
       type: 'list',
@@ -36,7 +36,7 @@ export async function askPackageManagers() {
         { name: 'yarn', value: 'yarn' },
         { name: 'bun', value: 'bun' },
       ],
-      default: 'pnpm',
+      default: ['pnpm'],
     },
   ]);
 

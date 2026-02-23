@@ -23,6 +23,7 @@ export async function setupCommitlint() {
         { name: 'Lefthook', value: 'lefthook' },
         { name: 'Husky', value: 'husky' },
       ],
+      default: ['lefthook'],
     },
   ]);
 

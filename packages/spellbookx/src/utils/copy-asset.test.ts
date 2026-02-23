@@ -40,6 +40,17 @@ describe('copyAsset', () => {
       assert.strictEqual(existsSync(vscodeDestPath), true);
       const vscodeContent = JSON.parse(readFileSync(vscodeDestPath, 'utf8'));
       assert.ok(vscodeContent.recommendations);
+
+      // Test lefthook.yml
+      copyAsset('lefthook.yml');
+      const lefthookDestPath = path.join(testRoot, 'lefthook.yml');
+      assert.strictEqual(existsSync(lefthookDestPath), true);
+      const lefthookContent = readFileSync(lefthookDestPath, 'utf8');
+      assert.ok(
+        lefthookContent.includes(
+          'git_url: https://github.com/spellbookx/lefthook'
+        )
+      );
     } finally {
       process.chdir(originalCwd);
     }

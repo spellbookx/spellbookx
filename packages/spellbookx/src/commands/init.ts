@@ -27,6 +27,7 @@ export async function initAction() {
         { name: 'Commitlint', value: 'commitlint' },
         { name: 'VS Code Config', value: 'vscode' },
       ],
+      default: ['eslint', 'prettier', 'cspell', 'commitlint', 'vscode'],
     },
   ]);
 
