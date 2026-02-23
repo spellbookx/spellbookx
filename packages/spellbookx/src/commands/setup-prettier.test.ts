@@ -25,9 +25,15 @@ describe('setupPrettier', () => {
     process.chdir(testRoot);
 
     try {
-      const setupPrettier = await esmock('./setup-prettier.js', {
+      const setupPrettierModule = await esmock('./setup-prettier.js', {
         inquirer: {
           prompt: async () => ({ configs: ['base', 'tailwind'] }),
+        },
+        '../utils/ask-package-managers.js': {
+          askPackageManagers: async () => ({
+            globalManager: 'pnpm',
+            localManager: 'pnpm',
+          }),
         },
         execa: {
           execa: async () => ({}),
@@ -40,7 +46,7 @@ describe('setupPrettier', () => {
         },
       });
 
-      await setupPrettier.setupPrettier();
+      await setupPrettierModule.setupPrettier();
 
       const configPath = path.join(testRoot, 'prettier.config.mjs');
       assert.strictEqual(existsSync(configPath), true);

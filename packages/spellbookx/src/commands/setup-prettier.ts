@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import { execa } from 'execa';
 import inquirer from 'inquirer';
 
+import { askPackageManagers } from '../utils/ask-package-managers.js';
 import { getPrettierDependencies } from '../utils/get-prettier-dependencies.js';
 import { installDeps } from '../utils/install-deps.js';
 import { writeConfig } from '../utils/write-config.js';
@@ -38,11 +38,21 @@ export default {
   configContent += '};\n';
   writeConfig('prettier.config.mjs', configContent);
 
+  const { globalManager, localManager } = await askPackageManagers();
+
   console.log(chalk.blue('\nInstalling prettier-config-spellbookx first...'));
-  await execa('pnpm', ['add', '-D', 'prettier-config-spellbookx'], {
-    stdio: 'inherit',
+  await installDeps(['prettier-config-spellbookx'], {
+    pkgManager: localManager,
+    isDev: true,
   });
 
   const prettierDeps = getPrettierDependencies();
-  await installDeps([...prettierDeps]);
+  await installDeps([...prettierDeps], { pkgManager: localManager });
+
+  // Install global tool
+  console.log(chalk.blue('\nInstalling Prettier globally...'));
+  await installDeps(['prettier'], {
+    pkgManager: globalManager,
+    isGlobal: true,
+  });
 }

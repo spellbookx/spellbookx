@@ -25,17 +25,22 @@ describe('setupEslint', () => {
     process.chdir(testRoot);
 
     try {
-      // Mock inquirer and install-deps
-      const setupEslint = await esmock('./setup-eslint.js', {
+      const setupEslintModule = await esmock('./setup-eslint.js', {
         inquirer: {
           prompt: async () => ({ configs: ['recommended'] }),
+        },
+        '../utils/ask-package-managers.js': {
+          askPackageManagers: async () => ({
+            globalManager: 'pnpm',
+            localManager: 'pnpm',
+          }),
         },
         '../utils/install-deps.js': {
           installDeps: async () => {},
         },
       });
 
-      await setupEslint.setupEslint();
+      await setupEslintModule.setupEslint();
 
       const configPath = path.join(testRoot, 'eslint.config.mjs');
       assert.strictEqual(existsSync(configPath), true);
@@ -51,16 +56,22 @@ describe('setupEslint', () => {
     process.chdir(testRoot);
 
     try {
-      const setupEslint = await esmock('./setup-eslint.js', {
+      const setupEslintModule = await esmock('./setup-eslint.js', {
         inquirer: {
           prompt: async () => ({ configs: ['javascript', 'json'] }),
+        },
+        '../utils/ask-package-managers.js': {
+          askPackageManagers: async () => ({
+            globalManager: 'pnpm',
+            localManager: 'pnpm',
+          }),
         },
         '../utils/install-deps.js': {
           installDeps: async () => {},
         },
       });
 
-      await setupEslint.setupEslint();
+      await setupEslintModule.setupEslint();
 
       const configPath = path.join(testRoot, 'eslint.config.mjs');
       const content = readFileSync(configPath, 'utf8');

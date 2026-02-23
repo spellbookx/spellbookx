@@ -25,13 +25,19 @@ describe('setupCspell', () => {
     process.chdir(testRoot);
 
     try {
-      const setupCspell = await esmock('./setup-cspell.js', {
+      const setupCspellModule = await esmock('./setup-cspell.js', {
+        '../utils/ask-package-managers.js': {
+          askPackageManagers: async () => ({
+            globalManager: 'pnpm',
+            localManager: 'pnpm',
+          }),
+        },
         '../utils/install-deps.js': {
           installDeps: async () => {},
         },
       });
 
-      await setupCspell.setupCspell();
+      await setupCspellModule.setupCspell();
 
       const configPath = path.join(testRoot, 'cspell.config.cjs');
       assert.strictEqual(existsSync(configPath), true);

@@ -1,5 +1,7 @@
+import chalk from 'chalk';
 import inquirer from 'inquirer';
 
+import { askPackageManagers } from '../utils/ask-package-managers.js';
 import { installDeps } from '../utils/install-deps.js';
 import { TOOL_DEPENDENCIES } from '../utils/tool-dependencies.js';
 import { writeConfig } from '../utils/write-config.js';
@@ -39,5 +41,13 @@ export default defineConfig([
   }
   configContent += ']);\n';
   writeConfig('eslint.config.mjs', configContent);
-  await installDeps(TOOL_DEPENDENCIES.eslint);
+
+  const { globalManager, localManager } = await askPackageManagers();
+
+  // Install local dependencies
+  await installDeps(TOOL_DEPENDENCIES.eslint, { pkgManager: localManager });
+
+  // Install global tool
+  console.log(chalk.blue('\nInstalling ESLint globally...'));
+  await installDeps(['eslint'], { pkgManager: globalManager, isGlobal: true });
 }

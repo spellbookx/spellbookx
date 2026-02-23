@@ -1,14 +1,7 @@
-commit-msg:
-  jobs:
-    - name: lint-commit-msg
-      run: pnpm dlx commitlint --verbose --edit {1}
-
-pre-commit:
-  parallel: false
-  jobs:
-    - name: lint
-      run: pnpm dlx eslint --no-warn-ignored --fix {staged_files}
-      stage_fixed: true
-    - name: fmt
-      run: pnpm exec prettier --ignore-unknown --write {staged_files}
-      stage_fixed: true
+remotes:
+  - git_url: https://github.com/spellbookx/lefthook
+    refetch: true
+    refetch_frequency: 24h
+    configs:
+      - '@commit-msg/pnpx-commitlint.yml'
+      - '@pre-commit/pnpx-eslint-prettier.yml'

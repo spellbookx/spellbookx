@@ -14,6 +14,8 @@ describe('setupCommitlint', () => {
     if (existsSync(testRoot))
       rmSync(testRoot, { recursive: true, force: true });
     mkdirSync(testRoot, { recursive: true });
+    // create a fake package.json for updatePackageJson
+    writeFileSync(path.join(testRoot, 'package.json'), '{}');
   });
 
   after(() => {
@@ -25,9 +27,15 @@ describe('setupCommitlint', () => {
     process.chdir(testRoot);
 
     try {
-      const setupCommitlint = await esmock('./setup-commitlint.js', {
+      const setupCommitlintModule = await esmock('./setup-commitlint.js', {
         inquirer: {
           prompt: async () => ({ gitHook: 'lefthook' }),
+        },
+        '../utils/ask-package-managers.js': {
+          askPackageManagers: async () => ({
+            globalManager: 'pnpm',
+            localManager: 'pnpm',
+          }),
         },
         '../utils/copy-asset.js': {
           copyAsset: (name: string) => {
@@ -38,9 +46,12 @@ describe('setupCommitlint', () => {
         '../utils/install-deps.js': {
           installDeps: async () => {},
         },
+        '../utils/update-package-json.js': {
+          updatePackageJson: () => {},
+        },
       });
 
-      await setupCommitlint.setupCommitlint();
+      await setupCommitlintModule.setupCommitlint();
 
       assert.strictEqual(
         existsSync(path.join(testRoot, 'commitlint.config.mjs')),
