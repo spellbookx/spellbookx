@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.9.2](https://github.com/spellbookx/spellbookx/compare/v0.9.1...v0.9.2) (2026-02-23)
+
 ## [0.9.1](https://github.com/spellbookx/spellbookx/compare/v0.9.0...v0.9.1) (2026-02-23)
 
 ### Bug Fixes
