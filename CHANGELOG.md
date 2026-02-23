@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.0](https://github.com/spellbookx/spellbookx/compare/v0.8.1...v0.9.0) (2026-02-23)
+
+### Features
+
+* **spellbookx:** improve config generation and add vscode tool setup ([453ace8](https://github.com/spellbookx/spellbookx/commit/453ace87ed2b2978f4a2649b0e53a415cfe60795))
+
 ## [0.8.1](https://github.com/spellbookx/spellbookx/compare/v0.8.0...v0.8.1) (2026-02-23)
 
 ### Bug Fixes
