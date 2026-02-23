@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 
 import { Command } from 'commander';
 
+import { createAction } from './commands/create.js';
 import { initAction } from './commands/init.js';
 import { installTool } from './commands/install.js';
 
@@ -18,6 +19,27 @@ program
   .description('Setup Spellbookx tools for your project')
   .version(pkg.version)
   .alias('sbx');
+
+program
+  .command('create [workspace-name]')
+  .description('Create a new Spellbookx workspace')
+  .option(
+    '-t, --template <template>',
+    'The template to use for the repository (e.g., turborepo-monorepo)'
+  )
+  .option(
+    '-o, --owner <owner>',
+    'The GitHub owner/organization to use for the template',
+    'spellbookx'
+  )
+  .action(
+    async (
+      workspaceName: string | undefined,
+      options: { template?: string; owner?: string }
+    ) => {
+      await createAction(workspaceName, options);
+    }
+  );
 
 program
   .command('init')
