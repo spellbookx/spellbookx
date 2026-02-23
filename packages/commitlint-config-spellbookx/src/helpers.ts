@@ -90,20 +90,34 @@ export function getScopes(): string[] {
     ...getWorkspacesRawPath(lernaJsonPath, 'json', 'packages')
   );
 
-  const workspaces: string[] = [];
+  const workspaces = new Set<string>();
+
+  const rootPackageJsonPath = path.join(cwd, 'package.json');
+  if (existsSync(rootPackageJsonPath) && !rawWorkspaces.includes('.')) {
+    rawWorkspaces.push('.');
+  }
 
   for (const pattern of rawWorkspaces) {
     const entries = fg.sync(pattern, { onlyDirectories: true, absolute: true });
 
     for (const dirPath of entries) {
-      const dirArray = dirPath.split(path.sep);
-      const dirName = dirArray.at(-1);
+      const packageJsonPath = path.join(dirPath, 'package.json');
 
-      if (typeof dirName === 'string') {
-        workspaces.push(dirName);
+      if (existsSync(packageJsonPath)) {
+        try {
+          const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
+            name?: string;
+          };
+
+          if (pkg.name) {
+            workspaces.add(pkg.name);
+          }
+        } catch {
+          // ignore invalid package.json files
+        }
       }
     }
   }
 
-  return workspaces;
+  return [...workspaces];
 }
