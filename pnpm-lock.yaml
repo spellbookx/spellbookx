@@ -291,9 +291,6 @@ importers:
       '@dcdavidev/tsconfig':
         specifier: ^0.1.0
         version: 0.1.0
-      '@types/inquirer':
-        specifier: ^9.0.9
-        version: 9.0.9
       '@types/node':
         specifier: ^25.3.0
         version: 25.3.0
@@ -2235,12 +2232,6 @@ packages:
     resolution:
       {
         integrity: sha512-rjaYQ9b9y/VFGOpqBEXRavc3jh0a+e6evAbI31tMda8VlPaSy0AZJfXsvmIe3wklc7W6C3zCSfleuMXR7NOyXw==,
-      }
-
-  '@types/inquirer@9.0.9':
-    resolution:
-      {
-        integrity: sha512-/mWx5136gts2Z2e5izdoRCo46lPp5TMs9R15GTSsgg/XnZyxDWVqoVU3R9lWnccKpqwsJLvRoxbCjoJtZB7DSw==,
       }
 
   '@types/js-yaml@4.0.9':
@@ -8869,11 +8860,6 @@ snapshots:
     dependencies:
       '@types/through': 0.0.33
       rxjs: 6.6.7
-
-  '@types/inquirer@9.0.9':
-    dependencies:
-      '@types/through': 0.0.33
-      rxjs: 7.8.2
 
   '@types/js-yaml@4.0.9': {}
 

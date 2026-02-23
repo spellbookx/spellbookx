@@ -51,7 +51,6 @@
   },
   "devDependencies": {
     "@dcdavidev/tsconfig": "^0.1.0",
-    "@types/inquirer": "^9.0.9",
     "@types/node": "^25.3.0",
     "esmock": "^2.7.3",
     "rolldown": "1.0.0-rc.5",
