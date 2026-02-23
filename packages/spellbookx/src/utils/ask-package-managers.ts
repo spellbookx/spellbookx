@@ -18,14 +18,24 @@ export async function askPackageManagers() {
       type: 'list',
       name: 'globalManager',
       message: 'Select your global package manager:',
-      choices: ['pnpm', 'npm', 'yarn', 'bun'],
+      choices: [
+        { name: 'pnpm', value: 'pnpm' },
+        { name: 'npm', value: 'npm' },
+        { name: 'yarn', value: 'yarn' },
+        { name: 'bun', value: 'bun' },
+      ],
       default: 'pnpm',
     },
     {
       type: 'list',
       name: 'localManager',
       message: 'Select your local package manager for this repo:',
-      choices: ['pnpm', 'npm', 'yarn', 'bun'],
+      choices: [
+        { name: 'pnpm', value: 'pnpm' },
+        { name: 'npm', value: 'npm' },
+        { name: 'yarn', value: 'yarn' },
+        { name: 'bun', value: 'bun' },
+      ],
       default: 'pnpm',
     },
   ]);

@@ -29,7 +29,7 @@ describe('setupCommitlint', () => {
     try {
       const setupCommitlintModule = await esmock('./setup-commitlint.js', {
         inquirer: {
-          prompt: async () => ({ gitHook: 'lefthook' }),
+          prompt: async () => ({ gitHooks: ['lefthook'] }),
         },
         '../utils/ask-package-managers.js': {
           askPackageManagers: async () => ({
