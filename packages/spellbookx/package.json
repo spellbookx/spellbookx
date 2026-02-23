@@ -1,0 +1,57 @@
+{
+  "name": "spellbookx",
+  "version": "0.1.0",
+  "private": false,
+  "description": "CLI tool for the Spellbookx ecosystem to setup linting, formatting, and commit standards.",
+  "keywords": [
+    "cli",
+    "spellbookx",
+    "lint",
+    "prettier",
+    "eslint",
+    "commitlint",
+    "cspell"
+  ],
+  "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "bugs": {
+    "url": "https://github.com/spellbookx/spellbookx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spellbookx/spellbookx.git",
+    "directory": "packages/spellbookx"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "bin": {
+    "sbx": "./dist/index.js",
+    "spellbookx": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "rolldown -c && tsc"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "execa": "^9.5.2",
+    "inquirer": "^12.4.2"
+  },
+  "devDependencies": {
+    "@dcdavidev/tsconfig": "^0.1.0",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^25.0.10",
+    "rolldown": "1.0.0-rc.1",
+    "typescript": "5.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
