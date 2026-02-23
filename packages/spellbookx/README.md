@@ -10,6 +10,14 @@ pnpm add -D spellbookx
 
 ## Usage
 
+Initialize a new project:
+
+```bash
+pnpm dlx spellbookx create [workspace-name]
+```
+
+Or setup tools in an existing project:
+
 ```bash
 pnpm spellbookx init
 ```
@@ -22,6 +30,7 @@ pnpm sbx init
 
 ## Features
 
+- **Project Scaffolding**: Create new workspaces using official templates.
 - **ESLint**: Setup `eslint-plugin-spellbookx` with customizable configurations.
 - **Prettier**: Setup `prettier-config-spellbookx` with customizable configurations.
 - **CSpell**: Setup `cspell-config-spellbookx`.

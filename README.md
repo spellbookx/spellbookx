@@ -87,6 +87,23 @@ import { base } from 'prettier-config-spellbookx';
 export default base;
 ```
 
+### [spellbookx](./packages/spellbookx)
+
+The official CLI for the Spellbookx ecosystem. It provides tools for project scaffolding and interactive setup of linting, formatting, and commit standards.
+
+**Usage:**
+
+```bash
+pnpm dlx spellbookx create [workspace-name]
+```
+
+Or in an existing project:
+
+```bash
+pnpm add -D spellbookx
+pnpm sbx init
+```
+
 ## License
 
 This project is licensed under the MIT License.
