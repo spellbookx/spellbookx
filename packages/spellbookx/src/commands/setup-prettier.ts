@@ -25,6 +25,7 @@ export async function setupPrettier() {
         { name: 'Prisma', value: 'prisma' },
         { name: 'Prisma-Tailwind', value: 'prisma-tailwind' },
       ],
+      default: ['base'],
     },
   ]);
 
@@ -33,7 +34,7 @@ export async function setupPrettier() {
 export default {
 `;
   for (const config of configs) {
-    configContent += `  ...spellbookx['${config}'],\n`;
+    configContent += `  ...spellbookx.${config},\n`;
   }
   configContent += '};\n';
   writeConfig('prettier.config.mjs', configContent);

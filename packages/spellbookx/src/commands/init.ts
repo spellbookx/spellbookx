@@ -6,6 +6,7 @@ import { setupCommitlint } from './setup-commitlint.js';
 import { setupCspell } from './setup-cspell.js';
 import { setupEslint } from './setup-eslint.js';
 import { setupPrettier } from './setup-prettier.js';
+import { setupVscode } from './setup-vscode.js';
 
 /**
  * Initializes Spellbookx tools interactively.
@@ -23,6 +24,7 @@ export async function initAction() {
         { name: 'Prettier', value: 'prettier' },
         { name: 'CSpell', value: 'cspell' },
         { name: 'Commitlint', value: 'commitlint' },
+        { name: 'VS Code Config', value: 'vscode' },
       ],
     },
   ]);
@@ -49,6 +51,10 @@ export async function initAction() {
 
   if (tools.includes('commitlint')) {
     await setupCommitlint();
+  }
+
+  if (tools.includes('vscode')) {
+    await setupVscode();
   }
 
   console.log(

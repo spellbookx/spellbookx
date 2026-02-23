@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
@@ -13,10 +13,15 @@ import { ASSETS_DIR, ROOT_DIR } from './paths.js';
 export function copyAsset(assetName: string, destName?: string) {
   const src = path.join(ASSETS_DIR, assetName);
   const dest = path.join(ROOT_DIR, destName || assetName);
+  const dir = path.dirname(dest);
 
   if (!existsSync(src)) {
     console.error(chalk.red(`Asset ${assetName} not found at ${src}`));
     return;
+  }
+
+  if (dir !== ROOT_DIR) {
+    mkdirSync(dir, { recursive: true });
   }
 
   const content = readFileSync(src, 'utf8');

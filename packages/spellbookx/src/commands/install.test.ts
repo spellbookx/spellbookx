@@ -60,6 +60,20 @@ describe('installTool', () => {
     assert.strictEqual(called, true);
   });
 
+  test('should call setupVscode for vscode', async () => {
+    let called = false;
+    const install = await esmock('./install.js', {
+      './setup-vscode.js': {
+        setupVscode: async () => {
+          called = true;
+        },
+      },
+    });
+
+    await install.installTool('vscode');
+    assert.strictEqual(called, true);
+  });
+
   test('should call copyAsset for editorconfig', async () => {
     let calledWith: string | null = null;
     const install = await esmock('./install.js', {

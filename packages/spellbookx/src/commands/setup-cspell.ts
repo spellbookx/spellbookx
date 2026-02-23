@@ -9,11 +9,23 @@ import { writeConfig } from '../utils/write-config.js';
  * Sets up CSpell.
  */
 export async function setupCspell() {
-  const configContent = `const config = require('cspell-config-spellbookx');
+  const configContent = `const { defineConfig } = require('@cspell/cspell-types');
 
-module.exports = config;
+module.exports = defineConfig({
+  version: '0.2',
+  import: ['cspell-config-spellbookx'],
+  dictionaryDefinitions: [
+    {
+      name: 'custom-dict',
+      path: './.config/cspell/custom.txt',
+      addWords: true,
+    },
+  ],
+  dictionaries: ['custom-dict'],
+});
 `;
   writeConfig('cspell.config.cjs', configContent);
+  writeConfig('.config/cspell/custom.txt', '');
 
   const { globalManager, localManager } = await askPackageManagers();
 

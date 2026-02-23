@@ -12,9 +12,9 @@ import { writeConfig } from '../utils/write-config.js';
  * Sets up Commitlint and Git hooks.
  */
 export async function setupCommitlint() {
-  const commitlintContent = `import config from 'commitlint-config-spellbookx';
-
-export default config;
+  const commitlintContent = `export default {
+  extends: ['spellbookx'],
+};
 `;
   writeConfig('commitlint.config.mjs', commitlintContent);
   copyAsset('.czrc');

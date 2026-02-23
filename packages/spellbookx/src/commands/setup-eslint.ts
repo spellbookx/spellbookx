@@ -24,6 +24,7 @@ export async function setupEslint() {
         { name: 'Markdown', value: 'markdown' },
         { name: 'Vuoto', value: 'vuoto' },
       ],
+      default: ['recommended'],
     },
   ]);
 

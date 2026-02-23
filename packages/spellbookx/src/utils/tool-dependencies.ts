@@ -1,7 +1,7 @@
 export const TOOL_DEPENDENCIES: Record<string, string[]> = {
   eslint: ['eslint', 'eslint-plugin-spellbookx'],
   prettier: ['prettier-config-spellbookx'], // prettier itself will be in prettierDeps
-  cspell: ['cspell', 'cspell-config-spellbookx'],
+  cspell: ['cspell', 'cspell-config-spellbookx', '@cspell/cspell-types'],
   commitlint: [
     '@commitlint/cli',
     'commitlint-config-spellbookx',

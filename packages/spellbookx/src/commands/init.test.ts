@@ -21,11 +21,14 @@ describe('initAction', () => {
       './setup-commitlint.js': {
         setupCommitlint: async () => {},
       },
+      './setup-vscode.js': {
+        setupVscode: async () => {},
+      },
       inquirer: {
         prompt: async (questions: unknown) => {
           const q = questions as { name: string }[];
           if (q[0].name === 'tools') {
-            return { tools: ['eslint', 'prettier', 'commitlint'] };
+            return { tools: ['eslint', 'prettier', 'commitlint', 'vscode'] };
           }
           return {};
         },

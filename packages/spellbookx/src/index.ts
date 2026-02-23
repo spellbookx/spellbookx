@@ -29,7 +29,7 @@ program
   .alias('i')
   .alias('add')
   .description(
-    'Install a specific tool (eslint, prettier, cspell, commitlint, editorconfig)'
+    'Install a specific tool (eslint, prettier, cspell, commitlint, vscode, editorconfig)'
   )
   .action(async (tool: string) => {
     await installTool(tool);

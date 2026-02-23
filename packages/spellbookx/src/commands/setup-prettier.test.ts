@@ -51,8 +51,8 @@ describe('setupPrettier', () => {
       const configPath = path.join(testRoot, 'prettier.config.mjs');
       assert.strictEqual(existsSync(configPath), true);
       const content = readFileSync(configPath, 'utf8');
-      assert.ok(content.includes("...spellbookx['base']"));
-      assert.ok(content.includes("...spellbookx['tailwind']"));
+      assert.ok(content.includes('...spellbookx.base'));
+      assert.ok(content.includes('...spellbookx.tailwind'));
     } finally {
       process.chdir(originalCwd);
     }

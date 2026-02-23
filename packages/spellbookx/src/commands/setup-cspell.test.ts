@@ -42,7 +42,11 @@ describe('setupCspell', () => {
       const configPath = path.join(testRoot, 'cspell.config.cjs');
       assert.strictEqual(existsSync(configPath), true);
       const content = readFileSync(configPath, 'utf8');
-      assert.ok(content.includes("require('cspell-config-spellbookx')"));
+      assert.ok(content.includes("'cspell-config-spellbookx'"));
+      assert.strictEqual(
+        existsSync(path.join(testRoot, '.config/cspell/custom.txt')),
+        true
+      );
     } finally {
       process.chdir(originalCwd);
     }

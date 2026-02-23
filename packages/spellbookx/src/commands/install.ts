@@ -5,6 +5,7 @@ import { setupCommitlint } from './setup-commitlint.js';
 import { setupCspell } from './setup-cspell.js';
 import { setupEslint } from './setup-eslint.js';
 import { setupPrettier } from './setup-prettier.js';
+import { setupVscode } from './setup-vscode.js';
 
 /**
  * Entry point for the install command.
@@ -26,6 +27,10 @@ export async function installTool(tool: string) {
     }
     case 'commitlint': {
       await setupCommitlint();
+      break;
+    }
+    case 'vscode': {
+      await setupVscode();
       break;
     }
     case 'editorconfig': {
