@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.1](https://github.com/spellbookx/spellbookx/compare/v0.9.0...v0.9.1) (2026-02-23)
+
+### Bug Fixes
+
+* **spellbookx:** fix asset loading and eslint 10 compatibility ([1ceefec](https://github.com/spellbookx/spellbookx/commit/1ceefec8580c6acd26091d2179e473eb5445609b))
+
 ## [0.9.0](https://github.com/spellbookx/spellbookx/compare/v0.8.1...v0.9.0) (2026-02-23)
 
 ### Features
