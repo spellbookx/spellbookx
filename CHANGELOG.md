@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.0](https://github.com/spellbookx/spellbookx/compare/v0.7.3...v0.8.0) (2026-02-23)
+
+### Features
+
+* add spellbookx CLI package ([600372e](https://github.com/spellbookx/spellbookx/commit/600372eb5ff0e34caa8e8f3f921e4182b10a400a))
+* **spellbookx:** enhance Lefthook remotes and global tool management ([e5e5ebb](https://github.com/spellbookx/spellbookx/commit/e5e5ebb988fb618e9a4b42aae11be30c574e854e))
+
+### Bug Fixes
+
+* **commitlint-config-spellbookx:** read packages names ([003e72b](https://github.com/spellbookx/spellbookx/commit/003e72b695ad0480e7bb4054326803e166f7b350))
+
 ## [0.7.3](https://github.com/spellbookx/spellbookx/compare/v0.7.2...v0.7.3) (2026-01-31)
 
 ## [0.7.2](https://github.com/spellbookx/spellbookx/compare/v0.7.1...v0.7.2) (2026-01-27)
