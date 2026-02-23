@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.0](https://github.com/spellbookx/spellbookx/compare/v0.9.5...v0.10.0) (2026-02-23)
+
+### Features
+
+* **spellbookx:** add create command ([1b31bf3](https://github.com/spellbookx/spellbookx/commit/1b31bf382b7831a90e6a5d39aafceb3c5dde292f))
+
 ## [0.9.5](https://github.com/spellbookx/spellbookx/compare/v0.9.4...v0.9.5) (2026-02-23)
 
 ### Bug Fixes
