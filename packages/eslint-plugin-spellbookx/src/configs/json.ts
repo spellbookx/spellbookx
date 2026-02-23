@@ -2,7 +2,7 @@ import { Linter } from 'eslint';
 import { defineConfig } from 'eslint/config';
 import packageJson from 'eslint-plugin-package-json';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import jsoncParser from 'jsonc-eslint-parser';
+import * as jsoncParser from 'jsonc-eslint-parser';
 import json from '@eslint/json';
 
 export const configJson: Linter.Config[] = defineConfig([

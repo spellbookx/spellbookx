@@ -33,6 +33,13 @@ describe('copyAsset', () => {
       // Verify content (should be the cz-git config)
       const content = JSON.parse(readFileSync(destPath, 'utf8'));
       assert.strictEqual(content.path, 'cz-git');
+
+      // Test a vscode asset (now moved to configs/vscode/)
+      copyAsset('vscode/extensions.json', 'copied-extensions.json');
+      const vscodeDestPath = path.join(testRoot, 'copied-extensions.json');
+      assert.strictEqual(existsSync(vscodeDestPath), true);
+      const vscodeContent = JSON.parse(readFileSync(vscodeDestPath, 'utf8'));
+      assert.ok(vscodeContent.recommendations);
     } finally {
       process.chdir(originalCwd);
     }
