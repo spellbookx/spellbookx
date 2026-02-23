@@ -1,4 +1,4 @@
-![spellbookx](./images/readme-banner.png)
+![spellbookx](./images/gh-banner.png)
 
 # spellbookx
 
