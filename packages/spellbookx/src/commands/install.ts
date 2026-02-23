@@ -2,11 +2,12 @@ import chalk from 'chalk';
 import { execa } from 'execa';
 import inquirer from 'inquirer';
 
+import { copyAsset } from '../utils/copy-asset.js';
 import {
   getPrettierDependencies,
   TOOL_DEPENDENCIES,
 } from '../utils/dependencies.js';
-import { copyAsset, writeConfig } from '../utils/files.js';
+import { writeConfig } from '../utils/write-config.js';
 
 /**
  *
