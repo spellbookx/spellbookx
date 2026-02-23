@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.3](https://github.com/spellbookx/spellbookx/compare/v0.9.2...v0.9.3) (2026-02-23)
+
+### Bug Fixes
+
+* **spellbookx:** reorder setupCommitlint prompts to avoid output overlap ([e1155bf](https://github.com/spellbookx/spellbookx/commit/e1155bff7f60194623ee91969ab35102303de263))
+
 ## [0.9.2](https://github.com/spellbookx/spellbookx/compare/v0.9.1...v0.9.2) (2026-02-23)
 
 ## [0.9.1](https://github.com/spellbookx/spellbookx/compare/v0.9.0...v0.9.1) (2026-02-23)
