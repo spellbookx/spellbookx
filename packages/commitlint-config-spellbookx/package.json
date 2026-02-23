@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@commitlint/types": "^20.3.1",
-    "@spellbookx/typescript-config": "workspace:*",
+    "@dcdavidev/tsconfig": "^0.1.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.0.10",
     "rolldown": "1.0.0-rc.1",
