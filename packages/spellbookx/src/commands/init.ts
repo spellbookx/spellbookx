@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 
+import { askPackageManagers } from '../utils/ask-package-managers.js';
 import { copyAsset } from '../utils/copy-asset.js';
 import { setupCommitlint } from './setup-commitlint.js';
 import { setupCspell } from './setup-cspell.js';
@@ -33,6 +34,9 @@ export async function initAction() {
     console.log(chalk.yellow('No tools selected. Exiting.'));
     return;
   }
+
+  // Ask package managers once at the beginning
+  await askPackageManagers();
 
   // Always ensure .editorconfig
   copyAsset('.editorconfig');

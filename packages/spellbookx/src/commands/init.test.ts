@@ -24,6 +24,12 @@ describe('initAction', () => {
       './setup-vscode.js': {
         setupVscode: async () => {},
       },
+      '../utils/ask-package-managers.js': {
+        askPackageManagers: async () => ({
+          globalManager: 'pnpm',
+          localManager: 'pnpm',
+        }),
+      },
       inquirer: {
         prompt: async (questions: unknown) => {
           const q = questions as { name: string }[];
