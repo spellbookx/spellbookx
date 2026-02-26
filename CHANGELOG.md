@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.1](https://github.com/spellbookx/spellbookx/compare/v0.10.0...v0.10.1) (2026-02-26)
+
+### Bug Fixes
+
+* **spellbookx:** add --ignore-workspace-root-check for pnpm ([04812b1](https://github.com/spellbookx/spellbookx/commit/04812b14c104788c27b58268d7216f30b98aea35))
+
 ## [0.10.0](https://github.com/spellbookx/spellbookx/compare/v0.9.5...v0.10.0) (2026-02-23)
 
 ### Features
