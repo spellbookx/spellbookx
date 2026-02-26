@@ -313,6 +313,12 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
+  tmp-test:
+    devDependencies:
+      is-odd:
+        specifier: ^3.0.1
+        version: 3.0.1
+
 packages:
   '@altano/repository-tools@2.0.1':
     resolution:
@@ -4892,6 +4898,13 @@ packages:
       }
     engines: { node: '>= 0.4' }
 
+  is-number@6.0.0:
+    resolution:
+      {
+        integrity: sha512-Wu1VHeILBK8KAWJUAiSZQX94GmOE45Rg6/538fKwiloUu21KncEkYGPqob2oSZ5mUT73vLGrHQjKw3KMPwfDzg==,
+      }
+    engines: { node: '>=0.10.0' }
+
   is-number@7.0.0:
     resolution:
       {
@@ -4905,6 +4918,13 @@ packages:
         integrity: sha512-drqDG3cbczxxEJRoOXcOjtdp1J/lyp1mNn0xaznRs8+muBhgQcrnbspox5X5fOw0HnMnbfDzvnEMEtqDEJEo8w==,
       }
     engines: { node: '>=8' }
+
+  is-odd@3.0.1:
+    resolution:
+      {
+        integrity: sha512-CQpnWPrDwmP1+SMHXZhtLtJv90yiyVfluGsX5iNCVkrhQtU3TQHsUWPG9wkdk9Lgd5yNpAg9jQEo90CBaXgWMA==,
+      }
+    engines: { node: '>=4' }
 
   is-path-cwd@2.2.0:
     resolution:
@@ -10804,9 +10824,15 @@ snapshots:
       call-bound: 1.0.4
       has-tostringtag: 1.0.2
 
+  is-number@6.0.0: {}
+
   is-number@7.0.0: {}
 
   is-obj@2.0.0: {}
+
+  is-odd@3.0.1:
+    dependencies:
+      is-number: 6.0.0
 
   is-path-cwd@2.2.0: {}
 

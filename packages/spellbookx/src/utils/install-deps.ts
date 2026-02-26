@@ -43,6 +43,13 @@ export async function installDeps(
   } else {
     if (pkgManager === 'npm') {
       args.push('install', isDev ? '--save-dev' : '--save', ...deps);
+    } else if (pkgManager === 'pnpm') {
+      args.push(
+        'add',
+        isDev ? '-D' : '',
+        '--ignore-workspace-root-check',
+        ...deps
+      );
     } else {
       args.push('add', isDev ? '-D' : '', ...deps);
     }
