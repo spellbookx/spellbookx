@@ -12,7 +12,17 @@ const require = _createRequire(import.meta.url);
 
 export default defineConfig([
   {
-    input: ['src/index.ts', 'src/types.ts'],
+    input: {
+      index: 'src/index.ts',
+      types: 'src/types.ts',
+      'configs/cspell': 'src/configs/cspell.ts',
+      'configs/ignores': 'src/configs/ignores.ts',
+      'configs/javascript': 'src/configs/javascript.ts',
+      'configs/json': 'src/configs/json.ts',
+      'configs/markdown': 'src/configs/markdown.ts',
+      'configs/recommended': 'src/configs/recommended.ts',
+      'configs/vuoto': 'src/configs/vuoto.ts',
+    },
     output: {
       format: 'esm',
       dir: 'dist',

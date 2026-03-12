@@ -36,6 +36,51 @@
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js",
       "default": "./dist/types.js"
+    },
+    "./configs": {
+      "types": "./dist/configs/index.d.ts",
+      "import": "./dist/configs/index.js",
+      "default": "./dist/configs/index.js"
+    },
+    "./base": {
+      "types": "./dist/configs/base.d.ts",
+      "import": "./dist/configs/base.js",
+      "default": "./dist/configs/base.js"
+    },
+    "./astro": {
+      "types": "./dist/configs/astro.d.ts",
+      "import": "./dist/configs/astro.js",
+      "default": "./dist/configs/astro.js"
+    },
+    "./astro-prisma": {
+      "types": "./dist/configs/astro-prisma.d.ts",
+      "import": "./dist/configs/astro-prisma.js",
+      "default": "./dist/configs/astro-prisma.js"
+    },
+    "./astro-prisma-tailwind": {
+      "types": "./dist/configs/astro-prisma-tailwind.d.ts",
+      "import": "./dist/configs/astro-prisma-tailwind.js",
+      "default": "./dist/configs/astro-prisma-tailwind.js"
+    },
+    "./astro-tailwind": {
+      "types": "./dist/configs/astro-tailwind.d.ts",
+      "import": "./dist/configs/astro-tailwind.js",
+      "default": "./dist/configs/astro-tailwind.js"
+    },
+    "./prisma": {
+      "types": "./dist/configs/prisma.d.ts",
+      "import": "./dist/configs/prisma.js",
+      "default": "./dist/configs/prisma.js"
+    },
+    "./prisma-tailwind": {
+      "types": "./dist/configs/prisma-tailwind.d.ts",
+      "import": "./dist/configs/prisma-tailwind.js",
+      "default": "./dist/configs/prisma-tailwind.js"
+    },
+    "./tailwind": {
+      "types": "./dist/configs/tailwind.d.ts",
+      "import": "./dist/configs/tailwind.js",
+      "default": "./dist/configs/tailwind.js"
     }
   },
   "main": "./dist/index.js",

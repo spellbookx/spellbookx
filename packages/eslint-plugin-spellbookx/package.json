@@ -34,6 +34,41 @@
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js",
       "default": "./dist/types.js"
+    },
+    "./cspell": {
+      "types": "./dist/configs/cspell.d.ts",
+      "import": "./dist/configs/cspell.js",
+      "default": "./dist/configs/cspell.js"
+    },
+    "./ignores": {
+      "types": "./dist/configs/ignores.d.ts",
+      "import": "./dist/configs/ignores.js",
+      "default": "./dist/configs/ignores.js"
+    },
+    "./javascript": {
+      "types": "./dist/configs/javascript.d.ts",
+      "import": "./dist/configs/javascript.js",
+      "default": "./dist/configs/javascript.js"
+    },
+    "./json": {
+      "types": "./dist/configs/json.d.ts",
+      "import": "./dist/configs/json.js",
+      "default": "./dist/configs/json.js"
+    },
+    "./markdown": {
+      "types": "./dist/configs/markdown.d.ts",
+      "import": "./dist/configs/markdown.js",
+      "default": "./dist/configs/markdown.js"
+    },
+    "./recommended": {
+      "types": "./dist/configs/recommended.d.ts",
+      "import": "./dist/configs/recommended.js",
+      "default": "./dist/configs/recommended.js"
+    },
+    "./vuoto": {
+      "types": "./dist/configs/vuoto.d.ts",
+      "import": "./dist/configs/vuoto.js",
+      "default": "./dist/configs/vuoto.js"
     }
   },
   "main": "./dist/index.js",
