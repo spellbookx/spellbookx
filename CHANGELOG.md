@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.11.0](https://github.com/spellbookx/spellbookx/compare/v0.10.1...v0.11.0) (2026-03-12)
+
+### Features
+
+* export individual configurations for prettier and eslint packages ([bd47f31](https://github.com/spellbookx/spellbookx/commit/bd47f313b5a75f8eab04a02cabb429aabbfb52c0))
+
 ## [0.10.1](https://github.com/spellbookx/spellbookx/compare/v0.10.0...v0.10.1) (2026-02-26)
 
 ### Bug Fixes
