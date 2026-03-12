@@ -1,6 +1,6 @@
 import type { Config } from 'prettier';
 
-export const base: Config = {
+const base: Config = {
   plugins: [
     'prettier-plugin-sh',
     'prettier-plugin-toml',
@@ -59,3 +59,5 @@ export const base: Config = {
     },
   ],
 };
+
+export default base;

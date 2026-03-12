@@ -1,6 +1,6 @@
 import type { Config } from 'prettier';
 
-export const astroPrisma: Config = {
+const astroPrisma: Config = {
   plugins: [
     'prettier-plugin-astro',
     'prettier-plugin-sh',
@@ -61,3 +61,5 @@ export const astroPrisma: Config = {
     },
   ],
 };
+
+export default astroPrisma;

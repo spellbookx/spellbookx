@@ -1,6 +1,6 @@
 import type { Config } from 'prettier';
 
-export const prismaTailwind: Config = {
+const prismaTailwind: Config = {
   plugins: [
     'prettier-plugin-sh',
     'prettier-plugin-toml',
@@ -61,3 +61,5 @@ export const prismaTailwind: Config = {
     },
   ],
 };
+
+export default prismaTailwind;

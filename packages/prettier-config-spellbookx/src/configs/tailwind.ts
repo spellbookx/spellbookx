@@ -1,6 +1,6 @@
 import type { Config } from 'prettier';
 
-export const tailwind: Config = {
+const tailwind: Config = {
   plugins: [
     'prettier-plugin-sh',
     'prettier-plugin-toml',
@@ -60,3 +60,5 @@ export const tailwind: Config = {
     },
   ],
 };
+
+export default tailwind;

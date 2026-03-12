@@ -1,6 +1,6 @@
 import type { Config } from 'prettier';
 
-export const astro: Config = {
+const astro: Config = {
   plugins: [
     'prettier-plugin-astro',
     'prettier-plugin-sh',
@@ -60,3 +60,5 @@ export const astro: Config = {
     },
   ],
 };
+
+export default astro;
