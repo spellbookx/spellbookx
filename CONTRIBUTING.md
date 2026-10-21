@@ -232,8 +232,9 @@ pnpm run test:force
 
 ## Release Process
 
-Releases are managed using `release-it` and the custom publisher script:
+Releases and versioning are managed using [Changesets](https://github.com/changesets/changesets) and Turborepo:
 
-1. **`pnpm run version`**: Analyzes conventional commits, bumps package versions in lockstep, updates [`CHANGELOG.md`](CHANGELOG.md), and creates a signed git release tag.
-2. **`pnpm run release`**: Compiles all packages and publishes `@spellbookx/*` and `packages/*` to npmjs with public access.
-3. **`pnpm run publish`**: Runs both steps sequentially (`pnpm run version && pnpm run release`).
+1. **`pnpm run changeset`**: Creates a changeset describing your change (or use `pnpm run changeset:conventional` to extract changesets from Conventional Commits).
+2. **`pnpm run version`**: Consumes changesets, bumps package versions in lockstep, and updates package changelogs.
+3. **`pnpm run release`**: Builds all packages and publishes `@spellbookx/*` and `packages/*` to npmjs via `turbo run release`.
+4. **`pnpm run publish`**: Runs the complete release flow (`pnpm run version && pnpm run release`).

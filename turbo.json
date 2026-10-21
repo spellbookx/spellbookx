@@ -10,6 +10,10 @@
     "test": {
       "dependsOn": ["build"],
       "inputs": ["$TURBO_DEFAULT$"]
+    },
+    "release": {
+      "dependsOn": ["build"],
+      "cache": false
     }
   }
 }

@@ -8,6 +8,8 @@
   "scripts": {
     "build": "turbo run build",
     "build:force": "turbo run build --force",
+    "changeset": "changeset",
+    "changeset:conventional": "changeset-conventional",
     "check": "pnpm run lint && pnpm run spellcheck && pnpm run test",
     "check:ci": "pnpm run lint:check && pnpm run fmt:check && pnpm run spellcheck && pnpm run test:force",
     "clean": "rm -rf .turbo packages/*/.turbo packages/*/dist @spellbookx/*/.turbo @spellbookx/*/dist",
@@ -20,7 +22,7 @@
     "lint:fmt": "pnpm run lint && pnpm run fmt",
     "prepare": "lefthook install",
     "publish": "pnpm run version && pnpm run release",
-    "release": "node scripts/publish-packages.mjs",
+    "release": "turbo run release",
     "spellcheck": "pnpm exec cspell --no-progress --no-summary .",
     "spellcheck:all": "pnpm exec cspell .",
     "test": "turbo run test",
@@ -28,7 +30,7 @@
     "test:unit": "turbo run test",
     "test:watch": "turbo run test -- --watch",
     "turbo:update": "pnpm dlx @turbo/codemod@latest update --force",
-    "version": "LEFTHOOK=\"0\" release-it"
+    "version": "changeset version"
   },
   "config": {
     "commitizen": {
@@ -36,6 +38,8 @@
     }
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/lint": "^21.2.4",
@@ -43,10 +47,10 @@
     "@cspell/cspell-types": "^10.4.0",
     "@dcdavidev/tsconfig": "^0.1.0",
     "@prettier/plugin-xml": "^3.4.2",
-    "@release-it/conventional-changelog": "^12.0.2",
     "@spellbookx/recipes": "workspace:*",
     "@turbo/gen": "^2.11.10",
     "@types/node": "^25.3.0",
+    "changeset-conventional-commits": "^1.0.4",
     "commitizen": "^4.3.2",
     "commitlint-config-spellbookx": "workspace:*",
     "conventional-changelog-conventionalcommits": "^10.4.1",
@@ -63,7 +67,6 @@
     "prettier-plugin-properties": "^0.3.1",
     "prettier-plugin-sh": "^0.20.2",
     "prettier-plugin-toml": "^4.1.0",
-    "release-it": "^21.1.1",
     "turbo": "^2.11.10",
     "typescript": "5.9.3",
     "vitest": "^5.0.5"

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "spellbookx/spellbookx" }
+  ],
+  "commit": false,
+  "fixed": [
+    [
+      "@spellbookx/recipes",
+      "commitlint-config-spellbookx",
+      "cspell-config-spellbookx",
+      "eslint-plugin-spellbookx",
+      "prettier-config-spellbookx",
+      "spellbookx"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
