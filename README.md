@@ -203,25 +203,26 @@ pnpm run build
 
 ### Available Scripts
 
-| Script                    | Command                          | Purpose                                                         |
-| :------------------------ | :------------------------------- | :-------------------------------------------------------------- |
-| `pnpm run build`          | `turbo run build`                | Compiles all workspace packages using Rolldown & `tsc`          |
-| `pnpm run build:force`    | `turbo run build --force`        | Rebuilds all packages ignoring Turborepo cache                  |
-| `pnpm run test`           | `turbo run test`                 | Executes all unit test suites using Vitest                      |
-| `pnpm run test:watch`     | `turbo run test -- --watch`      | Runs Vitest in interactive watch mode                           |
-| `pnpm run test:force`     | `turbo run test --force`         | Runs all tests bypassing Turborepo cache                        |
-| `pnpm run lint`           | `pnpm exec eslint --fix .`       | Lints and auto-fixes JavaScript, TypeScript, JSON, and Markdown |
-| `pnpm run lint:check`     | `pnpm exec eslint .`             | Lints codebase without applying automatic fixes                 |
-| `pnpm run fmt`            | `pnpm exec prettier --write .`   | Formats all supported files across the monorepo                 |
-| `pnpm run fmt:check`      | `pnpm exec prettier --check .`   | Verifies formatting without writing changes                     |
-| `pnpm run spellcheck`     | `pnpm exec cspell .`             | Quick spell-check without progress bar                          |
-| `pnpm run spellcheck:all` | `pnpm exec cspell .`             | Complete spell-check with full reporting                        |
-| `pnpm run check`          | `lint && spellcheck && test`     | Local validation suite                                          |
-| `pnpm run check:ci`       | `lint:check && fmt:check && ...` | Strict CI pipeline verification                                 |
-| `pnpm run clean`          | `rm -rf ...`                     | Removes `.turbo` caches and package `dist/` folders             |
-| `pnpm run commit`         | `cz`                             | Launches interactive Commitizen (`cz-git`) prompt               |
-| `pnpm run commit:lint`    | `commitlint --from=HEAD~1`       | Validates recent commit messages against Conventional Commits   |
-| `pnpm run release`        | `release-it`                     | Prepares releases, bumps versions, and generates changelogs     |
+| Script                      | Command                             | Purpose                                                         |
+| :-------------------------- | :---------------------------------- | :-------------------------------------------------------------- |
+| `pnpm run build`            | `turbo run build`                   | Compiles all workspace packages using Rolldown & `tsc`          |
+| `pnpm run build:force`      | `turbo run build --force`           | Rebuilds all packages ignoring Turborepo cache                  |
+| `pnpm run test`             | `turbo run test`                    | Executes all unit test suites using Vitest                      |
+| `pnpm run test:watch`       | `turbo run test -- --watch`         | Runs Vitest in interactive watch mode                           |
+| `pnpm run test:force`       | `turbo run test --force`            | Runs all tests bypassing Turborepo cache                        |
+| `pnpm run lint`             | `pnpm exec eslint --fix .`          | Lints and auto-fixes JavaScript, TypeScript, JSON, and Markdown |
+| `pnpm run lint:check`       | `pnpm exec eslint .`                | Lints codebase without applying automatic fixes                 |
+| `pnpm run fmt`              | `pnpm exec prettier --write .`      | Formats all supported files across the monorepo                 |
+| `pnpm run fmt:check`        | `pnpm exec prettier --check .`      | Verifies formatting without writing changes                     |
+| `pnpm run spellcheck`       | `pnpm exec cspell .`                | Quick spell-check without progress bar                          |
+| `pnpm run spellcheck:all`   | `pnpm exec cspell .`                | Complete spell-check with full reporting                        |
+| `pnpm run check`            | `lint && spellcheck && test`        | Local validation suite                                          |
+| `pnpm run check:ci`         | `lint:check && fmt:check && ...`    | Strict CI pipeline verification                                 |
+| `pnpm run clean`            | `rm -rf ...`                        | Removes `.turbo` caches and package `dist/` folders             |
+| `pnpm run commit`           | `cz`                                | Launches interactive Commitizen (`cz-git`) prompt               |
+| `pnpm run commit:lint`      | `commitlint --from=HEAD~1`          | Validates recent commit messages against Conventional Commits   |
+| `pnpm run release`          | `release-it`                        | Prepares releases, bumps versions, and generates changelogs     |
+| `pnpm run publish:packages` | `node scripts/publish-packages.mjs` | Builds and publishes `packages/*` and `@spellbookx/*` to npmjs  |
 
 ---
 

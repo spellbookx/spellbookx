@@ -19,6 +19,7 @@
     "lint:check": "pnpm exec eslint --no-warn-ignored .",
     "lint:fmt": "pnpm run lint && pnpm run fmt",
     "prepare": "lefthook install",
+    "publish:packages": "node scripts/publish-packages.mjs",
     "release": "LEFTHOOK=\"0\" release-it",
     "spellcheck": "pnpm exec cspell --no-progress --no-summary .",
     "spellcheck:all": "pnpm exec cspell .",
