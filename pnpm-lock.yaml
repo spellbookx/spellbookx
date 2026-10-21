@@ -260,8 +260,8 @@ importers:
         specifier: ^78.0.0
         version: 78.0.0(eslint@10.13.0(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-vuoto:
-        specifier: ^0.1.2
-        version: 0.1.2(eslint@10.13.0(jiti@2.6.1))
+        specifier: ^1.0.0
+        version: 1.0.0(eslint@10.13.0(jiti@2.6.1))
       globals:
         specifier: ^17.13.0
         version: 17.13.0
@@ -2996,9 +2996,8 @@ packages:
       typescript:
         optional: true
 
-  eslint-plugin-vuoto@0.1.2:
-    resolution: {integrity: sha512-yaQ3UwBsecj48wqMyT79yAtN+5xgvFHYXxBrrQvmT8Ezujq3T13tLlUDb0i/PCrjChd0xPhArSv2z03yhhjFwA==}
-    hasBin: true
+  eslint-plugin-vuoto@1.0.0:
+    resolution: {integrity: sha512-trPFylJoY0+P0GFjn1ePbGBMi2p3uVbSRpApX/hzKMZVEXilPFdPzDQtmqsFm/ADXS90M3Gz5cvjlPvkmYA5fA==}
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -5113,8 +5112,8 @@ packages:
   vscode-uri@3.2.0:
     resolution: {integrity: sha512-m2gXo3bn0G1kT9InzMf07fTbqMbGtyckj3bH5ktLO+1Ssv+yiATZ4dhwaQv9UZWxJh6E9IFGnQyjgWVDWVBDrg==}
 
-  vuoto@0.1.2:
-    resolution: {integrity: sha512-i4PGa2Bgauu0rtI9r0QRrOgc3TsIuHRaM8aswjiGKjqp30dvreFwLMyrsajnTArnQAXnxxY+kgFtEXSIu2kTHA==}
+  vuoto@1.0.0:
+    resolution: {integrity: sha512-uMGNRwf5C4ken/LlRA0/d0Cab75BnoKwzF6Kuq8LuyUbYjZtLVTX7H5munA8rAswT8iuBeLEHK2whM8+iExd9A==}
     hasBin: true
 
   wcwidth@1.0.1:
@@ -7960,12 +7959,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-vuoto@0.1.2(eslint@10.13.0(jiti@2.6.1)):
+  eslint-plugin-vuoto@1.0.0(eslint@10.13.0(jiti@2.6.1)):
     dependencies:
-      chalk: 5.6.2
       eslint: 10.13.0(jiti@2.6.1)
       tslib: 2.8.1
-      vuoto: 0.1.2
+      vuoto: 1.0.0
 
   eslint-scope@8.4.0:
     dependencies:
@@ -10271,7 +10269,7 @@ snapshots:
 
   vscode-uri@3.2.0: {}
 
-  vuoto@0.1.2:
+  vuoto@1.0.0:
     dependencies:
       chalk: 5.6.2
       commander: 14.0.3
