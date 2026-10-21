@@ -33,6 +33,7 @@ Spellbookx streamlines your developer workflow by providing battle-tested, opini
 - 📦 **Monorepo-Aware Commitlint**: Automatically discovers all workspace packages across `pnpm-workspace.yaml`, `package.json`, and `lerna.json` for scope validation.
 - 📖 **Technical & Multi-Lang Spellcheck**: Pre-configured CSpell dictionaries for English, Italian, Spanish, French, German, and programming runtimes.
 - 🗂️ **Shared Recipes**: Centralized ignore patterns and regex groups for simple-import-sort and prettier-plugin-sort-imports.
+- 🤖 **AI Agent Skills**: Built-in `.agents/skills` allowing AI coding assistants (Antigravity, Cursor, Copilot, Cline) to automatically scaffold and configure the toolchain.
 - 🔄 **Strict Dogfooding**: This monorepo uses its own configurations across all root configurations and packages.
 - 🚀 **Modern Toolchain**: Built with Turborepo, Rolldown, TypeScript, Vitest, and Lefthook.
 
@@ -113,10 +114,49 @@ module.exports = defineConfig({
 
 ---
 
+## AI Agent Skills
+
+Spellbookx includes official agent skills conforming to the open [Agent Skills specification](https://github.com/vercel-labs/skills). These skills enable AI coding assistants (such as Antigravity, Cursor, Copilot, Cline, Zed, and Warp) to automatically configure, customize, and maintain the Spellbookx developer toolchain without manual setup or prompt engineering.
+
+### Available Skills
+
+| Skill                       | Description                                                                                        | Location                                                                                  |
+| :-------------------------- | :------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| **`spellbookx-setup`**      | Complete guided setup of the full Spellbookx suite into any JS/TS codebase or monorepo.            | [`.agents/skills/spellbookx-setup`](./.agents/skills/spellbookx-setup/SKILL.md)           |
+| **`spellbookx-eslint`**     | Configures ESLint 9+ flat configs with framework presets and `@spellbookx/recipes` import sorting. | [`.agents/skills/spellbookx-eslint`](./.agents/skills/spellbookx-eslint/SKILL.md)         |
+| **`spellbookx-prettier`**   | Composes Prettier presets (Tailwind, Astro, Svelte, Prisma) using the `defineSbxConfig` composer.  | [`.agents/skills/spellbookx-prettier`](./.agents/skills/spellbookx-prettier/SKILL.md)     |
+| **`spellbookx-cspell`**     | Configures multi-language code spell-checking, custom dictionaries, and ignore paths.              | [`.agents/skills/spellbookx-cspell`](./.agents/skills/spellbookx-cspell/SKILL.md)         |
+| **`spellbookx-commitlint`** | Sets up Conventional Commits, monorepo scope discovery, and interactive `cz-git` prompt.           | [`.agents/skills/spellbookx-commitlint`](./.agents/skills/spellbookx-commitlint/SKILL.md) |
+
+### Installation
+
+Install all or selected Spellbookx skills into your project using the `skills` CLI:
+
+```bash
+# Add all Spellbookx skills to your project
+npx skills add spellbookx/spellbookx
+
+# Or add a specific skill:
+npx skills add spellbookx/spellbookx --skill spellbookx-setup
+```
+
+### Usage with AI Assistants
+
+Once installed, your AI assistant automatically discovers and activates the skills. You can interact with your agent using natural prompts:
+
+- _"Set up Spellbookx in this project using the `spellbookx-setup` skill."_
+- _"Configure ESLint flat config for my Next.js and Tailwind project using `spellbookx-eslint`."_
+- _"Add a custom technical dictionary and ignore paths using `spellbookx-cspell`."_
+- _"Format my commit using `spellbookx-commitlint`."_
+
+---
+
 ## Repository Structure
 
 ```text
 spellbookx/
+├── .agents/
+│   └── skills/                        # AI agent skills (setup, eslint, prettier, etc.)
 ├── @spellbookx/
 │   └── recipes/                       # Import sorting recipes & ignore patterns
 ├── packages/
