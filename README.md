@@ -135,20 +135,40 @@ Install all or selected Spellbookx skills into your project using the `skills` C
 
 ```bash
 # Add all Spellbookx skills to your project
-npx skills add spellbookx/spellbookx
+npx skills add dcdavidev/spellbookx
 
 # Or add a specific skill:
-npx skills add spellbookx/spellbookx --skill spellbookx-setup
+npx skills add dcdavidev/spellbookx --skill spellbookx-setup
+npx skills add dcdavidev/spellbookx --skill spellbookx-eslint
+npx skills add dcdavidev/spellbookx --skill spellbookx-prettier
+npx skills add dcdavidev/spellbookx --skill spellbookx-cspell
+npx skills add dcdavidev/spellbookx --skill spellbookx-commitlint
+
+# Or install globally for your personal AI assistant:
+npx skills add -g dcdavidev/spellbookx
+```
+
+#### Manual Installation
+
+You can also copy the skills directly into any project's `.agents/skills` folder:
+
+```bash
+mkdir -p .agents/skills
+git clone --depth 1 https://github.com/dcdavidev/spellbookx.git /tmp/spellbookx
+cp -r /tmp/spellbookx/.agents/skills/* .agents/skills/
+rm -rf /tmp/spellbookx
 ```
 
 ### Usage with AI Assistants
 
-Once installed, your AI assistant automatically discovers and activates the skills. You can interact with your agent using natural prompts:
+Once installed, your AI assistant (Google Antigravity, Cursor, Claude Code, GitHub Copilot, Cline, Windsurf, Zed, or Warp) automatically discovers and activates the skills. You can interact with your agent using natural prompts:
 
 - _"Set up Spellbookx in this project using the `spellbookx-setup` skill."_
 - _"Configure ESLint flat config for my Next.js and Tailwind project using `spellbookx-eslint`."_
 - _"Add a custom technical dictionary and ignore paths using `spellbookx-cspell`."_
 - _"Format my commit using `spellbookx-commitlint`."_
+
+For full documentation and skill guides, see [`.agents/README.md`](./.agents/README.md).
 
 ---
 
@@ -191,7 +211,7 @@ spellbookx/
 
 ```bash
 # Clone the repository
-git clone https://github.com/spellbookx/spellbookx.git
+git clone https://github.com/dcdavidev/spellbookx.git
 cd spellbookx
 
 # Install dependencies

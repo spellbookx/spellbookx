@@ -26,11 +26,26 @@ Before installing packages, inspect the project environment:
 
 ---
 
-## 2. Dependency Installation
+## 2. Installation Options
+
+### Option A: Automated CLI Wizard (Fastest)
+
+Run the interactive setup wizard to scaffold configurations and install dependencies:
+
+```bash
+# pnpm
+pnpm dlx spellbookx init
+
+# npm / npx
+npx spellbookx init
+
+# bun
+bunx spellbookx init
+```
+
+### Option B: Manual Dependency Installation
 
 Install the required packages as development dependencies:
-
-### Core Suite (Recommended)
 
 ```bash
 # pnpm
