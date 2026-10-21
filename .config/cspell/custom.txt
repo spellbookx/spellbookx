@@ -1,4 +1,5 @@
 commitlintrc
 esmock
 ianvs
+ssot
 yarndlx
