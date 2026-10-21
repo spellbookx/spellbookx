@@ -23,6 +23,7 @@ Spellbookx streamlines your developer workflow by providing battle-tested, opini
 | [**`@spellbookx/recipes`**](./@spellbookx/recipes)                            | Curated import categorization rules and comprehensive ignore patterns for toolchains, operating systems, and runtimes.                            |          [![npm](https://img.shields.io/npm/v/@spellbookx/recipes.svg)](https://www.npmjs.com/package/@spellbookx/recipes)          |
 | [**`commitlint-config-spellbookx`**](./packages/commitlint-config-spellbookx) | Strict Conventional Commits configuration with automatic workspace package scope discovery and interactive `cz-git` prompt.                       | [![npm](https://img.shields.io/npm/v/commitlint-config-spellbookx.svg)](https://www.npmjs.com/package/commitlint-config-spellbookx) |
 | [**`cspell-config-spellbookx`**](./packages/cspell-config-spellbookx)         | Multi-language CSpell spell-checker preset with extensive programming dictionaries, ignore globs, and technical jargon.                           |     [![npm](https://img.shields.io/npm/v/cspell-config-spellbookx.svg)](https://www.npmjs.com/package/cspell-config-spellbookx)     |
+| [**`spellbookx`**](./packages/spellbookx)                                     | 🧙 The Spellbookx CLI (`sbx`) — Automated interactive setup wizard for ESLint, Prettier, CSpell, and Commitlint.                                  |                   [![npm](https://img.shields.io/npm/v/spellbookx.svg)](https://www.npmjs.com/package/spellbookx)                   |
 
 ---
 
@@ -163,7 +164,8 @@ spellbookx/
 │   ├── commitlint-config-spellbookx/  # Conventional Commits + cz-git prompt
 │   ├── cspell-config-spellbookx/      # CSpell multi-lang & technical dicts
 │   ├── eslint-plugin-spellbookx/      # ESLint 9+ flat configs (16 presets)
-│   └── prettier-config-spellbookx/    # Prettier configs (19 presets + composer)
+│   ├── prettier-config-spellbookx/    # Prettier configs (19 presets + composer)
+│   └── spellbookx/                    # 🧙 The Spellbookx CLI (`sbx`)
 ├── .config/cspell/                    # Monorepo CSpell custom dictionary
 ├── .editorconfig                      # Consistent indentation and coding styles
 ├── .nvmrc                             # Node.js LTS version (>= v24.x)
