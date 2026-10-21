@@ -1,8 +1,15 @@
-import { Linter } from 'eslint';
+/**
+ * @file markdown.ts
+ * ESLint configuration for Markdown and GitHub Flavored Markdown files.
+ */
+
+import type { Linter } from 'eslint';
 import { defineConfig } from 'eslint/config';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import markdown from '@eslint/markdown';
 
+/**
+ * Flat ESLint configuration activating `@eslint/markdown` for linting GitHub Flavored Markdown (`.md`) files.
+ */
 export const configMarkdown: Linter.Config[] = defineConfig([
   {
     files: ['**/*.md'],
@@ -11,6 +18,6 @@ export const configMarkdown: Linter.Config[] = defineConfig([
     language: 'markdown/gfm',
     extends: ['markdown/recommended'],
   },
-
-  prettierRecommended,
 ]);
+
+export default configMarkdown;

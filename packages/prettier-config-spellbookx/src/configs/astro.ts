@@ -1,64 +1,26 @@
+/**
+ * @file astro.ts
+ * Prettier configuration preset extending base with Astro component formatting.
+ */
+
 import type { Config } from 'prettier';
 
+import { overrides } from '../overrides.js';
+import { plugins } from '../plugins.js';
+import base from './base.js';
+
+/**
+ * File override applied for Astro files.
+ */
+export const astroOverride = overrides.astro;
+
+/**
+ * Prettier configuration preset for Astro projects.
+ */
 const astro: Config = {
-  plugins: [
-    'prettier-plugin-astro',
-    'prettier-plugin-sh',
-    'prettier-plugin-toml',
-    'prettier-plugin-ini',
-    'prettier-plugin-packagejson',
-    'prettier-plugin-properties',
-    '@prettier/plugin-xml',
-  ],
-
-  trailingComma: 'es5',
-  tabWidth: 2,
-  semi: true,
-  singleQuote: true,
-  printWidth: 80,
-  endOfLine: 'lf',
-  bracketSpacing: true,
-
-  overrides: [
-    {
-      files: '**/.czrc',
-      options: {
-        parser: 'json',
-      },
-    },
-    {
-      files: ['*.toml'],
-      options: {
-        printWidth: 100,
-      },
-    },
-    {
-      files: ['*.astro'],
-      options: {
-        parser: 'astro',
-      },
-    },
-    {
-      files: [
-        '**/*.xml',
-        '**/*.svg',
-        '**/*.xhtml',
-        '**/*.xsd',
-        '**/*.xsl',
-        '**/*.xslt',
-        '**/*.plist',
-        '**/*.axml',
-        '**/*.xaml',
-        '**/*.config',
-        '**/*.resx',
-        '**/*.csproj',
-        '**/*.vbproj',
-      ],
-      options: {
-        parser: 'xml',
-      },
-    },
-  ],
+  ...base,
+  plugins: [plugins.astro, ...(base.plugins ?? [])],
+  overrides: [...(base.overrides ?? []), astroOverride],
 };
 
 export default astro;

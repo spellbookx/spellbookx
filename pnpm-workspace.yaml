@@ -1,5 +1,6 @@
 packages:
   - packages/*
+  - '@spellbookx/*'
 
 onlyBuiltDependencies:
   - core-js-pure

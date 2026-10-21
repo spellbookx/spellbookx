@@ -1,10 +1,17 @@
-import { Linter } from 'eslint';
+/**
+ * @file json.ts
+ * ESLint configuration for JSON, JSON5, JSONC, and package.json validation.
+ */
+
+import type { Linter } from 'eslint';
 import { defineConfig } from 'eslint/config';
 import packageJson from 'eslint-plugin-package-json';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import * as jsoncParser from 'jsonc-eslint-parser';
 import json from '@eslint/json';
 
+/**
+ * Flat ESLint configuration for linting JSON, JSON5, JSONC, and package.json files.
+ */
 export const configJson: Linter.Config[] = defineConfig([
   {
     files: ['**/*.json'],
@@ -47,11 +54,10 @@ export const configJson: Linter.Config[] = defineConfig([
       'package-json/valid-description': 'error',
       'package-json/valid-license': 'error',
       'package-json/valid-name': 'error',
-      'package-json/valid-package-definition': 'error',
       'package-json/valid-version': 'error',
       'prettier/prettier': 'off',
     },
   },
-
-  prettierRecommended,
 ]);
+
+export default configJson;

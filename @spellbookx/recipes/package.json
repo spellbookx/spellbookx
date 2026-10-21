@@ -1,0 +1,61 @@
+{
+  "name": "@spellbookx/recipes",
+  "version": "0.11.1",
+  "private": false,
+  "description": "Curated configurations, patterns, and recipes for the Spellbookx ecosystem.",
+  "keywords": [
+    "spellbookx",
+    "recipes",
+    "imports",
+    "import-sort",
+    "eslint",
+    "prettier",
+    "patterns"
+  ],
+  "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "bugs": {
+    "url": "https://github.com/spellbookx/spellbookx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spellbookx/spellbookx.git",
+    "directory": "@spellbookx/recipes"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./imports": {
+      "types": "./dist/imports/index.d.ts",
+      "import": "./dist/imports/index.js",
+      "default": "./dist/imports/index.js"
+    },
+    "./ignores": {
+      "types": "./dist/ignores/index.d.ts",
+      "import": "./dist/ignores/index.js",
+      "default": "./dist/ignores/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rolldown -c && tsc",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@dcdavidev/tsconfig": "^0.1.0",
+    "@types/node": "^25.3.0",
+    "rolldown": "1.0.0-rc.5",
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,7 +1,13 @@
-remotes:
-  - git_url: https://github.com/spellbookx/lefthook
-    refetch: true
-    refetch_frequency: 24h
-    configs:
-      - '@commit-msg/pnpx-commitlint.yml'
-      - '@pre-commit/pnpx-eslint-prettier.yml'
+# Lefthook configuration
+# Documentation: https://github.com/evilmartians/lefthook
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}
+
+pre-commit:
+  commands:
+    lint:
+      run: pnpm exec eslint --no-warn-ignored --fix {staged_files} && pnpm exec prettier --ignore-unknown --write {staged_files}
+      stage_fixed: true

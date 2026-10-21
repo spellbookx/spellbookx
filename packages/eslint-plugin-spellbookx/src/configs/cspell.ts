@@ -1,9 +1,15 @@
-import { Linter } from 'eslint';
-import { defineConfig } from 'eslint/config';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import cspell from '@cspell/eslint-plugin/configs';
+/**
+ * @file cspell.ts
+ * ESLint configuration for CSpell spell-checking integration.
+ */
 
-export const configCspell: Linter.Config[] = defineConfig([
-  cspell.recommended,
-  prettierRecommended,
-]);
+import type { Linter } from 'eslint';
+import { defineConfig } from 'eslint/config';
+import * as cspell from '@cspell/eslint-plugin/configs';
+
+/**
+ * Flat ESLint configuration activating `@cspell/eslint-plugin` for automated source code spell-checking.
+ */
+export const configCspell: Linter.Config[] = defineConfig([cspell.recommended]);
+
+export default configCspell;

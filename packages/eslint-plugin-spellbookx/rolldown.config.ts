@@ -14,13 +14,24 @@ export default defineConfig([
   {
     input: {
       index: 'src/index.ts',
-      types: 'src/types.ts',
+      'lib/index': 'src/lib/index.ts',
+      'lib/package-json': 'src/lib/package-json.ts',
+      'lib/define-imports': 'src/lib/define-imports.ts',
+      'configs/all': 'src/configs/all.ts',
+      'configs/astro': 'src/configs/astro.ts',
+      'configs/base': 'src/configs/base.ts',
       'configs/cspell': 'src/configs/cspell.ts',
       'configs/ignores': 'src/configs/ignores.ts',
       'configs/javascript': 'src/configs/javascript.ts',
       'configs/json': 'src/configs/json.ts',
       'configs/markdown': 'src/configs/markdown.ts',
+      'configs/node': 'src/configs/node.ts',
+      'configs/prettier': 'src/configs/prettier.ts',
+      'configs/react': 'src/configs/react.ts',
       'configs/recommended': 'src/configs/recommended.ts',
+      'configs/recommended-spellcheck': 'src/configs/recommended-spellcheck.ts',
+      'configs/strict': 'src/configs/strict.ts',
+      'configs/svelte': 'src/configs/svelte.ts',
       'configs/vuoto': 'src/configs/vuoto.ts',
     },
     output: {
@@ -33,9 +44,9 @@ export default defineConfig([
     },
     platform: 'node',
     external: (id) => {
-      if (id.startsWith('node:')) return true;
-      if (id.startsWith('.') || id.startsWith('/')) return false;
-      return true;
+      return (
+        id.startsWith('node:') || !(id.startsWith('.') || id.startsWith('/'))
+      );
     },
   },
 ]);

@@ -30,10 +30,30 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.js",
-      "default": "./dist/types.js"
+    "./lib": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "default": "./dist/lib/index.js"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "import": "./dist/lib/*.js",
+      "default": "./dist/lib/*.js"
+    },
+    "./all": {
+      "types": "./dist/configs/all.d.ts",
+      "import": "./dist/configs/all.js",
+      "default": "./dist/configs/all.js"
+    },
+    "./astro": {
+      "types": "./dist/configs/astro.d.ts",
+      "import": "./dist/configs/astro.js",
+      "default": "./dist/configs/astro.js"
+    },
+    "./base": {
+      "types": "./dist/configs/base.d.ts",
+      "import": "./dist/configs/base.js",
+      "default": "./dist/configs/base.js"
     },
     "./cspell": {
       "types": "./dist/configs/cspell.d.ts",
@@ -60,10 +80,40 @@
       "import": "./dist/configs/markdown.js",
       "default": "./dist/configs/markdown.js"
     },
+    "./node": {
+      "types": "./dist/configs/node.d.ts",
+      "import": "./dist/configs/node.js",
+      "default": "./dist/configs/node.js"
+    },
+    "./prettier": {
+      "types": "./dist/configs/prettier.d.ts",
+      "import": "./dist/configs/prettier.js",
+      "default": "./dist/configs/prettier.js"
+    },
+    "./react": {
+      "types": "./dist/configs/react.d.ts",
+      "import": "./dist/configs/react.js",
+      "default": "./dist/configs/react.js"
+    },
     "./recommended": {
       "types": "./dist/configs/recommended.d.ts",
       "import": "./dist/configs/recommended.js",
       "default": "./dist/configs/recommended.js"
+    },
+    "./recommended-spellcheck": {
+      "types": "./dist/configs/recommended-spellcheck.d.ts",
+      "import": "./dist/configs/recommended-spellcheck.js",
+      "default": "./dist/configs/recommended-spellcheck.js"
+    },
+    "./strict": {
+      "types": "./dist/configs/strict.d.ts",
+      "import": "./dist/configs/strict.js",
+      "default": "./dist/configs/strict.js"
+    },
+    "./svelte": {
+      "types": "./dist/configs/svelte.d.ts",
+      "import": "./dist/configs/svelte.js",
+      "default": "./dist/configs/svelte.js"
     },
     "./vuoto": {
       "types": "./dist/configs/vuoto.d.ts",
@@ -75,38 +125,43 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c && tsc"
+    "build": "rolldown -c && tsc",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@cspell/eslint-plugin": "^9.6.4",
+    "@cspell/eslint-plugin": "^10.4.0",
     "@eslint-react/eslint-plugin": "^2.13.0",
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^1.0.1",
     "@eslint/markdown": "^7.5.1",
-    "@typescript-eslint/parser": "^8.56.0",
+    "@spellbookx/recipes": "workspace:*",
+    "@typescript-eslint/parser": "^8.72.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsdoc": "^62.7.0",
+    "eslint-plugin-jsdoc": "^65.4.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-node-dependencies": "^2.1.0",
-    "eslint-plugin-package-json": "^0.89.1",
-    "eslint-plugin-prettier": "^5.5.5",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unicorn": "^63.0.0",
-    "eslint-plugin-vuoto": "^0.1.1",
-    "globals": "^17.3.0",
-    "jsonc-eslint-parser": "^3.1.0",
-    "typescript-eslint": "^8.56.0"
+    "eslint-plugin-node-dependencies": "^2.3.0",
+    "eslint-plugin-package-json": "^1.10.1",
+    "eslint-plugin-prettier": "^5.5.7",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "eslint-plugin-svelte": "^3.23.1",
+    "eslint-plugin-unicorn": "^78.0.0",
+    "eslint-plugin-vuoto": "^0.1.2",
+    "globals": "^17.13.0",
+    "jsonc-eslint-parser": "^3.3.0",
+    "typescript-eslint": "^8.72.0"
   },
   "devDependencies": {
     "@dcdavidev/tsconfig": "^0.1.0",
     "@types/node": "^25.3.0",
-    "eslint": "^10.0.1",
+    "eslint": "^10.13.0",
     "rolldown": "1.0.0-rc.5",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
   },
   "peerDependencies": {
-    "eslint": "^9.39.2"
+    "eslint": "^9.39.2 || ^10.0.0"
   },
   "publishConfig": {
     "access": "public"

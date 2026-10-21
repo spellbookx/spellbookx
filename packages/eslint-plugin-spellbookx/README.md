@@ -1,96 +1,150 @@
 # eslint-plugin-spellbookx
 
-An ESLint plugin containing shared configurations for the Spellbookx project. This package bundles and pre-configures a variety of essential ESLint plugins for a consistent and high-quality codebase.
+A modern, highly modular, and opinionated [ESLint](https://eslint.org/) flat configuration plugin for the Spellbookx ecosystem. It bundles 16 ready-to-use configurations, fine-tuned rules for JavaScript, TypeScript, React, Astro, Svelte, and Node.js, and automated import sorting using Spellbookx recipes.
 
-## Description
+---
 
-This ESLint plugin provides a set of shareable configurations that are fine-tuned for modern JavaScript/TypeScript development. It includes rules for:
+## Available Configurations
 
-- **JavaScript**: Best practices, error prevention, and code style.
-- **TypeScript**: Static typing, and modern language features.
-- **JSON**: Linting for JSON files.
-- **Markdown**: Linting for Markdown files.
-- **Imports**: Sorting and organizing imports.
-- **JSDoc**: Enforcing JSDoc comments.
-- **Prettier**: Integrating Prettier for code formatting.
-- **CSpell**: Spell-checking within your code.
+| Configuration                 | Description                                                | Included Modules / Plugins                                                |
+| :---------------------------- | :--------------------------------------------------------- | :------------------------------------------------------------------------ |
+| **`recommended`** _(default)_ | Standard bundle for modern web and Node.js projects        | `ignores`, `javascript`, `react`, `json`, `markdown`, `vuoto`, `prettier` |
+| **`recommended-spellcheck`**  | Recommended bundle + automated spell-checking              | `recommended` + `cspell`                                                  |
+| **`all`**                     | All-inclusive bundle for multi-framework monorepos         | All 16 configurations and framework rules bundled together                |
+| **`base`**                    | Minimal baseline for JS/TS codebases                       | `ignores`, `javascript`, `prettier`                                       |
+| **`node`**                    | Tailored for Node.js backend services, APIs, and CLI tools | `ignores`, `javascript`, `json`, `vuoto`, `prettier`                      |
+| **`strict`**                  | Strict TypeScript rule definitions                         | `typescript-eslint` strict configs                                        |
+| **`react`**                   | React & React Native TSX/JSX components                    | `@eslint-react/eslint-plugin`                                             |
+| **`astro`**                   | Astro `.astro` component linting and parsing               | `eslint-plugin-astro`                                                     |
+| **`svelte`**                  | Svelte `.svelte` component linting and parsing             | `eslint-plugin-svelte`                                                    |
+| **`javascript`**              | Comprehensive JS/TS rules, Unicorn, JSDoc, and import sort | `@eslint/js`, `typescript-eslint`, `unicorn`, `simple-import-sort`, etc.  |
+| **`json`**                    | JSON and JSONC linting                                     | `@eslint/json`, `jsonc-eslint-parser`                                     |
+| **`markdown`**                | Markdown file linting                                      | `@eslint/markdown`                                                        |
+| **`prettier`**                | Prettier formatting integration and conflict resolution    | `eslint-plugin-prettier/recommended`                                      |
+| **`cspell`**                  | Spell-checking for source code, comments, and strings      | `@cspell/eslint-plugin`                                                   |
+| **`ignores`**                 | Universal monorepo ignore patterns                         | Ignore patterns for build outputs, dependencies, and lockfiles            |
+| **`vuoto`**                   | Code cleanliness and empty-block hygiene                   | `eslint-plugin-vuoto`                                                     |
 
-## Why use this?
-
-This plugin saves you the hassle of manually installing and configuring multiple ESLint plugins. By providing a centralized and opinionated configuration, it helps to:
-
-- Enforce a consistent code style across the entire monorepo.
-- Catch potential errors and bugs early in the development process.
-- Improve code readability and maintainability.
+---
 
 ## Installation
 
-Install the package and its peer dependencies using your favorite package manager:
-
-**npm**
+Install the package and ESLint using **npm**:
 
 ```bash
 npm install --save-dev eslint-plugin-spellbookx eslint
 ```
 
-**pnpm**
+Or with your preferred package manager:
 
 ```bash
+# pnpm
 pnpm add -D eslint-plugin-spellbookx eslint
-```
 
-**yarn**
-
-```bash
+# yarn
 yarn add -D eslint-plugin-spellbookx eslint
-```
 
-**bun**
-
-```bash
+# bun
 bun add -d eslint-plugin-spellbookx eslint
 ```
 
+---
+
 ## Usage
 
-To use this plugin, create an `eslint.config.mjs` file in your project's root and extend the desired configurations.
+In your project root, configure ESLint using `eslint.config.js` or `eslint.config.mjs` (ESLint Flat Config format):
 
-### Recommended Configuration
-
-The `recommended` configuration includes all the essential rules for a typical JavaScript/TypeScript project.
+### 1. Default Recommended Preset
 
 ```javascript
+// eslint.config.mjs
 import spellbookx from 'eslint-plugin-spellbookx';
 
 export default [
   ...spellbookx.configs.recommended,
-  // Add your custom rules here
+  // Your custom rules or overrides here
 ];
 ```
 
-### Advanced Configuration
+### 2. Direct Subpath Imports
 
-You can also create a more tailored configuration by picking and choosing the configs you need:
+Import only the configurations relevant to your project:
 
 ```javascript
-import spellbookx from 'eslint-plugin-spellbookx';
+// eslint.config.mjs
+import configBase from 'eslint-plugin-spellbookx/base';
+import configReact from 'eslint-plugin-spellbookx/react';
+
+export default [...configBase, ...configReact];
+```
+
+Available subpaths:
+
+- `eslint-plugin-spellbookx/recommended`
+- `eslint-plugin-spellbookx/recommended-spellcheck`
+- `eslint-plugin-spellbookx/all`
+- `eslint-plugin-spellbookx/base`
+- `eslint-plugin-spellbookx/node`
+- `eslint-plugin-spellbookx/strict`
+- `eslint-plugin-spellbookx/react`
+- `eslint-plugin-spellbookx/astro`
+- `eslint-plugin-spellbookx/svelte`
+- `eslint-plugin-spellbookx/javascript`
+- `eslint-plugin-spellbookx/json`
+- `eslint-plugin-spellbookx/markdown`
+- `eslint-plugin-spellbookx/prettier`
+- `eslint-plugin-spellbookx/cspell`
+- `eslint-plugin-spellbookx/ignores`
+- `eslint-plugin-spellbookx/vuoto`
+
+### 3. Named Imports from Root
+
+```javascript
+// eslint.config.mjs
+import { configNode, configStrict } from 'eslint-plugin-spellbookx';
+
+export default [...configNode, ...configStrict];
+```
+
+### 4. Customizing Import Sorting with `defineImports`
+
+You can customize or compose import sorting regex groups using `defineImports`:
+
+```javascript
+// eslint.config.mjs
+import { defineImports } from 'eslint-plugin-spellbookx/lib';
+import { imports } from '@spellbookx/recipes/imports';
 
 export default [
-  ...spellbookx.configs.ignores,
-  ...spellbookx.configs.javascript,
-  ...spellbookx.configs.typescript,
-  ...spellbookx.configs.json,
-  ...spellbookx.configs.markdown,
-  ...spellbookx.configs.vuoto,
-  ...spellbookx.configs.cspell,
-  // any other configuration
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: defineImports(
+            imports.dotenv,
+            imports.builtinModules,
+            imports.uiFrameworks,
+            imports.relative
+          ),
+        },
+      ],
+    },
+  },
 ];
 ```
+
+---
 
 ## License
 
 This project is licensed under the MIT License.
 
-**Copyright (c) 2026 Davide Di Criscito**
+- **Author & Creator**: [Davide Di Criscito](https://github.com/dcdavidev)
+- **GitHub Organization**: [Spellbookx](https://github.com/spellbookx)
+- **Copyright**: © 2026 Davide Di Criscito and [Spellbookx](https://github.com/spellbookx) contributors.
 
-For the full details, see the [LICENSE](LICENSE) file.
+For full details, see the [LICENSE](LICENSE) file.

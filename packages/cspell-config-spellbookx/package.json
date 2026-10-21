@@ -27,23 +27,46 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./constants": {
+      "types": "./dist/constants/index.d.ts",
+      "import": "./dist/constants/index.js",
+      "default": "./dist/constants/index.js"
+    },
+    "./constants/*": {
+      "types": "./dist/constants/*.d.ts",
+      "import": "./dist/constants/*.js",
+      "default": "./dist/constants/*.js"
+    },
+    "./lib": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "default": "./dist/lib/index.js"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "import": "./dist/lib/*.js",
+      "default": "./dist/lib/*.js"
     }
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c && tsc"
+    "build": "rolldown -c && tsc",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@cspell/cspell-types": "^9.6.4",
-    "cspell": "^9.6.4"
+    "@cspell/cspell-types": "^10.4.0",
+    "@spellbookx/recipes": "workspace:*",
+    "cspell": "^10.4.0"
   },
   "devDependencies": {
     "@dcdavidev/tsconfig": "^0.1.0",
     "@types/node": "^25.3.0",
     "rolldown": "1.0.0-rc.5",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
   },
   "publishConfig": {
     "access": "public"

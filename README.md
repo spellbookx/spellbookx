@@ -1,113 +1,204 @@
 ![spellbookx](./images/gh-banner.png)
 
-# spellbookx
+# Spellbookx
 
-Welcome to Spellbookx, a collection of shareable configurations for various development tools. This monorepo is designed to streamline your development workflow by providing consistent and opinionated setups for linting, formatting, commit messaging, and more.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D24.0.0-brightgreen.svg)](.nvmrc)
+[![pnpm Version](https://img.shields.io/badge/pnpm-%3E%3D10.0.0-orange.svg)](https://pnpm.io/)
+[![Turborepo](https://img.shields.io/badge/turbo-2.x-blueviolet.svg)](https://turbo.build/repo)
+[![Vitest](https://img.shields.io/badge/vitest-5.x-yellow.svg)](https://vitest.dev/)
 
-## Packages
+A modern, highly modular monorepo of shareable developer tool configurations and recipes for JavaScript, TypeScript, React, Astro, Svelte, and Node.js.
 
-This repository contains the following packages:
+Spellbookx streamlines your developer workflow by providing battle-tested, opinionated, and composable setups for linting, formatting, spell-checking, and commit conventions.
 
-### [commitlint-config-spellbookx](./packages/commitlint-config-spellbookx)
+---
 
-Shared [Commitlint](https://commitlint.js.org/) configuration for the Spellbookx project. This package ensures that all commits adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+## Workspace Packages
 
-**Installation:**
+| Package                                                                       | Description                                                                                                                                       |                                                               Version                                                               |
+| :---------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------: |
+| [**`eslint-plugin-spellbookx`**](./packages/eslint-plugin-spellbookx)         | Modern ESLint 9+ Flat Config plugin bundling 16 modular presets, framework rules (React, Astro, Svelte, Node), and automated import sorting.      |     [![npm](https://img.shields.io/npm/v/eslint-plugin-spellbookx.svg)](https://www.npmjs.com/package/eslint-plugin-spellbookx)     |
+| [**`prettier-config-spellbookx`**](./packages/prettier-config-spellbookx)     | Prettier configuration with 19 ready-to-use presets, plugins for Tailwind, Prisma, Astro, Svelte, SQL, Nginx, and the `defineSbxConfig` composer. |   [![npm](https://img.shields.io/npm/v/prettier-config-spellbookx.svg)](https://www.npmjs.com/package/prettier-config-spellbookx)   |
+| [**`@spellbookx/recipes`**](./@spellbookx/recipes)                            | Curated import categorization rules and comprehensive ignore patterns for toolchains, operating systems, and runtimes.                            |          [![npm](https://img.shields.io/npm/v/@spellbookx/recipes.svg)](https://www.npmjs.com/package/@spellbookx/recipes)          |
+| [**`commitlint-config-spellbookx`**](./packages/commitlint-config-spellbookx) | Strict Conventional Commits configuration with automatic workspace package scope discovery and interactive `cz-git` prompt.                       | [![npm](https://img.shields.io/npm/v/commitlint-config-spellbookx.svg)](https://www.npmjs.com/package/commitlint-config-spellbookx) |
+| [**`cspell-config-spellbookx`**](./packages/cspell-config-spellbookx)         | Multi-language CSpell spell-checker preset with extensive programming dictionaries, ignore globs, and technical jargon.                           |     [![npm](https://img.shields.io/npm/v/cspell-config-spellbookx.svg)](https://www.npmjs.com/package/cspell-config-spellbookx)     |
 
-```bash
-pnpm add -D commitlint-config-spellbookx @commitlint/cli
-```
+---
 
-**Usage:**
-Create a `commitlint.config.mjs` file in your project's root:
+## Key Highlights
 
-```javascript
-import config from 'commitlint-config-spellbookx';
+- ⚡ **ESLint 9+ Flat Configs**: Native support for ESLint flat configurations without legacy `.eslintrc` overhead.
+- 🎨 **Multi-Framework Prettier**: First-class formatting presets for Tailwind CSS class sorting, Astro, Svelte, Prisma, SQL, and Nginx.
+- 📦 **Monorepo-Aware Commitlint**: Automatically discovers all workspace packages across `pnpm-workspace.yaml`, `package.json`, and `lerna.json` for scope validation.
+- 📖 **Technical & Multi-Lang Spellcheck**: Pre-configured CSpell dictionaries for English, Italian, Spanish, French, German, and programming runtimes.
+- 🗂️ **Shared Recipes**: Centralized ignore patterns and regex groups for simple-import-sort and prettier-plugin-sort-imports.
+- 🔄 **Strict Dogfooding**: This monorepo uses its own configurations across all root configurations and packages.
+- 🚀 **Modern Toolchain**: Built with Turborepo, Rolldown, TypeScript, Vitest, and Lefthook.
 
-export default config;
-```
+---
 
-### [cspell-config-spellbookx](./packages/cspell-config-spellbookx)
+## Quick Packages Overview
 
-Shared [CSpell](https://cspell.org/) configuration for the Spellbookx project. This package provides a consistent and robust spell-checking setup for all packages in the monorepo.
-
-**Installation:**
-
-```bash
-pnpm add -D cspell-config-spellbookx cspell
-```
-
-**Usage:**
-Create a `cspell.config.cjs` file in your project's root:
-
-```javascript
-const config = require('cspell-config-spellbookx');
-
-module.exports = config;
-```
-
-### [eslint-plugin-spellbookx](./packages/eslint-plugin-spellbookx)
-
-An ESLint plugin containing shared configurations for the Spellbookx project. This package bundles and pre-configures a variety of essential ESLint plugins for a consistent and high-quality codebase.
-
-**Installation:**
+### 1. ESLint Plugin (`eslint-plugin-spellbookx`)
 
 ```bash
 pnpm add -D eslint-plugin-spellbookx eslint
 ```
 
-**Usage:**
-Create an `eslint.config.mjs` file in your project's root:
-
 ```javascript
+// eslint.config.mjs
+import { defineConfig } from 'eslint/config';
 import spellbookx from 'eslint-plugin-spellbookx';
 
-export default [
-  ...spellbookx.configs.recommended,
-  // Add your custom rules here
-];
+export default defineConfig([
+  spellbookx.configs['recommended-spellcheck'],
+  // or spellbookx.configs.recommended, spellbookx.configs.react, etc.
+]);
 ```
 
-### [prettier-config-spellbookx](./packages/prettier-config-spellbookx)
-
-Shared [Prettier](https://prettier.io/) configuration for the Spellbookx project. This package provides a consistent and opinionated code formatting setup for a wide range of file types.
-
-**Installation:**
+### 2. Prettier Config (`prettier-config-spellbookx`)
 
 ```bash
 pnpm add -D prettier-config-spellbookx prettier
 ```
 
-**Usage:**
-Create a `prettier.config.mjs` file in your project's root:
+```javascript
+// prettier.config.mjs
+export { default } from 'prettier-config-spellbookx';
+// or use specific presets:
+// export { default } from 'prettier-config-spellbookx/astro-tailwind';
+// export { default } from 'prettier-config-spellbookx/base';
+```
+
+### 3. Spellbookx Recipes (`@spellbookx/recipes`)
+
+```bash
+pnpm add -D @spellbookx/recipes
+```
+
+```typescript
+import recipes, { ignores, imports } from '@spellbookx/recipes';
+
+console.log(imports.uiFrameworks); // Regex matching React, Vue, Svelte, Astro, etc.
+console.log(ignores.node); // Array of globs for build outputs and caches
+```
+
+### 4. Commitlint Config (`commitlint-config-spellbookx`)
+
+```bash
+pnpm add -D commitlint-config-spellbookx @commitlint/cli
+```
 
 ```javascript
-import { base } from 'prettier-config-spellbookx';
-
-export default base;
+// commitlint.config.mjs
+export { default } from 'commitlint-config-spellbookx';
 ```
 
-### [spellbookx](./packages/spellbookx)
-
-The official CLI for the Spellbookx ecosystem. It provides tools for project scaffolding and interactive setup of linting, formatting, and commit standards.
-
-**Usage:**
+### 5. CSpell Config (`cspell-config-spellbookx`)
 
 ```bash
-pnpm dlx spellbookx create [workspace-name]
+pnpm add -D cspell-config-spellbookx cspell
 ```
 
-Or in an existing project:
+```javascript
+// cspell.config.cjs
+const { defineConfig } = require('@cspell/cspell-types');
+
+module.exports = defineConfig({
+  version: '0.2',
+  import: ['cspell-config-spellbookx'],
+});
+```
+
+---
+
+## Repository Structure
+
+```text
+spellbookx/
+├── @spellbookx/
+│   └── recipes/                       # Import sorting recipes & ignore patterns
+├── packages/
+│   ├── commitlint-config-spellbookx/  # Conventional Commits + cz-git prompt
+│   ├── cspell-config-spellbookx/      # CSpell multi-lang & technical dicts
+│   ├── eslint-plugin-spellbookx/      # ESLint 9+ flat configs (16 presets)
+│   └── prettier-config-spellbookx/    # Prettier configs (19 presets + composer)
+├── .config/cspell/                    # Monorepo CSpell custom dictionary
+├── .editorconfig                      # Consistent indentation and coding styles
+├── .nvmrc                             # Node.js LTS version (>= v24.x)
+├── .prettierignore                    # Global format exclusions
+├── eslint.config.mjs                  # Monorepo ESLint flat configuration
+├── lefthook.yml                       # Fast Git hooks manager
+├── package.json                       # Monorepo workspace root scripts & devDeps
+├── pnpm-workspace.yaml                # pnpm workspace definition
+├── prettier.config.mjs                # Monorepo Prettier configuration
+└── turbo.json                         # Turborepo task pipeline configuration
+```
+
+---
+
+## Development
+
+### Prerequisites
+
+- **Node.js**: `>= 24.0.0` (Active LTS recommended, see [`.nvmrc`](.nvmrc))
+- **Package Manager**: [pnpm](https://pnpm.io/) `>= 10.0.0`
+
+### Setup
 
 ```bash
-pnpm add -D spellbookx
-pnpm sbx init
+# Clone the repository
+git clone https://github.com/spellbookx/spellbookx.git
+cd spellbookx
+
+# Install dependencies
+pnpm install
+
+# Build all packages
+pnpm run build
 ```
+
+### Available Scripts
+
+| Script                    | Command                          | Purpose                                                         |
+| :------------------------ | :------------------------------- | :-------------------------------------------------------------- |
+| `pnpm run build`          | `turbo run build`                | Compiles all workspace packages using Rolldown & `tsc`          |
+| `pnpm run build:force`    | `turbo run build --force`        | Rebuilds all packages ignoring Turborepo cache                  |
+| `pnpm run test`           | `turbo run test`                 | Executes all unit test suites using Vitest                      |
+| `pnpm run test:watch`     | `turbo run test -- --watch`      | Runs Vitest in interactive watch mode                           |
+| `pnpm run test:force`     | `turbo run test --force`         | Runs all tests bypassing Turborepo cache                        |
+| `pnpm run lint`           | `pnpm exec eslint --fix .`       | Lints and auto-fixes JavaScript, TypeScript, JSON, and Markdown |
+| `pnpm run lint:check`     | `pnpm exec eslint .`             | Lints codebase without applying automatic fixes                 |
+| `pnpm run fmt`            | `pnpm exec prettier --write .`   | Formats all supported files across the monorepo                 |
+| `pnpm run fmt:check`      | `pnpm exec prettier --check .`   | Verifies formatting without writing changes                     |
+| `pnpm run spellcheck`     | `pnpm exec cspell .`             | Quick spell-check without progress bar                          |
+| `pnpm run spellcheck:all` | `pnpm exec cspell .`             | Complete spell-check with full reporting                        |
+| `pnpm run check`          | `lint && spellcheck && test`     | Local validation suite                                          |
+| `pnpm run check:ci`       | `lint:check && fmt:check && ...` | Strict CI pipeline verification                                 |
+| `pnpm run clean`          | `rm -rf ...`                     | Removes `.turbo` caches and package `dist/` folders             |
+| `pnpm run commit`         | `cz`                             | Launches interactive Commitizen (`cz-git`) prompt               |
+| `pnpm run commit:lint`    | `commitlint --from=HEAD~1`       | Validates recent commit messages against Conventional Commits   |
+| `pnpm run release`        | `release-it`                     | Prepares releases, bumps versions, and generates changelogs     |
+
+---
+
+## Git Workflow & Hooks
+
+This project enforces commit hygiene and pre-commit checks using [Lefthook](https://github.com/evilmartians/lefthook):
+
+1. **Pre-commit**: Runs `pnpm run lint` and `pnpm run fmt` on staged files.
+2. **Commit-msg**: Validates the commit message with `commitlint` according to Conventional Commits.
+3. **Interactive Commits**: Run `pnpm run commit` to use the interactive CLI powered by `cz-git`.
+
+---
 
 ## License
 
-This project is licensed under the MIT License.
+This project is open-source software licensed under the [MIT License](./LICENSE).
 
-**Copyright (c) 2026 Davide Di Criscito**
+- **Author & Creator**: [Davide Di Criscito](https://github.com/dcdavidev)
+- **GitHub Organization**: [Spellbookx](https://github.com/spellbookx)
+- **Copyright**: © 2026 Davide Di Criscito and [Spellbookx](https://github.com/spellbookx) contributors.
 
-For the full details, see the [LICENSE](LICENSE) file.
+For full license details and permissions, see the [LICENSE](./LICENSE) file.

@@ -1,20 +1,30 @@
-import { Linter } from 'eslint';
-import { defineConfig } from 'eslint/config';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
+/**
+ * @file recommended.ts
+ * Standard recommended ESLint configuration for JavaScript, TypeScript, React, JSON, Markdown, and Prettier.
+ */
 
-import { configCspell } from './cspell.js';
-import configIgnores from './ignores.js';
+import type { Linter } from 'eslint';
+import { defineConfig } from 'eslint/config';
+
+import { configIgnores } from './ignores.js';
 import { configJavascript } from './javascript.js';
 import { configJson } from './json.js';
 import { configMarkdown } from './markdown.js';
+import { configPrettier } from './prettier.js';
+import { configReact } from './react.js';
 import { configVuoto } from './vuoto.js';
 
+/**
+ * Recommended flat ESLint configuration bundle for modern web and Node.js projects.
+ */
 export const configRecommended: Linter.Config[] = defineConfig([
   configIgnores,
   configJavascript,
+  configReact,
   configJson,
   configMarkdown,
   configVuoto,
-  configCspell,
-  prettierRecommended,
+  configPrettier,
 ]);
+
+export default configRecommended;

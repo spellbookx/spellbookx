@@ -29,30 +29,64 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./rules": {
+      "types": "./dist/rules.d.ts",
+      "import": "./dist/rules.js",
+      "default": "./dist/rules.js"
+    },
+    "./prompt": {
+      "types": "./dist/prompt.d.ts",
+      "import": "./dist/prompt.js",
+      "default": "./dist/prompt.js"
+    },
+    "./scopes": {
+      "types": "./dist/scopes.d.ts",
+      "import": "./dist/scopes.js",
+      "default": "./dist/scopes.js"
+    },
+    "./constants": {
+      "types": "./dist/constants/commit-types.d.ts",
+      "import": "./dist/constants/commit-types.js",
+      "default": "./dist/constants/commit-types.js"
+    },
+    "./lib": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "default": "./dist/lib/index.js"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "import": "./dist/lib/*.js",
+      "default": "./dist/lib/*.js"
     }
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c && tsc"
+    "build": "rolldown -c && tsc",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@commitlint/cli": "^20.4.2",
-    "@commitlint/config-conventional": "^20.4.2",
-    "commitizen": "^4.3.1",
-    "conventional-changelog-conventionalcommits": "^9.1.0",
-    "cz-git": "^1.12.0",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "commitizen": "^4.3.2",
+    "conventional-changelog-conventionalcommits": "^10.4.1",
+    "cz-git": "^1.14.0",
     "fast-glob": "^3.3.3",
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {
-    "@commitlint/types": "^20.4.0",
+    "@commitlint/lint": "^21.2.4",
+    "@commitlint/load": "^21.2.4",
+    "@commitlint/types": "^21.2.3",
     "@dcdavidev/tsconfig": "^0.1.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.3.0",
     "rolldown": "1.0.0-rc.5",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
   },
   "publishConfig": {
     "access": "public"

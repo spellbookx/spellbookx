@@ -32,20 +32,70 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.js",
-      "default": "./dist/types.js"
-    },
     "./configs": {
       "types": "./dist/configs/index.d.ts",
       "import": "./dist/configs/index.js",
       "default": "./dist/configs/index.js"
     },
+    "./plugins": {
+      "types": "./dist/plugins.d.ts",
+      "import": "./dist/plugins.js",
+      "default": "./dist/plugins.js"
+    },
+    "./rules": {
+      "types": "./dist/rules.d.ts",
+      "import": "./dist/rules.js",
+      "default": "./dist/rules.js"
+    },
+    "./overrides": {
+      "types": "./dist/overrides.d.ts",
+      "import": "./dist/overrides.js",
+      "default": "./dist/overrides.js"
+    },
+    "./define-config": {
+      "types": "./dist/define-config.d.ts",
+      "import": "./dist/define-config.js",
+      "default": "./dist/define-config.js"
+    },
+    "./import-order": {
+      "types": "./dist/import-order.d.ts",
+      "import": "./dist/import-order.js",
+      "default": "./dist/import-order.js"
+    },
+    "./lib": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "default": "./dist/lib/index.js"
+    },
+    "./lib/*": {
+      "types": "./dist/lib/*.d.ts",
+      "import": "./dist/lib/*.js",
+      "default": "./dist/lib/*.js"
+    },
+    "./all": {
+      "types": "./dist/configs/all.d.ts",
+      "import": "./dist/configs/all.js",
+      "default": "./dist/configs/all.js"
+    },
     "./base": {
       "types": "./dist/configs/base.d.ts",
       "import": "./dist/configs/base.js",
       "default": "./dist/configs/base.js"
+    },
+    "./embed": {
+      "types": "./dist/configs/embed.d.ts",
+      "import": "./dist/configs/embed.js",
+      "default": "./dist/configs/embed.js"
+    },
+    "./multiline-arrays": {
+      "types": "./dist/configs/multiline-arrays.d.ts",
+      "import": "./dist/configs/multiline-arrays.js",
+      "default": "./dist/configs/multiline-arrays.js"
+    },
+    "./nginx": {
+      "types": "./dist/configs/nginx.d.ts",
+      "import": "./dist/configs/nginx.js",
+      "default": "./dist/configs/nginx.js"
     },
     "./astro": {
       "types": "./dist/configs/astro.d.ts",
@@ -77,6 +127,41 @@
       "import": "./dist/configs/prisma-tailwind.js",
       "default": "./dist/configs/prisma-tailwind.js"
     },
+    "./recommended": {
+      "types": "./dist/configs/recommended.d.ts",
+      "import": "./dist/configs/recommended.js",
+      "default": "./dist/configs/recommended.js"
+    },
+    "./sort-imports": {
+      "types": "./dist/configs/sort-imports.d.ts",
+      "import": "./dist/configs/sort-imports.js",
+      "default": "./dist/configs/sort-imports.js"
+    },
+    "./sql": {
+      "types": "./dist/configs/sql.d.ts",
+      "import": "./dist/configs/sql.js",
+      "default": "./dist/configs/sql.js"
+    },
+    "./svelte": {
+      "types": "./dist/configs/svelte.d.ts",
+      "import": "./dist/configs/svelte.js",
+      "default": "./dist/configs/svelte.js"
+    },
+    "./svelte-prisma": {
+      "types": "./dist/configs/svelte-prisma.d.ts",
+      "import": "./dist/configs/svelte-prisma.js",
+      "default": "./dist/configs/svelte-prisma.js"
+    },
+    "./svelte-prisma-tailwind": {
+      "types": "./dist/configs/svelte-prisma-tailwind.d.ts",
+      "import": "./dist/configs/svelte-prisma-tailwind.js",
+      "default": "./dist/configs/svelte-prisma-tailwind.js"
+    },
+    "./svelte-tailwind": {
+      "types": "./dist/configs/svelte-tailwind.d.ts",
+      "import": "./dist/configs/svelte-tailwind.js",
+      "default": "./dist/configs/svelte-tailwind.js"
+    },
     "./tailwind": {
       "types": "./dist/configs/tailwind.d.ts",
       "import": "./dist/configs/tailwind.js",
@@ -87,25 +172,34 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rolldown -c && tsc"
+    "build": "rolldown -c && tsc",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@prettier/plugin-xml": "^3.4.2",
-    "prettier": "^3.8.1",
-    "prettier-plugin-astro": "^0.14.1",
+    "@spellbookx/recipes": "workspace:*",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "prettier-plugin-embed": "^0.8.1",
     "prettier-plugin-ini": "^1.3.0",
-    "prettier-plugin-packagejson": "^3.0.0",
+    "prettier-plugin-multiline-arrays": "^4.1.11",
+    "prettier-plugin-nginx": "^2.0.0",
+    "prettier-plugin-packagejson": "^3.0.2",
     "prettier-plugin-prisma": "^5.0.0",
     "prettier-plugin-properties": "^0.3.1",
-    "prettier-plugin-sh": "^0.18.0",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "prettier-plugin-toml": "^2.0.6"
+    "prettier-plugin-sh": "^0.20.2",
+    "prettier-plugin-sql": "^0.20.0",
+    "prettier-plugin-svelte": "^4.1.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "prettier-plugin-toml": "^4.1.0"
   },
   "devDependencies": {
     "@dcdavidev/tsconfig": "^0.1.0",
     "@types/node": "^25.3.0",
     "rolldown": "1.0.0-rc.5",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
   },
   "publishConfig": {
     "access": "public"
