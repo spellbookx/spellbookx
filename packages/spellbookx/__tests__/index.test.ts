@@ -20,6 +20,7 @@ describe('spellbookx cli program', () => {
 
   test('should have version defined', () => {
     const program = createProgram();
-    expect(program.version()).toBe('0.11.1');
+    expect(program.version()).toBeDefined();
+    expect(typeof program.version()).toBe('string');
   });
 });

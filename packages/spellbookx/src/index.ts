@@ -7,6 +7,7 @@ import { Command } from 'commander';
 
 import { runInit } from './commands/init.js';
 import { brand, WIZARD_EMOJI } from './constants/theme.js';
+import { packageJson } from './lib/package-json.js';
 import type { PackageManager, ToolId } from './types/index.js';
 
 export * from './commands/index.js';
@@ -28,7 +29,7 @@ export function createProgram(): Command {
     .description(
       `${WIZARD_EMOJI} ${brand('Spellbookx')} developer toolchain CLI`
     )
-    .version('0.11.1');
+    .version(packageJson.version);
 
   program
     .command('init')

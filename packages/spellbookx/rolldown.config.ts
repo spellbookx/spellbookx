@@ -16,6 +16,7 @@ export default defineConfig([
       'lib/detect-pm': 'src/lib/detect-pm.ts',
       'lib/get-install-args': 'src/lib/get-install-args.ts',
       'lib/install-deps': 'src/lib/install-deps.ts',
+      'lib/package-json': 'src/lib/package-json.ts',
       'lib/prompt-tools': 'src/lib/prompt-tools.ts',
       'lib/setup-tool': 'src/lib/setup-tool.ts',
       'lib/update-package-json': 'src/lib/update-package-json.ts',

@@ -12,8 +12,8 @@ describe('spellbookx banner', () => {
     expect(banner).toContain('Arcane developer toolchain');
   });
 
-  test('should use fallback version if none passed', () => {
+  test('should use default package version if none passed', () => {
     const banner = getBanner();
-    expect(banner).toContain('v0.11.1');
+    expect(banner).toMatch(/v\d+\.\d+\.\d+/);
   });
 });

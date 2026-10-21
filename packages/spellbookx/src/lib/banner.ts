@@ -6,14 +6,15 @@
 import chalk from 'chalk';
 
 import { COLORS, WIZARD_EMOJI } from '../constants/theme.js';
+import { packageJson } from './package-json.js';
 
 /**
  * Returns the stylized terminal banner for Spellbookx CLI.
  *
- * @param version - Package version string (defaults to '0.11.1').
+ * @param version - Package version string (defaults to packageJson.version).
  * @returns Formatted ANSI banner string.
  */
-export function getBanner(version: string = '0.11.1'): string {
+export function getBanner(version: string = packageJson.version): string {
   const line = chalk.hex(COLORS.dark)('─'.repeat(54));
   const title = chalk
     .hex(COLORS.primary)
