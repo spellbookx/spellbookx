@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.0](https://github.com/spellbookx/spellbookx/compare/v0.11.1...v0.12.0) (2026-10-21)
+
+### Features
+
+* **spellbookx:** create interactive wizard CLI ([b5f44f9](https://github.com/spellbookx/spellbookx/commit/b5f44f99fd9a463aea38eb4f4922913baceafd1c))
+* **spellbookx:** dynamic version resolution from package.json ([9667922](https://github.com/spellbookx/spellbookx/commit/96679227d3cee90dfab5ee7c4b48414134ec0ee2))
+* **workspace:** add AI agent skills suite and update README ([9e35a7a](https://github.com/spellbookx/spellbookx/commit/9e35a7a9807208ead5edee9fcb83ba63be02790c))
+
 ## [0.11.1](https://github.com/spellbookx/spellbookx/compare/v0.11.0...v0.11.1) (2026-03-12)
 
 ## [0.11.0](https://github.com/spellbookx/spellbookx/compare/v0.10.1...v0.11.0) (2026-03-12)
