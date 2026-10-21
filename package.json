@@ -2,6 +2,14 @@
   "name": "root",
   "version": "0.12.0",
   "private": true,
+  "homepage": "https://github.com/dcdavidev/spellbookx#readme",
+  "bugs": {
+    "url": "https://github.com/dcdavidev/spellbookx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dcdavidev/spellbookx.git"
+  },
   "author": {
     "name": "Davide Di Criscito"
   },

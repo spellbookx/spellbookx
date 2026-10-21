@@ -280,7 +280,6 @@ After modifying `.npmrc`, run `pnpm install` to update the symlink structure.
 This project is licensed under the MIT License.
 
 - **Author & Creator**: [Davide Di Criscito](https://github.com/dcdavidev)
-- **GitHub Organization**: [Spellbookx](https://github.com/spellbookx)
-- **Copyright**: © 2026 Davide Di Criscito and [Spellbookx](https://github.com/spellbookx) contributors.
+- **Copyright**: © 2026 Davide Di Criscito and contributors.
 
 For full details, see the [LICENSE](LICENSE) file.

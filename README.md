@@ -249,7 +249,6 @@ Contributions, issues, and feature requests are welcome! Please read our [Contri
 This project is open-source software licensed under the [MIT License](./LICENSE).
 
 - **Author & Creator**: [Davide Di Criscito](https://github.com/dcdavidev)
-- **GitHub Organization**: [Spellbookx](https://github.com/spellbookx)
-- **Copyright**: © 2026 Davide Di Criscito and [Spellbookx](https://github.com/spellbookx) contributors.
+- **Copyright**: © 2026 Davide Di Criscito and contributors.
 
 For full license details and permissions, see the [LICENSE](./LICENSE) file.

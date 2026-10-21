@@ -14,13 +14,13 @@
     "commitlint",
     "toolchain"
   ],
-  "homepage": "https://github.com/spellbookx/spellbookx#readme",
+  "homepage": "https://github.com/dcdavidev/spellbookx#readme",
   "bugs": {
-    "url": "https://github.com/spellbookx/spellbookx/issues"
+    "url": "https://github.com/dcdavidev/spellbookx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spellbookx/spellbookx.git",
+    "url": "git+https://github.com/dcdavidev/spellbookx.git",
     "directory": "packages/spellbookx"
   },
   "license": "MIT",
