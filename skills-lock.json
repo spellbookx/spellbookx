@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "eslint-plugin-vuoto": {
+      "source": "dcdavidev/vuoto",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/eslint-plugin-vuoto/SKILL.md",
+      "computedHash": "ff48c6633e420682ecdc53bc27d7c654dfecb3fcfffdb81cd8c20ef6cc10803d"
+    },
+    "vuoto": {
+      "source": "dcdavidev/vuoto",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/vuoto/SKILL.md",
+      "computedHash": "7aa1f98214c8d76e4768ca03cd76fd61fe8274f47747ba80e4b558d8f42c157b"
+    }
+  }
+}
