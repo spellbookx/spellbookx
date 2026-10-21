@@ -19,15 +19,16 @@
     "lint:check": "pnpm exec eslint --no-warn-ignored .",
     "lint:fmt": "pnpm run lint && pnpm run fmt",
     "prepare": "lefthook install",
-    "publish:packages": "node scripts/publish-packages.mjs",
-    "release": "LEFTHOOK=\"0\" release-it",
+    "publish": "pnpm run version && pnpm run release",
+    "release": "node scripts/publish-packages.mjs",
     "spellcheck": "pnpm exec cspell --no-progress --no-summary .",
     "spellcheck:all": "pnpm exec cspell .",
     "test": "turbo run test",
     "test:force": "turbo run test --force",
     "test:unit": "turbo run test",
     "test:watch": "turbo run test -- --watch",
-    "turbo:update": "pnpm dlx @turbo/codemod@latest update --force"
+    "turbo:update": "pnpm dlx @turbo/codemod@latest update --force",
+    "version": "LEFTHOOK=\"0\" release-it"
   },
   "config": {
     "commitizen": {
