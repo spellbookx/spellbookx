@@ -30,6 +30,7 @@
     "prepare": "lefthook install",
     "publish": "pnpm run version && pnpm run release",
     "release": "turbo run release",
+    "release:auto": "tsx scripts/release.ts",
     "spellcheck": "pnpm exec cspell --no-progress --no-summary .",
     "spellcheck:all": "pnpm exec cspell .",
     "test": "turbo run test",
