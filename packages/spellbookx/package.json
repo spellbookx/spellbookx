@@ -1,6 +1,6 @@
 {
   "name": "spellbookx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "🧙 Wizard CLI for the Spellbookx developer toolchain (ESLint, Prettier, CSpell, Commitlint).",
   "keywords": [
@@ -45,7 +45,6 @@
   ],
   "scripts": {
     "build": "rolldown -c && tsc",
-    "publish": "pnpm run release",
     "release": "pnpm publish --access public --no-git-checks",
     "test": "vitest run"
   },

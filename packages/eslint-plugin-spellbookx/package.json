@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-spellbookx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "A comprehensive ESLint plugin with shareable configs for JS/TS, React, JSON, and more.",
   "keywords": [
@@ -126,7 +126,6 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rolldown -c && tsc",
-    "publish": "pnpm run release",
     "release": "pnpm publish --access public --no-git-checks",
     "test": "vitest run"
   },

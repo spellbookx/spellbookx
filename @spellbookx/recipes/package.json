@@ -1,6 +1,6 @@
 {
   "name": "@spellbookx/recipes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "Curated configurations, patterns, and recipes for the Spellbookx ecosystem.",
   "keywords": [
@@ -46,7 +46,6 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rolldown -c && tsc",
-    "publish": "pnpm run release",
     "release": "pnpm publish --access public --no-git-checks",
     "test": "vitest run"
   },

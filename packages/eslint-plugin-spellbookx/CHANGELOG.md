@@ -1,5 +1,13 @@
 # eslint-plugin-spellbookx
 
+## 1.0.1
+
+### Patch Changes
+
+- chore: upgrade vuoto and eslint-plugin-vuoto
+- Updated dependencies []:
+  - @spellbookx/recipes@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,5 +1,12 @@
 # cspell-config-spellbookx
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @spellbookx/recipes@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

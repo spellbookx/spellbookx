@@ -1,6 +1,6 @@
 {
   "name": "prettier-config-spellbookx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "A shareable Prettier configuration with plugins for Astro, Prisma, Tailwind, and more.",
   "keywords": [
@@ -173,7 +173,6 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rolldown -c && tsc",
-    "publish": "pnpm run release",
     "release": "pnpm publish --access public --no-git-checks",
     "test": "vitest run"
   },
