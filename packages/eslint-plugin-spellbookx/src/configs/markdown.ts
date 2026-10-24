@@ -17,6 +17,9 @@ export const configMarkdown: Linter.Config[] = defineConfig([
     plugins: { markdown: markdown as any },
     language: 'markdown/gfm',
     extends: ['markdown/recommended'],
+    rules: {
+      'markdown/no-missing-label-refs': 'off',
+    },
   },
 ]);
 

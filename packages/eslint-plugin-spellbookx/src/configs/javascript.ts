@@ -84,6 +84,8 @@ export const configJavascript: Linter.Config[] = defineConfig([
       'unicorn/name-replacements': 'off',
       'unicorn/no-top-level-side-effects': 'off',
       'unicorn/no-asterisk-prefix-in-documentation-comments': 'off',
+      'no-process-exit': 'off',
+      'unicorn/no-process-exit': 'off',
     },
   },
 
