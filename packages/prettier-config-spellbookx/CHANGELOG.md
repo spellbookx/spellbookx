@@ -1,5 +1,16 @@
 # prettier-config-spellbookx
 
+## 1.1.0
+
+### Minor Changes
+
+- chore(release): automated minor release bump
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @spellbookx/recipes@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # commitlint-config-spellbookx
 
+## 1.1.0
+
+### Minor Changes
+
+- chore(release): automated minor release bump
+
 ## 1.0.2
 
 ### Patch Changes
