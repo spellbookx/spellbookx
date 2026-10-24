@@ -21,6 +21,16 @@ export const czrcOverride: OverrideEntry = {
 };
 
 /**
+ * File override for JSON with Comments (`.jsonc`) files to disable trailing commas.
+ */
+export const jsoncOverride: OverrideEntry = {
+  files: '*.jsonc',
+  options: {
+    trailingComma: 'none',
+  },
+};
+
+/**
  * File override for TOML configuration files with an expanded print width.
  */
 export const tomlOverride: OverrideEntry = {
@@ -79,6 +89,7 @@ export const svelteOverride: OverrideEntry = {
  */
 export const baseOverrides: OverrideEntry[] = [
   czrcOverride,
+  jsoncOverride,
   tomlOverride,
   xmlOverride,
 ];
@@ -97,6 +108,7 @@ export const allOverrides: OverrideEntry[] = [
  */
 export const overrides = {
   czrc: czrcOverride,
+  jsonc: jsoncOverride,
   toml: tomlOverride,
   xml: xmlOverride,
   astro: astroOverride,

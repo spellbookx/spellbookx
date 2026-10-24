@@ -90,12 +90,18 @@ describe('prettier-config-spellbookx exports', () => {
 
   test('overrides dictionary should export individual and aggregated overrides', () => {
     expect(overrides.czrc.files).toBe('**/.czrc');
+    expect(overrides.jsonc).toEqual({
+      files: '*.jsonc',
+      options: {
+        trailingComma: 'none',
+      },
+    });
     expect(overrides.toml.files).toEqual(['*.toml']);
     expect(overrides.astro.files).toEqual(['*.astro']);
     expect(overrides.svelte.files).toEqual(['*.svelte']);
     expect(Array.isArray(overrides.base)).toBe(true);
-    expect(overrides.base).toHaveLength(3);
+    expect(overrides.base).toHaveLength(4);
     expect(Array.isArray(overrides.all)).toBe(true);
-    expect(overrides.all).toHaveLength(5);
+    expect(overrides.all).toHaveLength(6);
   });
 });

@@ -137,7 +137,7 @@ Available building blocks:
 
 - `rules.base`: Base formatting rules (`tabWidth: 2`, `singleQuote: true`, `semi: true`, `trailingComma: 'es5'`, `printWidth: 80`, `endOfLine: 'lf'`, `bracketSpacing: true`).
 - `plugins.*`: `sh`, `toml`, `ini`, `packagejson`, `properties`, `xml`, `astro`, `svelte`, `prisma`, `sql`, `nginx`, `embed`, `sortImports`, `multilineArrays`, `tailwind`.
-- `overrides.*`: `czrc`, `toml`, `xml`, `astro`, `svelte`, `base`, `all`.
+- `overrides.*`: `czrc`, `jsonc`, `toml`, `xml`, `astro`, `svelte`, `base`, `all`.
 - `importOrder`: Complete regex patterns for `@ianvs/prettier-plugin-sort-imports`, aligned with `eslint-plugin-spellbookx` (Node.js built-ins, frameworks, state, UI libraries, testing, workspace packages, internal aliases, assets, styles, and relatives).
 
 ### 7. Atomic Utility Functions (`lib`)
