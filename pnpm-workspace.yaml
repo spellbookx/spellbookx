@@ -1,6 +1,5 @@
 packages:
   - packages/*
-  - '@spellbookx/*'
 
 allowBuilds:
   esbuild: true

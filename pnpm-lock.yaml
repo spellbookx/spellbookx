@@ -198,7 +198,7 @@ importers:
         version: 3.4.2(prettier@3.9.10)
       '@spellbookx/recipes':
         specifier: workspace:*
-        version: link:@spellbookx/recipes
+        version: link:packages/recipes
       '@turbo/gen':
         specifier: ^2.11.10
         version: 2.11.10(@types/node@25.3.0)
@@ -266,24 +266,6 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5(@types/node@25.3.0)(vite@8.3.5(@types/node@25.3.0)(esbuild@0.28.2)(jiti@2.6.1)(tsx@4.23.15)(yaml@2.9.1))
 
-  '@spellbookx/recipes':
-    devDependencies:
-      '@dcdavidev/tsconfig':
-        specifier: ^0.1.0
-        version: 0.1.0
-      '@types/node':
-        specifier: ^25.3.0
-        version: 25.3.0
-      rolldown:
-        specifier: 1.0.0-rc.5
-        version: 1.0.0-rc.5(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
-      vitest:
-        specifier: ^5.0.5
-        version: 5.0.5(@types/node@25.3.0)(vite@8.3.5(@types/node@25.3.0)(esbuild@0.28.2)(jiti@2.6.1)(tsx@4.23.15)(yaml@2.9.1))
-
   packages/commitlint-config-spellbookx:
     dependencies:
       '@commitlint/cli':
@@ -343,7 +325,7 @@ importers:
         version: 10.4.0
       '@spellbookx/recipes':
         specifier: workspace:*
-        version: link:../../@spellbookx/recipes
+        version: link:../recipes
       cspell:
         specifier: ^10.4.0
         version: 10.4.0
@@ -383,7 +365,7 @@ importers:
         version: 7.5.1(supports-color@7.2.0)
       '@spellbookx/recipes':
         specifier: workspace:*
-        version: link:../../@spellbookx/recipes
+        version: link:../recipes
       '@typescript-eslint/parser':
         specifier: ^8.72.0
         version: 8.72.0(eslint@10.13.0(jiti@2.6.1)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
@@ -462,7 +444,7 @@ importers:
         version: 3.4.2(prettier@3.9.10)
       '@spellbookx/recipes':
         specifier: workspace:*
-        version: link:../../@spellbookx/recipes
+        version: link:../recipes
       prettier:
         specifier: ^3.9.10
         version: 3.9.10
@@ -505,6 +487,24 @@ importers:
       prettier-plugin-toml:
         specifier: ^4.1.0
         version: 4.1.0(prettier@3.9.10)
+    devDependencies:
+      '@dcdavidev/tsconfig':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@types/node':
+        specifier: ^25.3.0
+        version: 25.3.0
+      rolldown:
+        specifier: 1.0.0-rc.5
+        version: 1.0.0-rc.5(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^5.0.5
+        version: 5.0.5(@types/node@25.3.0)(vite@8.3.5(@types/node@25.3.0)(esbuild@0.28.2)(jiti@2.6.1)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/recipes:
     devDependencies:
       '@dcdavidev/tsconfig':
         specifier: ^0.1.0

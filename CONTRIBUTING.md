@@ -79,13 +79,12 @@ Spellbookx is organized as a pnpm monorepo managed with [Turborepo](https://turb
 
 ```text
 spellbookx/
-├── @spellbookx/
-│   └── recipes/                       # Shared import sorting & ignore glob definitions
 ├── packages/
 │   ├── commitlint-config-spellbookx/  # Conventional Commits + cz-git prompt
 │   ├── cspell-config-spellbookx/      # CSpell multi-language & tech dictionaries
 │   ├── eslint-plugin-spellbookx/      # ESLint 9+ flat configs (16 presets)
 │   ├── prettier-config-spellbookx/    # Prettier configs (19 presets + composer)
+│   ├── recipes/                       # Shared import sorting & ignore glob definitions
 │   └── spellbookx/                    # 🧙 The Spellbookx CLI (`sbx`)
 ├── scripts/
 │   └── publish-packages.mjs           # Automated npmjs multi-package publisher
@@ -236,5 +235,5 @@ Releases and versioning are managed using [Changesets](https://github.com/change
 
 1. **`pnpm run changeset`**: Creates a changeset describing your change (or use `pnpm run changeset:conventional` to extract changesets from Conventional Commits).
 2. **`pnpm run version`**: Consumes changesets, bumps package versions in lockstep, and updates package changelogs.
-3. **`pnpm run release`**: Builds all packages and publishes `@spellbookx/*` and `packages/*` to npmjs via `turbo run release`.
+3. **`pnpm run release`**: Builds all packages and publishes `packages/*` to npmjs via `turbo run release`.
 4. **`pnpm run publish`**: Runs the complete release flow (`pnpm run version && pnpm run release`).

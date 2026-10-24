@@ -19,13 +19,12 @@ The repository is organized as a pnpm workspace orchestrated by **Turborepo** fo
 
 ```text
 spellbookx/
-├── @spellbookx/
-│   └── recipes/                     # Core shared recipes (import regexes & ignore patterns)
 ├── packages/
 │   ├── eslint-plugin-spellbookx/     # ESLint 9+ Flat Config plugin with 16 modular presets
 │   ├── prettier-config-spellbookx/   # Prettier presets, plugins & defineSbxConfig composer
 │   ├── commitlint-config-spellbookx/ # Monorepo scope auto-discovery & cz-git interactive prompt
 │   ├── cspell-config-spellbookx/     # Multi-language & technical spellcheck configuration
+│   ├── recipes/                      # Core shared recipes (import regexes & ignore patterns)
 │   └── spellbookx/                   # CLI wizard (`sbx`) for interactive toolchain scaffolding
 ├── .agents/
 │   └── skills/                       # Built-in AI Agent skills for assisted toolchain adoption

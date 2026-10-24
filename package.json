@@ -19,7 +19,7 @@
     "changeset:conventional": "changeset-conventional",
     "check": "pnpm run lint && pnpm run spellcheck && pnpm run test",
     "check:ci": "pnpm run lint:check && pnpm run fmt:check && pnpm run spellcheck && pnpm run test:force",
-    "clean": "rm -rf .turbo packages/*/.turbo packages/*/dist @spellbookx/*/.turbo @spellbookx/*/dist",
+    "clean": "rm -rf .turbo packages/*/.turbo packages/*/dist",
     "commit": "cz",
     "commit:lint": "commitlint --from=HEAD~1",
     "fmt": "pnpm exec prettier --ignore-unknown --write .",
