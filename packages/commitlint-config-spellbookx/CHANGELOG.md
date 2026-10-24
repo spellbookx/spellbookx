@@ -1,5 +1,11 @@
 # commitlint-config-spellbookx
 
+## 1.0.2
+
+### Patch Changes
+
+- chore(release): automated patch release bump
+
 ## 1.0.1
 
 No changes in this release.

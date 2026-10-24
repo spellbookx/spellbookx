@@ -1,5 +1,13 @@
 # eslint-plugin-spellbookx
 
+## 1.0.2
+
+### Patch Changes
+
+- chore(release): automated patch release bump
+- Updated dependencies []:
+  - @spellbookx/recipes@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes
