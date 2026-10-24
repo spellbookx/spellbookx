@@ -30,7 +30,7 @@
     "prepare": "lefthook install",
     "publish": "pnpm run version && pnpm run release",
     "release": "turbo run release",
-    "release:auto": "tsx scripts/release.ts",
+    "release:auto": "dropdx",
     "spellcheck": "pnpm exec cspell --no-progress --no-summary .",
     "spellcheck:all": "pnpm exec cspell .",
     "test": "turbo run test",
@@ -53,6 +53,7 @@
     "@commitlint/lint": "^21.2.4",
     "@commitlint/load": "^21.2.4",
     "@cspell/cspell-types": "^10.4.0",
+    "@dcdavidev/dropdx": "^0.2.0",
     "@dcdavidev/tsconfig": "^0.1.0",
     "@prettier/plugin-xml": "^3.4.2",
     "@spellbookx/recipes": "workspace:*",
@@ -79,7 +80,7 @@
     "typescript": "5.9.3",
     "vitest": "^5.0.5"
   },
-  "packageManager": "pnpm@10.30.1+sha512.3590e550d5384caa39bd5c7c739f72270234b2f6059e13018f975c313b1eb9fefcc09714048765d4d9efe961382c312e624572c0420762bdc5d5940cdf9be73a",
+  "packageManager": "pnpm@12.15.0",
   "engines": {
     "node": ">=24"
   }
