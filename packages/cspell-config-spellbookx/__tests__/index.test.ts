@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import namedConfig, {
+import defaultConfig, {
   config,
   defineConfig,
   defineSbxConfig,
@@ -10,32 +10,33 @@ import namedConfig, {
   words,
 } from '../src/index.js';
 
-describe('cspell-config-spellbookx - index', () => {
-  test('should export valid default and named cspell configuration', () => {
-    expect(namedConfig).toBeDefined();
-    expect(config).toBeDefined();
-    expect(namedConfig).toBe(config);
-    expect(typeof namedConfig).toBe('object');
+describe('cspell-config-spellbookx (entrypoint)', () => {
+  it('exports the same configuration object as default and named export', () => {
+    expect(defaultConfig).toBeDefined();
+    expect(defaultConfig).toBe(config);
+    expect(defaultConfig).toBeTypeOf('object');
   });
 
-  test('should conform to cspell configuration specification', () => {
-    expect(namedConfig.version).toBe('0.2');
-    expect(namedConfig.name).toBe('cspell-config-spellbookx');
-    expect(namedConfig.enabled).toBe(true);
-    expect(namedConfig.enableGlobDot).toBe(true);
-    expect(namedConfig.language).toBe('en,es,it,fr,de');
-    expect(namedConfig.loadDefaultConfiguration).toBe(true);
-    expect(namedConfig.allowCompoundWords).toBe(true);
-    expect(Array.isArray(namedConfig.dictionaries)).toBe(true);
-    expect(Array.isArray(namedConfig.words)).toBe(true);
-    expect(Array.isArray(namedConfig.ignorePaths)).toBe(true);
+  it('conforms to the CSpell v0.2 configuration specification', () => {
+    expect(defaultConfig).toMatchObject({
+      version: '0.2',
+      name: 'cspell-config-spellbookx',
+      enabled: true,
+      enableGlobDot: true,
+      language: 'en,es,it,fr,de',
+      loadDefaultConfiguration: true,
+      allowCompoundWords: true,
+    });
+    expect(defaultConfig.dictionaries).toBe(dictionaries);
+    expect(defaultConfig.words).toBe(words);
+    expect(defaultConfig.ignorePaths).toBe(ignorePaths);
   });
 
-  test('should export helper metadata, constants, and builders', () => {
+  it('re-exports package metadata, constants, and config composers', () => {
     expect(packageJson.name).toBe('cspell-config-spellbookx');
-    expect(packageJson.version).toBeDefined();
-    expect(typeof defineSbxConfig).toBe('function');
-    expect(typeof defineConfig).toBe('function');
+    expect(packageJson.version).toMatch(/^\d+\.\d+\.\d+/);
+    expect(defineSbxConfig).toBeTypeOf('function');
+    expect(defineConfig).toBe(defineSbxConfig);
     expect(Array.isArray(words)).toBe(true);
     expect(Array.isArray(ignorePaths)).toBe(true);
     expect(Array.isArray(dictionaries)).toBe(true);

@@ -67,7 +67,7 @@
   "scripts": {
     "build": "rolldown -c && tsc",
     "release": "pnpm publish --access public --no-git-checks",
-    "test": "vitest run"
+    "test": "vitest run --no-fsModuleCache"
   },
   "dependencies": {
     "@commitlint/cli": "^21.2.4",

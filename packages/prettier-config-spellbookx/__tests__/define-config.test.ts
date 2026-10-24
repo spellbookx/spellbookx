@@ -1,9 +1,4 @@
-/**
- * @file define-config.test.ts
- * Tests for defineSbxConfig and defineConfig composer utilities.
- */
-
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import prettier from 'prettier';
 
@@ -14,8 +9,8 @@ import {
   plugins,
 } from '../src/index.js';
 
-describe('defineSbxConfig and defineConfig', () => {
-  test('defineSbxConfig should deep merge configs, sort plugins, and merge overrides', () => {
+describe('prettier-config-spellbookx (defineSbxConfig & defineConfig)', () => {
+  it('merges configs, sorts plugins canonically, and deduplicates entries', () => {
     const customConfig = defineSbxConfig([
       configs.base,
       {
@@ -26,40 +21,43 @@ describe('defineSbxConfig and defineConfig', () => {
 
     expect(customConfig.printWidth).toBe(100);
     expect(customConfig.tabWidth).toBe(2);
-    // plugins must be sorted with tailwind last and sort-imports first
+
     const customPlugins = customConfig.plugins as string[];
     expect(customPlugins.at(0)).toBe('@ianvs/prettier-plugin-sort-imports');
     expect(customPlugins.at(-1)).toBe('prettier-plugin-tailwindcss');
-    // duplicate plugins must not exist
     expect(new Set(customPlugins).size).toBe(customPlugins.length);
   });
 
-  test('defineConfig alias should be identical to defineSbxConfig', () => {
+  it('aliases defineConfig to defineSbxConfig', () => {
     expect(defineConfig).toBe(defineSbxConfig);
   });
 
-  test('defineSbxConfig should handle variable arguments and empty inputs', () => {
+  it('handles variadic arguments, nested arrays, and falsy inputs', () => {
     const merged = defineSbxConfig(
       configs.base,
       undefined,
+      null,
       false,
       { semi: false },
       [{ singleQuote: false }]
     );
+
     expect(merged.semi).toBe(false);
     expect(merged.singleQuote).toBe(false);
     expect(defineSbxConfig()).toEqual({});
   });
 
-  test('should format using a custom configuration built with defineSbxConfig', async () => {
+  it('formats code using a composed configuration', async () => {
     const customConfig = defineSbxConfig([
       configs.base,
       { printWidth: 120, semi: false },
     ]);
+
     const formatted = await prettier.format('const answer = 42;\n', {
       ...customConfig,
       parser: 'typescript',
     });
+
     expect(formatted).toBe('const answer = 42\n');
   });
 });

@@ -1,24 +1,23 @@
-import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { hasWrittenConfigFile } from '../src/lib/write-config.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const tempDir = path.resolve(__dirname, '../temp-write-config');
+describe('spellbookx (hasWrittenConfigFile)', () => {
+  let tempDir: string;
 
-describe('writeConfigFile', () => {
-  beforeAll(() => {
-    mkdirSync(tempDir, { recursive: true });
+  beforeEach(() => {
+    tempDir = mkdtempSync(path.join(os.tmpdir(), 'sbx-write-config-'));
   });
 
-  afterAll(() => {
+  afterEach(() => {
     rmSync(tempDir, { recursive: true, force: true });
   });
 
-  test('should write file and create parent directory recursively', () => {
+  it('writes a configuration file and creates parent directories recursively', () => {
     const relPath = '.nested/folder/config.mjs';
     const written = hasWrittenConfigFile(relPath, 'export default {};', {
       cwd: tempDir,
@@ -31,18 +30,19 @@ describe('writeConfigFile', () => {
     );
   });
 
-  test('should not overwrite file by default if already exists', () => {
+  it('does not overwrite an existing file when overwrite is false or omitted', () => {
     const relPath = 'existing.txt';
     hasWrittenConfigFile(relPath, 'initial', { cwd: tempDir });
 
     const rewritten = hasWrittenConfigFile(relPath, 'modified', {
       cwd: tempDir,
     });
+
     expect(rewritten).toBe(false);
     expect(readFileSync(path.join(tempDir, relPath), 'utf8')).toBe('initial');
   });
 
-  test('should overwrite when overwrite option is true', () => {
+  it('overwrites an existing file when overwrite is true', () => {
     const relPath = 'overwrite.txt';
     hasWrittenConfigFile(relPath, 'v1', { cwd: tempDir });
 
@@ -50,6 +50,7 @@ describe('writeConfigFile', () => {
       cwd: tempDir,
       overwrite: true,
     });
+
     expect(overwritten).toBe(true);
     expect(readFileSync(path.join(tempDir, relPath), 'utf8')).toBe('v2');
   });

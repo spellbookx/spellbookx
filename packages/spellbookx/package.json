@@ -46,7 +46,7 @@
   "scripts": {
     "build": "rolldown -c && tsc",
     "release": "pnpm publish --access public --no-git-checks",
-    "test": "vitest run"
+    "test": "vitest run --no-fsModuleCache"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.3.2",

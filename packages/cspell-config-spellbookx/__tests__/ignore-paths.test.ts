@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import defaultIgnorePaths, {
   CORE_IGNORE_PATHS,
@@ -13,51 +13,49 @@ import defaultIgnorePaths, {
   WINDOWS_IGNORE_PATHS,
 } from '../src/constants/ignore-paths.js';
 
-describe('cspell-config-spellbookx - ignore-paths', () => {
-  test('should export ignorePaths as named and default exports', () => {
-    expect(ignorePaths).toBeDefined();
-    expect(defaultIgnorePaths).toBeDefined();
-    expect(ignorePaths).toBe(defaultIgnorePaths);
+describe('cspell-config-spellbookx (ignorePaths)', () => {
+  it('exports ignorePaths as both default and named export', () => {
+    expect(defaultIgnorePaths).toBe(ignorePaths);
     expect(Array.isArray(ignorePaths)).toBe(true);
     expect(ignorePaths.length).toBeGreaterThan(0);
   });
 
-  test('should contain essential root ignore patterns', () => {
-    const requiredPatterns = [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/build/**',
-      '**/.turbo/**',
-      '**/pnpm-lock.yaml',
-      '**/.git/**',
-      '**/.cache/**',
-    ];
-
-    for (const pattern of requiredPatterns) {
-      expect(ignorePaths).toContain(pattern);
-    }
-  });
-
-  test('should define and combine all category ignore path groups', () => {
-    const categories = [
+  it.each([
+    [
+      'CORE_IGNORE_PATHS',
       CORE_IGNORE_PATHS,
+      ['**/*LICENSE*', '**/CHANGELOG.md', '**/.cache/**', '**/.DS_Store'],
+    ],
+    [
+      'NODE_IGNORE_PATHS',
       NODE_IGNORE_PATHS,
+      ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.turbo/**'],
+    ],
+    [
+      'LOCK_FILES_IGNORE_PATHS',
       LOCK_FILES_IGNORE_PATHS,
-      RUST_IGNORE_PATHS,
-      GO_IGNORE_PATHS,
-      PYTHON_IGNORE_PATHS,
+      ['**/pnpm-lock.yaml', '**/package-lock.json', '**/yarn.lock'],
+    ],
+    ['RUST_IGNORE_PATHS', RUST_IGNORE_PATHS, ['**/target/**', '**/Cargo.lock']],
+    ['GO_IGNORE_PATHS', GO_IGNORE_PATHS, ['**/go.sum']],
+    ['PYTHON_IGNORE_PATHS', PYTHON_IGNORE_PATHS, ['**/__pycache__/**']],
+    [
+      'TOOLCHAINS_IGNORE_PATHS',
       TOOLCHAINS_IGNORE_PATHS,
-      WINDOWS_IGNORE_PATHS,
-      MISC_IGNORE_PATHS,
-    ];
-
-    for (const category of categories) {
-      expect(Array.isArray(category)).toBe(true);
+      ['**/.git/**', '**/.gradle/**'],
+    ],
+    ['WINDOWS_IGNORE_PATHS', WINDOWS_IGNORE_PATHS, ['**/Thumbs.db']],
+    ['MISC_IGNORE_PATHS', MISC_IGNORE_PATHS, ['**/connect.lock', '**/*.hbs']],
+  ] as const)(
+    'merges %s into root ignorePaths',
+    (_name, category, expectedPatterns) => {
       expect(category.length).toBeGreaterThan(0);
-
+      for (const pattern of expectedPatterns) {
+        expect(category).toContain(pattern);
+      }
       for (const pattern of category) {
         expect(ignorePaths).toContain(pattern);
       }
     }
-  });
+  );
 });

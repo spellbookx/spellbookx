@@ -1,9 +1,4 @@
-/**
- * @file index.test.ts
- * Tests verifying the main configuration export and metadata of commitlint-config-spellbookx.
- */
-
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import defaultExport, {
   COMMIT_TYPES,
@@ -17,12 +12,11 @@ import defaultExport, {
 } from '../src/index.js';
 import { packageJson } from '../src/lib/package-json.js';
 
-describe('commitlint-config-spellbookx entrypoint', () => {
-  test('should export valid configuration object', () => {
+describe('commitlint-config-spellbookx (entrypoint)', () => {
+  it('exports a valid commitlint UserConfig object as default and named export', () => {
     expect(defaultExport).toBe(config);
-    expect(typeof config).toBe('object');
-    expect(Array.isArray(config.extends)).toBe(true);
-    expect(config.extends).toContain('@commitlint/config-conventional');
+    expect(config).toBeTypeOf('object');
+    expect(config.extends).toEqual(['@commitlint/config-conventional']);
     expect(config.parserPreset).toBe(
       'conventional-changelog-conventionalcommits'
     );
@@ -30,18 +24,41 @@ describe('commitlint-config-spellbookx entrypoint', () => {
     expect(config.prompt).toBe(prompt);
   });
 
-  test('should contain valid package metadata in helpers', () => {
+  it('exposes accurate package metadata', () => {
     expect(packageJson.name).toBe('commitlint-config-spellbookx');
-    expect(packageJson.version).toBeDefined();
+    expect(packageJson.version).toMatch(/^\d+\.\d+\.\d+/);
   });
 
-  test('should export conventional commit types and scope constants', () => {
-    expect(Array.isArray(COMMIT_TYPES)).toBe(true);
-    expect(COMMIT_TYPES).toContain('feat');
-    expect(COMMIT_TYPES).toContain('fix');
+  it('exports all 11 standard conventional commit types', () => {
+    expect(COMMIT_TYPES).toEqual([
+      'feat',
+      'fix',
+      'docs',
+      'style',
+      'refactor',
+      'perf',
+      'test',
+      'chore',
+      'ci',
+      'build',
+      'revert',
+    ]);
+  });
+
+  it('configures cz-git interactive prompt questions and settings', () => {
+    expect(prompt?.settings?.enableMultipleScopes).toBe(true);
+    expect(prompt?.settings?.scopeEnumSeparator).toBe(',');
+    expect(prompt?.questions?.scope?.enum).toBe(scopesEnum);
+
+    for (const type of COMMIT_TYPES) {
+      expect(prompt?.questions?.type?.enum?.[type]).toBeDefined();
+    }
+  });
+
+  it('exports special scope constants and dynamically discovered scopes', () => {
     expect(SCOPE_WORKSPACE).toBe('workspace');
     expect(SCOPE_RELEASE).toBe('release');
     expect(Array.isArray(scopesArray)).toBe(true);
-    expect(typeof scopesEnum).toBe('object');
+    expect(scopesEnum).toBeTypeOf('object');
   });
 });

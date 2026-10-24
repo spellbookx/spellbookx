@@ -1,9 +1,4 @@
-/**
- * @file configs.test.ts
- * Tests verifying the structure, formatting options, and plugin compositions of all presets.
- */
-
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import type { Config } from 'prettier';
 
@@ -30,137 +25,132 @@ import {
 } from '../src/configs/index.js';
 import type { SbxPrettierConfig } from '../src/index.js';
 
-describe('prettier configurations structure', () => {
-  const allConfigs: Record<SbxPrettierConfig, Config> = {
-    all,
-    astro,
-    'astro-prisma': astroPrisma,
-    'astro-prisma-tailwind': astroPrismaTailwind,
-    'astro-tailwind': astroTailwind,
-    base,
-    embed,
-    'multiline-arrays': multilineArrays,
-    nginx,
-    prisma,
-    'prisma-tailwind': prismaTailwind,
-    recommended,
-    'sort-imports': sortImports,
-    sql,
-    svelte,
-    'svelte-prisma': sveltePrisma,
-    'svelte-prisma-tailwind': sveltePrismaTailwind,
-    'svelte-tailwind': svelteTailwind,
-    tailwind,
-  };
+describe('prettier-config-spellbookx (configs structure)', () => {
+  const allPresets: [SbxPrettierConfig, Config][] = [
+    ['all', all],
+    ['astro', astro],
+    ['astro-prisma', astroPrisma],
+    ['astro-prisma-tailwind', astroPrismaTailwind],
+    ['astro-tailwind', astroTailwind],
+    ['base', base],
+    ['embed', embed],
+    ['multiline-arrays', multilineArrays],
+    ['nginx', nginx],
+    ['prisma', prisma],
+    ['prisma-tailwind', prismaTailwind],
+    ['recommended', recommended],
+    ['sort-imports', sortImports],
+    ['sql', sql],
+    ['svelte', svelte],
+    ['svelte-prisma', sveltePrisma],
+    ['svelte-prisma-tailwind', sveltePrismaTailwind],
+    ['svelte-tailwind', svelteTailwind],
+    ['tailwind', tailwind],
+  ];
 
-  test('all configurations should share consistent standard formatting rules', () => {
-    for (const config of Object.values(allConfigs)) {
-      expect(config.trailingComma).toBe('es5');
-      expect(config.tabWidth).toBe(2);
-      expect(config.semi).toBe(true);
-      expect(config.singleQuote).toBe(true);
-      expect(config.printWidth).toBe(80);
-      expect(config.endOfLine).toBe('lf');
-      expect(config.bracketSpacing).toBe(true);
+  it.each(allPresets)(
+    'preset "%s" shares consistent base formatting options',
+    (_name, config) => {
+      expect(config).toMatchObject({
+        trailingComma: 'es5',
+        tabWidth: 2,
+        semi: true,
+        singleQuote: true,
+        printWidth: 80,
+        endOfLine: 'lf',
+        bracketSpacing: true,
+      });
       expect(Array.isArray(config.plugins)).toBe(true);
       expect(Array.isArray(config.overrides)).toBe(true);
     }
-  });
+  );
 
-  test('tailwind plugin should always be placed last when present', () => {
-    const tailwindConfigs = [
-      tailwind,
-      astroTailwind,
-      prismaTailwind,
-      astroPrismaTailwind,
-      svelteTailwind,
-      sveltePrismaTailwind,
-      all,
-      recommended,
-    ];
-
-    for (const config of tailwindConfigs) {
-      const p = (config.plugins || []) as string[];
+  it.each([
+    ['tailwind', tailwind],
+    ['astro-tailwind', astroTailwind],
+    ['prisma-tailwind', prismaTailwind],
+    ['astro-prisma-tailwind', astroPrismaTailwind],
+    ['svelte-tailwind', svelteTailwind],
+    ['svelte-prisma-tailwind', sveltePrismaTailwind],
+    ['all', all],
+    ['recommended', recommended],
+  ] as const)(
+    'places prettier-plugin-tailwindcss last in "%s"',
+    (_name, config) => {
+      const p = (config.plugins ?? []) as string[];
       expect(p.at(-1)).toBe('prettier-plugin-tailwindcss');
     }
+  );
+
+  it.each([
+    ['astro', astro],
+    ['astro-prisma', astroPrisma],
+    ['astro-tailwind', astroTailwind],
+    ['astro-prisma-tailwind', astroPrismaTailwind],
+    ['all', all],
+  ] as const)('includes prettier-plugin-astro in "%s"', (_name, config) => {
+    expect(config.plugins).toContain('prettier-plugin-astro');
   });
 
-  test('astro configurations should include prettier-plugin-astro', () => {
-    const astroConfigs = [
-      astro,
-      astroPrisma,
-      astroTailwind,
-      astroPrismaTailwind,
-      all,
-    ];
-
-    for (const config of astroConfigs) {
-      const p = (config.plugins || []) as string[];
-      expect(p).toContain('prettier-plugin-astro');
-    }
+  it.each([
+    ['svelte', svelte],
+    ['svelte-prisma', sveltePrisma],
+    ['svelte-tailwind', svelteTailwind],
+    ['svelte-prisma-tailwind', sveltePrismaTailwind],
+    ['all', all],
+  ] as const)('includes prettier-plugin-svelte in "%s"', (_name, config) => {
+    expect(config.plugins).toContain('prettier-plugin-svelte');
   });
 
-  test('svelte configurations should include prettier-plugin-svelte', () => {
-    const svelteConfigs = [
-      svelte,
-      sveltePrisma,
-      svelteTailwind,
-      sveltePrismaTailwind,
-      all,
-    ];
-
-    for (const config of svelteConfigs) {
-      const p = (config.plugins || []) as string[];
-      expect(p).toContain('prettier-plugin-svelte');
-    }
+  it.each([
+    ['prisma', prisma],
+    ['astro-prisma', astroPrisma],
+    ['prisma-tailwind', prismaTailwind],
+    ['astro-prisma-tailwind', astroPrismaTailwind],
+    ['svelte-prisma', sveltePrisma],
+    ['svelte-prisma-tailwind', sveltePrismaTailwind],
+    ['all', all],
+  ] as const)('includes prettier-plugin-prisma in "%s"', (_name, config) => {
+    expect(config.plugins).toContain('prettier-plugin-prisma');
   });
 
-  test('prisma configurations should include prettier-plugin-prisma', () => {
-    const prismaConfigs = [
-      prisma,
-      astroPrisma,
-      prismaTailwind,
-      astroPrismaTailwind,
-      sveltePrisma,
-      sveltePrismaTailwind,
-      all,
-    ];
-
-    for (const config of prismaConfigs) {
-      const p = (config.plugins || []) as string[];
-      expect(p).toContain('prettier-plugin-prisma');
-    }
-  });
-
-  test('all configuration should contain all available plugins with tailwind last', () => {
-    const p = (all.plugins || []) as string[];
-    expect(p).toContain('@ianvs/prettier-plugin-sort-imports');
-    expect(p).toContain('prettier-plugin-multiline-arrays');
-    expect(p).toContain('prettier-plugin-astro');
-    expect(p).toContain('prettier-plugin-svelte');
-    expect(p).toContain('prettier-plugin-sh');
-    expect(p).toContain('prettier-plugin-toml');
-    expect(p).toContain('prettier-plugin-ini');
-    expect(p).toContain('prettier-plugin-packagejson');
-    expect(p).toContain('prettier-plugin-properties');
-    expect(p).toContain('prettier-plugin-sql');
-    expect(p).toContain('prettier-plugin-nginx');
-    expect(p).toContain('prettier-plugin-prisma');
-    expect(p).toContain('@prettier/plugin-xml');
-    expect(p).toContain('prettier-plugin-embed');
-    expect(p).toContain('prettier-plugin-tailwindcss');
+  it('includes all supported plugins in "all" with tailwind ordered last', () => {
+    const p = (all.plugins ?? []) as string[];
+    expect(p).toEqual(
+      expect.arrayContaining([
+        '@ianvs/prettier-plugin-sort-imports',
+        'prettier-plugin-multiline-arrays',
+        'prettier-plugin-astro',
+        'prettier-plugin-svelte',
+        'prettier-plugin-sh',
+        'prettier-plugin-toml',
+        'prettier-plugin-ini',
+        'prettier-plugin-packagejson',
+        'prettier-plugin-properties',
+        'prettier-plugin-sql',
+        'prettier-plugin-nginx',
+        'prettier-plugin-prisma',
+        '@prettier/plugin-xml',
+        'prettier-plugin-embed',
+        'prettier-plugin-tailwindcss',
+      ])
+    );
     expect(p.at(-1)).toBe('prettier-plugin-tailwindcss');
   });
 
-  test('recommended configuration should contain community recommended plugins', () => {
-    const p = (recommended.plugins || []) as string[];
-    expect(p).toContain('prettier-plugin-sh');
-    expect(p).toContain('prettier-plugin-toml');
-    expect(p).toContain('prettier-plugin-ini');
-    expect(p).toContain('prettier-plugin-packagejson');
-    expect(p).toContain('prettier-plugin-properties');
-    expect(p).toContain('@prettier/plugin-xml');
-    expect(p).toContain('prettier-plugin-tailwindcss');
+  it('includes standard plugins in "recommended" without framework-specific plugins', () => {
+    const p = (recommended.plugins ?? []) as string[];
+    expect(p).toEqual(
+      expect.arrayContaining([
+        'prettier-plugin-sh',
+        'prettier-plugin-toml',
+        'prettier-plugin-ini',
+        'prettier-plugin-packagejson',
+        'prettier-plugin-properties',
+        '@prettier/plugin-xml',
+        'prettier-plugin-tailwindcss',
+      ])
+    );
     expect(p.at(-1)).toBe('prettier-plugin-tailwindcss');
     expect(p).not.toContain('prettier-plugin-astro');
     expect(p).not.toContain('prettier-plugin-svelte');

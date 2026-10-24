@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import {
+import defaultImports, {
   assets,
   backendFrameworks,
   backendMiddlewares,
@@ -31,77 +31,61 @@ import {
 } from '../src/imports/index.js';
 
 describe('@spellbookx/recipes/imports', () => {
-  test('separator constants should be empty string', () => {
+  it('exports imports dictionary as both default and named export', () => {
+    expect(defaultImports).toBe(imports);
+  });
+
+  it('defines empty string separator aliases consistently', () => {
     expect(separator).toBe('');
     expect(newline).toBe('');
     expect(nl).toBe('');
     expect(imports.separator).toBe('');
-    expect(imports.nl).toBe('');
     expect(imports.newline).toBe('');
+    expect(imports.nl).toBe('');
   });
 
-  test('dotenv group should contain dotenv and dotenvx', () => {
-    expect(dotenv).toContain('@dotenvx/dotenvx');
-    expect(dotenv).toContain('dotenv');
-  });
+  it.each([
+    ['dotenv', dotenv, ['@dotenvx/dotenvx', 'dotenv']],
+    ['sideEffects', sideEffects, [String.raw`^\u0000`]],
+    ['env', env, ['@env']],
+    ['builtinModules', builtinModules, ['fs', 'path', 'node:']],
+    ['backendFrameworks', backendFrameworks, ['express', 'fastify', '@nestjs']],
+    ['backendMiddlewares', backendMiddlewares, ['cors', 'helmet', 'morgan']],
+    ['uiFrameworks', uiFrameworks, ['react', 'svelte', 'vue', 'solid-js']],
+    ['reactPackages', reactPackages, ['react-dom', 'react-router']],
+    [
+      'fullstackFrameworks',
+      fullstackFrameworks,
+      ['next', '@sveltejs/kit', '@remix-run'],
+    ],
+    ['reactNativeExpo', reactNativeExpo, ['react-native', 'expo']],
+    ['stateManagement', stateManagement, ['zustand', 'redux', 'jotai']],
+    ['dataFetching', dataFetching, ['axios', '@tanstack/react-query', 'swr']],
+    ['uiLibraries', uiLibraries, ['@mui', '@radix-ui', 'shadcn-ui']],
+    [
+      'cssInJs',
+      cssInJs,
+      ['clsx', 'tailwind-merge', 'class-variance-authority'],
+    ],
+    ['icons', icons, ['lucide', 'react-icons', '@fortawesome']],
+    ['testing', testing, ['vitest', 'jest', '@testing-library']],
+    ['thirdParty', thirdParty, ['<THIRD_PARTY_MODULES>']],
+    ['monorepo', monorepo, ['@org/', '^@repo/', '^@workspace/']],
+    ['internalAliases', internalAliases, ['@/', '~/', '#/']],
+    ['assets', assets, [String.raw`^.+\.(gif|jpe?g|png|svg|webp)$`]],
+    ['json', json, [String.raw`^.+\.json$`]],
+    ['styles', styles, [String.raw`^.+\.s?css$`, String.raw`^.+\.less$`]],
+    ['relative', relative, ['../', './']],
+  ] as const)(
+    'import group "%s" is mapped in imports dictionary and contains expected entries',
+    (key, group, expectedItems) => {
+      expect(imports[key]).toBe(group);
+      expect(Array.isArray(group)).toBe(true);
+      expect(group.length).toBeGreaterThan(0);
 
-  test('sideEffects and env groups should contain expected tokens', () => {
-    expect(sideEffects).toContain(String.raw`^\u0000`);
-    expect(env).toContain('@env');
-  });
-
-  test('builtinModules should contain node built-ins and node: prefix', () => {
-    expect(builtinModules).toContain('fs');
-    expect(builtinModules).toContain('path');
-    expect(builtinModules).toContain('node:');
-  });
-
-  test('frameworks and libraries should be populated', () => {
-    expect(backendFrameworks).toContain('express');
-    expect(backendMiddlewares).toContain('cors');
-    expect(uiFrameworks).toContain('react');
-    expect(uiFrameworks).toContain('svelte');
-    expect(reactPackages).toContain('react-dom');
-    expect(fullstackFrameworks).toContain('next');
-    expect(reactNativeExpo).toContain('expo');
-    expect(stateManagement).toContain('zustand');
-    expect(dataFetching).toContain('axios');
-    expect(uiLibraries).toContain('@mui');
-    expect(cssInJs).toContain('clsx');
-    expect(icons).toContain('lucide');
-    expect(testing).toContain('vitest');
-    expect(thirdParty).toContain('<THIRD_PARTY_MODULES>');
-    expect(monorepo).toContain('@org/');
-    expect(internalAliases).toContain('@/');
-    expect(assets.length).toBeGreaterThan(0);
-    expect(json.length).toBeGreaterThan(0);
-    expect(styles.length).toBeGreaterThan(0);
-    expect(relative).toContain('../');
-  });
-
-  test('imports dictionary should reference all individual groups', () => {
-    expect(imports.assets).toBe(assets);
-    expect(imports.backendFrameworks).toBe(backendFrameworks);
-    expect(imports.backendMiddlewares).toBe(backendMiddlewares);
-    expect(imports.builtinModules).toBe(builtinModules);
-    expect(imports.cssInJs).toBe(cssInJs);
-    expect(imports.dataFetching).toBe(dataFetching);
-    expect(imports.dotenv).toBe(dotenv);
-    expect(imports.env).toBe(env);
-    expect(imports.fullstackFrameworks).toBe(fullstackFrameworks);
-    expect(imports.icons).toBe(icons);
-    expect(imports.internalAliases).toBe(internalAliases);
-    expect(imports.json).toBe(json);
-    expect(imports.monorepo).toBe(monorepo);
-    expect(imports.reactNativeExpo).toBe(reactNativeExpo);
-    expect(imports.reactPackages).toBe(reactPackages);
-    expect(imports.relative).toBe(relative);
-    expect(imports.sideEffects).toBe(sideEffects);
-    expect(imports.stateManagement).toBe(stateManagement);
-    expect(imports.styles).toBe(styles);
-    expect(imports.testing).toBe(testing);
-    expect(imports.thirdParty).toBe(thirdParty);
-    expect(imports.uiFrameworks).toBe(uiFrameworks);
-    expect(imports.uiLibraries).toBe(uiLibraries);
-  });
+      for (const item of expectedItems) {
+        expect(group).toContain(item);
+      }
+    }
+  );
 });

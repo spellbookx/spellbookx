@@ -1,39 +1,40 @@
 import {
   existsSync,
-  mkdirSync,
+  mkdtempSync,
   readFileSync,
   rmSync,
   writeFileSync,
 } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { runInit } from '../src/commands/init.js';
+import * as installDepsModule from '../src/lib/install-deps.js';
+import * as promptToolsModule from '../src/lib/prompt-tools.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const tempDir = path.resolve(__dirname, '../temp-init');
+describe('spellbookx (runInit)', () => {
+  let tempDir: string;
 
-describe('runInit', () => {
-  beforeAll(() => {
-    mkdirSync(tempDir, { recursive: true });
+  beforeEach(() => {
+    tempDir = mkdtempSync(path.join(os.tmpdir(), 'sbx-init-'));
+    vi.clearAllMocks();
   });
 
-  afterAll(() => {
+  afterEach(() => {
+    vi.restoreAllMocks();
     rmSync(tempDir, { recursive: true, force: true });
   });
 
-  test('should initialize selected tools non-interactively without installing', async () => {
-    const caseDir = path.join(tempDir, 'case-init-run');
-    mkdirSync(caseDir, { recursive: true });
+  it('initializes selected tools non-interactively when skipInstall is true', async () => {
     writeFileSync(
-      path.join(caseDir, 'package.json'),
+      path.join(tempDir, 'package.json'),
       JSON.stringify({ name: 'init-test' })
     );
 
     const res = await runInit({
-      cwd: caseDir,
+      cwd: tempDir,
       tools: ['eslint', 'prettier'],
       packageManager: 'pnpm',
       skipInstall: true,
@@ -42,30 +43,71 @@ describe('runInit', () => {
 
     expect(res.selectedTools).toEqual(['eslint', 'prettier']);
     expect(res.packageManager).toBe('pnpm');
-    expect(res.createdFiles).toContain('eslint.config.mjs');
-    expect(res.createdFiles).toContain('prettier.config.mjs');
-    expect(existsSync(path.join(caseDir, 'eslint.config.mjs'))).toBe(true);
-    expect(existsSync(path.join(caseDir, 'prettier.config.mjs'))).toBe(true);
+    expect(res.createdFiles).toEqual(
+      expect.arrayContaining([
+        'eslint.config.mjs',
+        'prettier.config.mjs',
+        '.prettierignore',
+      ])
+    );
+    expect(existsSync(path.join(tempDir, 'eslint.config.mjs'))).toBe(true);
+    expect(existsSync(path.join(tempDir, 'prettier.config.mjs'))).toBe(true);
 
     const pkg = JSON.parse(
-      readFileSync(path.join(caseDir, 'package.json'), 'utf8')
+      readFileSync(path.join(tempDir, 'package.json'), 'utf8')
     );
     expect(pkg.scripts.lint).toBeDefined();
     expect(pkg.scripts.fmt).toBeDefined();
   });
 
-  test('should return empty result if no tools are selected', async () => {
-    const caseDir = path.join(tempDir, 'case-init-empty');
-    mkdirSync(caseDir, { recursive: true });
+  it('prompts for tools interactively and invokes installDeps when skipInstall is false', async () => {
+    writeFileSync(
+      path.join(tempDir, 'package.json'),
+      JSON.stringify({ name: 'interactive-test' })
+    );
+
+    const promptSpy = vi
+      .spyOn(promptToolsModule, 'promptTools')
+      .mockResolvedValue(['cspell']);
+    const installSpy = vi
+      .spyOn(installDepsModule, 'installDeps')
+      .mockResolvedValue();
 
     const res = await runInit({
-      cwd: caseDir,
-      tools: [],
-      skipInstall: true,
+      cwd: tempDir,
+      packageManager: 'bun',
+      skipInstall: false,
       silent: true,
     });
 
-    expect(res.selectedTools).toEqual([]);
-    expect(res.createdFiles).toEqual([]);
+    expect(promptSpy).toHaveBeenCalledTimes(1);
+    expect(installSpy).toHaveBeenCalledWith(
+      'bun',
+      expect.arrayContaining(['cspell', 'cspell-config-spellbookx']),
+      { cwd: tempDir, silent: true }
+    );
+    expect(res.selectedTools).toEqual(['cspell']);
+    expect(res.createdFiles).toContain('cspell.config.cjs');
+  });
+
+  it('returns an empty result without installing or creating files when no tools are selected', async () => {
+    const installSpy = vi
+      .spyOn(installDepsModule, 'installDeps')
+      .mockResolvedValue();
+
+    const res = await runInit({
+      cwd: tempDir,
+      tools: [],
+      skipInstall: false,
+      silent: true,
+    });
+
+    expect(installSpy).not.toHaveBeenCalled();
+    expect(res).toEqual({
+      selectedTools: [],
+      packageManager: 'pnpm',
+      installedDependencies: [],
+      createdFiles: [],
+    });
   });
 });

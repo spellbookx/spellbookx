@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   defineConfig,
@@ -8,16 +8,16 @@ import {
   packageJson,
 } from '../src/lib/index.js';
 
-describe('cspell-config-spellbookx - lib', () => {
+describe('cspell-config-spellbookx (lib utilities)', () => {
   describe('packageJson', () => {
-    test('should contain valid package metadata', () => {
+    it('exposes package name and version', () => {
       expect(packageJson.name).toBe('cspell-config-spellbookx');
-      expect(packageJson.version).toBeDefined();
+      expect(packageJson.version).toMatch(/^\d+\.\d+\.\d+/);
     });
   });
 
   describe('normalizeWords', () => {
-    test('should normalize, deduplicate, and sort words alphabetically', () => {
+    it('trims, lowercases, deduplicates, and sorts words alphabetically', () => {
       const input = [
         'Zebra',
         ' apple ',
@@ -25,27 +25,27 @@ describe('cspell-config-spellbookx - lib', () => {
         'APPLE',
         'Banana',
         '',
+        ' '.repeat(3),
         null,
         undefined,
       ];
-      const result = normalizeWords(input);
 
-      expect(result).toEqual(['apple', 'banana', 'zebra']);
+      expect(normalizeWords(input)).toEqual(['apple', 'banana', 'zebra']);
     });
 
-    test('should handle empty input array or defaults', () => {
-      expect(normalizeWords([])).toEqual([]);
+    it('returns an empty array when called with no arguments or empty list', () => {
       expect(normalizeWords()).toEqual([]);
+      expect(normalizeWords([])).toEqual([]);
     });
   });
 
   describe('mergeCSpellConfigs', () => {
-    test('should return empty object when given empty or falsy configs', () => {
+    it('returns an empty object when passed no configs or only falsy values', () => {
       expect(mergeCSpellConfigs()).toEqual({});
       expect(mergeCSpellConfigs(undefined, null, false)).toEqual({});
     });
 
-    test('should deduplicate and normalize words across configs', () => {
+    it('deduplicates and normalizes words across multiple configs', () => {
       const merged = mergeCSpellConfigs(
         { words: ['foo', 'Bar'] },
         { words: ['BAR', 'baz', 'FOO'] }
@@ -54,7 +54,7 @@ describe('cspell-config-spellbookx - lib', () => {
       expect(merged.words).toEqual(['bar', 'baz', 'foo']);
     });
 
-    test('should deduplicate ignorePaths and dictionaries across configs', () => {
+    it('deduplicates ignorePaths and dictionaries while preserving order', () => {
       const merged = mergeCSpellConfigs(
         {
           ignorePaths: ['**/dist/**', '**/node_modules/**'],
@@ -74,7 +74,7 @@ describe('cspell-config-spellbookx - lib', () => {
       expect(merged.dictionaries).toEqual(['typescript', 'node', 'python']);
     });
 
-    test('should support nested arrays of configs', () => {
+    it('flattens arbitrarily nested config arrays', () => {
       const merged = mergeCSpellConfigs([
         { words: ['alpha'] },
         [{ words: ['beta'] }, { words: ['gamma'] }],
@@ -84,37 +84,40 @@ describe('cspell-config-spellbookx - lib', () => {
     });
   });
 
-  describe('defineSbxConfig / defineConfig', () => {
-    test('should return default spellbookx configuration when called without overrides', () => {
-      const config = defineSbxConfig();
+  describe('defineSbxConfig & defineConfig', () => {
+    it('returns the base spellbookx CSpell config when called without arguments', () => {
+      const result = defineSbxConfig();
 
-      expect(config.version).toBe('0.2');
-      expect(config.name).toBe('cspell-config-spellbookx');
-      expect(config.words?.length).toBeGreaterThan(0);
-      expect(config.ignorePaths?.length).toBeGreaterThan(0);
+      expect(result.version).toBe('0.2');
+      expect(result.name).toBe('cspell-config-spellbookx');
+      expect(result.words?.length).toBeGreaterThan(0);
+      expect(result.ignorePaths?.length).toBeGreaterThan(0);
     });
 
-    test('should extend base configuration with additional words and ignores', () => {
-      const config = defineSbxConfig({
-        words: ['customword123'],
-        ignorePaths: ['**/my-secret-dir/**'],
+    it('merges custom words, ignorePaths, and dictionaries with base defaults', () => {
+      const result = defineSbxConfig({
+        words: ['customtoken'],
+        ignorePaths: ['**/generated/**'],
+        dictionaries: ['custom-dict'],
       });
 
-      expect(config.words).toContain('customword123');
-      expect(config.words).toContain('spellbookx');
-      expect(config.ignorePaths).toContain('**/my-secret-dir/**');
-      expect(config.ignorePaths).toContain('**/node_modules/**');
+      expect(result.words).toContain('customtoken');
+      expect(result.words).toContain('spellbookx');
+      expect(result.ignorePaths).toContain('**/generated/**');
+      expect(result.ignorePaths).toContain('**/node_modules/**');
+      expect(result.dictionaries).toContain('custom-dict');
+      expect(result.dictionaries).toContain('typescript');
     });
 
-    test('should allow scalar property overrides', () => {
-      const config = defineConfig({
+    it('allows overriding scalar CSpell properties via defineConfig alias', () => {
+      const result = defineConfig({
         language: 'en',
         allowCompoundWords: false,
       });
 
-      expect(config.language).toBe('en');
-      expect(config.allowCompoundWords).toBe(false);
-      expect(config.words).toContain('spellbookx');
+      expect(result.language).toBe('en');
+      expect(result.allowCompoundWords).toBe(false);
+      expect(result.words).toContain('spellbookx');
     });
   });
 });

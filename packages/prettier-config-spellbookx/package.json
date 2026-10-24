@@ -174,7 +174,7 @@
   "scripts": {
     "build": "rolldown -c && tsc",
     "release": "pnpm publish --access public --no-git-checks",
-    "test": "vitest run"
+    "test": "vitest run --no-fsModuleCache"
   },
   "dependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",

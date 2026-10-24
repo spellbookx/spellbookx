@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { ESLint } from 'eslint';
 
@@ -9,9 +9,10 @@ import { configMarkdown } from '../src/configs/markdown.js';
 import { configNode } from '../src/configs/node.js';
 import { configRecommended } from '../src/configs/recommended.js';
 import { configRecommendedSpellcheck } from '../src/configs/recommended-spellcheck.js';
+import { configVuoto } from '../src/configs/vuoto.js';
 
 describe('eslint-plugin-spellbookx (lint execution)', () => {
-  test('should lint valid JavaScript/TypeScript code without errors', async () => {
+  it('lints valid TypeScript code without errors using configJavascript', async () => {
     const eslint = new ESLint({
       overrideConfigFile: true,
       overrideConfig: configJavascript,
@@ -21,10 +22,11 @@ describe('eslint-plugin-spellbookx (lint execution)', () => {
       'export const answer: number = 42;\n',
       { filePath: 'test.ts' }
     );
+
     expect(result.errorCount).toBe(0);
   });
 
-  test('should catch unused variables and report errors in TypeScript', async () => {
+  it('reports @typescript-eslint/no-unused-vars errors on unused variables', async () => {
     const eslint = new ESLint({
       overrideConfigFile: true,
       overrideConfig: configJavascript,
@@ -33,6 +35,7 @@ describe('eslint-plugin-spellbookx (lint execution)', () => {
     const [result] = await eslint.lintText('const unusedVar = 1;\n', {
       filePath: 'test.ts',
     });
+
     expect(result.errorCount).toBeGreaterThan(0);
     expect(
       result.messages.some(
@@ -41,7 +44,7 @@ describe('eslint-plugin-spellbookx (lint execution)', () => {
     ).toBe(true);
   });
 
-  test('should lint valid JSON without errors using configJson', async () => {
+  it('lints valid JSON without errors using configJson', async () => {
     const eslint = new ESLint({
       overrideConfigFile: true,
       overrideConfig: configJson,
@@ -50,10 +53,11 @@ describe('eslint-plugin-spellbookx (lint execution)', () => {
     const [result] = await eslint.lintText('{\n  "name": "test"\n}\n', {
       filePath: 'test.json',
     });
+
     expect(result.errorCount).toBe(0);
   });
 
-  test('should lint valid Markdown without errors using configMarkdown', async () => {
+  it('lints valid Markdown without errors using configMarkdown', async () => {
     const eslint = new ESLint({
       overrideConfigFile: true,
       overrideConfig: configMarkdown,
@@ -62,54 +66,26 @@ describe('eslint-plugin-spellbookx (lint execution)', () => {
     const [result] = await eslint.lintText('# Hello World\n\nSome text.\n', {
       filePath: 'test.md',
     });
+
     expect(result.errorCount).toBe(0);
   });
 
-  test('should lint code successfully using configRecommended', async () => {
+  it.each([
+    ['configBase', configBase],
+    ['configNode', configNode],
+    ['configRecommended', configRecommended],
+    ['configRecommendedSpellcheck', configRecommendedSpellcheck],
+    ['configVuoto', configVuoto],
+  ] as const)('lints clean TypeScript code with %s', async (_name, config) => {
     const eslint = new ESLint({
       overrideConfigFile: true,
-      overrideConfig: configRecommended,
+      overrideConfig: config,
     });
 
-    const [result] = await eslint.lintText('export const x = 1;\n', {
-      filePath: 'test.ts',
-    });
-    expect(result.errorCount).toBe(0);
-  });
-
-  test('should lint code successfully using configBase', async () => {
-    const eslint = new ESLint({
-      overrideConfigFile: true,
-      overrideConfig: configBase,
+    const [result] = await eslint.lintText('export const value = 1;\n', {
+      filePath: 'sample.ts',
     });
 
-    const [result] = await eslint.lintText('export const x = 1;\n', {
-      filePath: 'test.ts',
-    });
-    expect(result.errorCount).toBe(0);
-  });
-
-  test('should lint code successfully using configNode', async () => {
-    const eslint = new ESLint({
-      overrideConfigFile: true,
-      overrideConfig: configNode,
-    });
-
-    const [result] = await eslint.lintText('export const x = 1;\n', {
-      filePath: 'test.ts',
-    });
-    expect(result.errorCount).toBe(0);
-  });
-
-  test('should lint code successfully using configRecommendedSpellcheck', async () => {
-    const eslint = new ESLint({
-      overrideConfigFile: true,
-      overrideConfig: configRecommendedSpellcheck,
-    });
-
-    const [result] = await eslint.lintText('export const x = 1;\n', {
-      filePath: 'test.ts',
-    });
     expect(result.errorCount).toBe(0);
   });
 });

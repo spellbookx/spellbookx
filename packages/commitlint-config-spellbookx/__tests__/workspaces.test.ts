@@ -1,13 +1,15 @@
-/**
- * @file workspaces.test.ts
- * Tests for git root discovery, workspace config parsing, and scopes gathering.
- */
-
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
   findGitRoot,
@@ -16,61 +18,120 @@ import {
 } from '../src/lib/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const testDir = path.resolve(__dirname, '../temp-test-commitlint');
 
-describe('workspace discovery and parsing', () => {
-  beforeAll(() => {
-    if (existsSync(testDir)) rmSync(testDir, { recursive: true, force: true });
-    mkdirSync(testDir, { recursive: true });
+describe('commitlint-config-spellbookx (workspace discovery)', () => {
+  let tempDir: string;
+
+  beforeEach(() => {
+    tempDir = mkdtempSync(path.join(os.tmpdir(), 'sbx-commitlint-'));
   });
 
-  afterAll(() => {
-    if (existsSync(testDir)) rmSync(testDir, { recursive: true, force: true });
+  afterEach(() => {
+    rmSync(tempDir, { recursive: true, force: true });
   });
 
-  test('findGitRoot should locate git root directory', () => {
-    const root = findGitRoot(__dirname);
-    expect(root).not.toBeNull();
-    expect(existsSync(path.join(root!, '.git'))).toBe(true);
+  describe('findGitRoot', () => {
+    it('locates the git root directory from a nested package path', () => {
+      const root = findGitRoot(__dirname);
+
+      expect(root).not.toBeNull();
+      expect(existsSync(path.join(root!, '.git'))).toBe(true);
+    });
+
+    it('returns null when no .git directory exists up to filesystem root', () => {
+      const root = findGitRoot(tempDir);
+
+      expect(root).toBeNull();
+    });
   });
 
-  test('should parse workspaces from JSON correctly', () => {
-    const jsonPath = path.join(testDir, 'package.json');
-    mkdirSync(testDir, { recursive: true });
-    writeFileSync(
-      jsonPath,
-      JSON.stringify({ workspaces: ['packages/*', 'apps/*'] })
-    );
+  describe('getWorkspacesRawPath', () => {
+    it('parses workspace globs from a JSON file', () => {
+      const jsonPath = path.join(tempDir, 'package.json');
+      writeFileSync(
+        jsonPath,
+        JSON.stringify({ workspaces: ['packages/*', 'apps/*'] })
+      );
 
-    const workspaces = getWorkspacesRawPath(jsonPath, 'json', 'workspaces');
-    expect(workspaces).toEqual(['packages/*', 'apps/*']);
+      expect(getWorkspacesRawPath(jsonPath, 'json', 'workspaces')).toEqual([
+        'packages/*',
+        'apps/*',
+      ]);
+    });
+
+    it('parses package globs from a YAML file', () => {
+      const yamlPath = path.join(tempDir, 'pnpm-workspace.yaml');
+      writeFileSync(yamlPath, 'packages:\n  - "packages/*"\n  - "plugins/*"\n');
+
+      expect(getWorkspacesRawPath(yamlPath, 'yaml', 'packages')).toEqual([
+        'packages/*',
+        'plugins/*',
+      ]);
+    });
+
+    it('returns an empty array when file does not exist or property is missing', () => {
+      expect(
+        getWorkspacesRawPath(path.join(tempDir, 'missing.json'), 'json')
+      ).toEqual([]);
+
+      const jsonPath = path.join(tempDir, 'empty.json');
+      writeFileSync(jsonPath, JSON.stringify({ name: 'no-workspaces' }));
+      expect(getWorkspacesRawPath(jsonPath, 'json', 'workspaces')).toEqual([]);
+    });
+
+    it('throws an error when given an unsupported parser type', () => {
+      const filePath = path.join(tempDir, 'config.txt');
+      writeFileSync(filePath, 'content');
+
+      expect(() => {
+        // @ts-expect-error Testing invalid parser runtime check
+        getWorkspacesRawPath(filePath, 'xml');
+      }).toThrow(/Unsupported parser type: xml/);
+    });
   });
 
-  test('should parse packages from YAML correctly', () => {
-    const yamlPath = path.join(testDir, 'pnpm-workspace.yaml');
-    mkdirSync(testDir, { recursive: true });
-    writeFileSync(yamlPath, 'packages:\n  - "packages/*"\n  - "plugins/*"\n');
+  describe('getScopes', () => {
+    it('discovers all package scopes in the current monorepo', () => {
+      const scopes = getScopes(__dirname);
 
-    const packages = getWorkspacesRawPath(yamlPath, 'yaml', 'packages');
-    expect(packages).toEqual(['packages/*', 'plugins/*']);
-  });
+      expect(scopes).toEqual(
+        expect.arrayContaining([
+          '@spellbookx/recipes',
+          'commitlint-config-spellbookx',
+          'cspell-config-spellbookx',
+          'eslint-plugin-spellbookx',
+          'prettier-config-spellbookx',
+          'spellbookx',
+        ])
+      );
+    });
 
-  test('should throw on unsupported parser', () => {
-    const filePath = path.join(testDir, 'config.txt');
-    writeFileSync(filePath, 'some text');
-    expect(() => {
-      // @ts-expect-error Testing invalid parser
-      getWorkspacesRawPath(filePath, 'xml');
-    }).toThrow(/Unsupported parser type/);
-  });
+    it('discovers scopes from a simulated git repository with workspaces and ignores malformed package.json', () => {
+      mkdirSync(path.join(tempDir, '.git'));
+      writeFileSync(
+        path.join(tempDir, 'package.json'),
+        JSON.stringify({ name: 'root-pkg', workspaces: ['packages/*'] })
+      );
 
-  test('should return scopes including workspace and monorepo packages', () => {
-    const scopes = getScopes();
-    expect(Array.isArray(scopes)).toBe(true);
-    expect(scopes).toContain('commitlint-config-spellbookx');
-    expect(scopes).toContain('cspell-config-spellbookx');
-    expect(scopes).toContain('eslint-plugin-spellbookx');
-    expect(scopes).toContain('prettier-config-spellbookx');
-    expect(scopes).toContain('@spellbookx/recipes');
+      const pkgA = path.join(tempDir, 'packages/pkg-a');
+      const pkgInvalid = path.join(tempDir, 'packages/pkg-invalid');
+      mkdirSync(pkgA, { recursive: true });
+      mkdirSync(pkgInvalid, { recursive: true });
+
+      writeFileSync(
+        path.join(pkgA, 'package.json'),
+        JSON.stringify({ name: '@acme/pkg-a' })
+      );
+      writeFileSync(path.join(pkgInvalid, 'package.json'), '{ invalid json');
+
+      const scopes = getScopes(tempDir);
+
+      expect(scopes).toContain('root-pkg');
+      expect(scopes).toContain('@acme/pkg-a');
+    });
+
+    it('throws a fatal error when invoked outside a git repository', () => {
+      expect(() => getScopes(tempDir)).toThrow('[FATAL] Not a repository.');
+    });
   });
 });

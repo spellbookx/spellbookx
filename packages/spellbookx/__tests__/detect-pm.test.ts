@@ -1,70 +1,62 @@
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { detectPackageManager } from '../src/lib/detect-pm.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const tempDir = path.resolve(__dirname, '../temp-detect-pm');
+describe('spellbookx (detectPackageManager)', () => {
+  let tempDir: string;
 
-describe('detectPackageManager', () => {
-  beforeAll(() => {
-    mkdirSync(tempDir, { recursive: true });
+  beforeEach(() => {
+    tempDir = mkdtempSync(path.join(os.tmpdir(), 'sbx-detect-pm-'));
   });
 
-  afterAll(() => {
+  afterEach(() => {
     rmSync(tempDir, { recursive: true, force: true });
   });
 
-  test('should detect from package.json packageManager field', () => {
-    const caseDir = path.join(tempDir, 'case-pm-field');
-    mkdirSync(caseDir, { recursive: true });
-    writeFileSync(
-      path.join(caseDir, 'package.json'),
-      JSON.stringify({ packageManager: 'bun@1.2.0' })
-    );
+  it.each([
+    ['pnpm@9.0.0', 'pnpm'],
+    ['bun@1.2.0', 'bun'],
+    ['yarn@4.0.0', 'yarn'],
+    ['npm@10.0.0', 'npm'],
+  ] as const)(
+    'detects "%s" from package.json packageManager field as "%s"',
+    (pmField, expected) => {
+      writeFileSync(
+        path.join(tempDir, 'package.json'),
+        JSON.stringify({ packageManager: pmField })
+      );
 
-    expect(detectPackageManager(caseDir)).toBe('bun');
+      expect(detectPackageManager(tempDir)).toBe(expected);
+    }
+  );
+
+  it.each([
+    ['pnpm-lock.yaml', 'pnpm'],
+    ['bun.lock', 'bun'],
+    ['bun.lockb', 'bun'],
+    ['yarn.lock', 'yarn'],
+    ['package-lock.json', 'npm'],
+  ] as const)(
+    'detects package manager from lockfile "%s" as "%s"',
+    (lockfile, expected) => {
+      writeFileSync(path.join(tempDir, lockfile), '');
+
+      expect(detectPackageManager(tempDir)).toBe(expected);
+    }
+  );
+
+  it('falls back to lockfile detection when package.json contains invalid JSON', () => {
+    writeFileSync(path.join(tempDir, 'package.json'), '{ malformed json');
+    writeFileSync(path.join(tempDir, 'yarn.lock'), '');
+
+    expect(detectPackageManager(tempDir)).toBe('yarn');
   });
 
-  test('should detect pnpm from pnpm-lock.yaml', () => {
-    const caseDir = path.join(tempDir, 'case-pnpm');
-    mkdirSync(caseDir, { recursive: true });
-    writeFileSync(path.join(caseDir, 'pnpm-lock.yaml'), '');
-
-    expect(detectPackageManager(caseDir)).toBe('pnpm');
-  });
-
-  test('should detect bun from bun.lockb', () => {
-    const caseDir = path.join(tempDir, 'case-bun');
-    mkdirSync(caseDir, { recursive: true });
-    writeFileSync(path.join(caseDir, 'bun.lockb'), '');
-
-    expect(detectPackageManager(caseDir)).toBe('bun');
-  });
-
-  test('should detect yarn from yarn.lock', () => {
-    const caseDir = path.join(tempDir, 'case-yarn');
-    mkdirSync(caseDir, { recursive: true });
-    writeFileSync(path.join(caseDir, 'yarn.lock'), '');
-
-    expect(detectPackageManager(caseDir)).toBe('yarn');
-  });
-
-  test('should detect npm from package-lock.json', () => {
-    const caseDir = path.join(tempDir, 'case-npm');
-    mkdirSync(caseDir, { recursive: true });
-    writeFileSync(path.join(caseDir, 'package-lock.json'), '');
-
-    expect(detectPackageManager(caseDir)).toBe('npm');
-  });
-
-  test('should default to pnpm when no indicators are present', () => {
-    const caseDir = path.join(tempDir, 'case-empty');
-    mkdirSync(caseDir, { recursive: true });
-
-    expect(detectPackageManager(caseDir)).toBe('pnpm');
+  it('defaults to "pnpm" when no package.json or lockfiles exist', () => {
+    expect(detectPackageManager(tempDir)).toBe('pnpm');
   });
 });

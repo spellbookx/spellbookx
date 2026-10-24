@@ -1,28 +1,25 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { didUpdatePackageJson } from '../src/lib/update-package-json.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const tempDir = path.resolve(__dirname, '../temp-update-package-json');
+describe('spellbookx (didUpdatePackageJson)', () => {
+  let tempDir: string;
 
-describe('didUpdatePackageJson', () => {
-  beforeAll(() => {
-    mkdirSync(tempDir, { recursive: true });
+  beforeEach(() => {
+    tempDir = mkdtempSync(path.join(os.tmpdir(), 'sbx-update-pkg-'));
   });
 
-  afterAll(() => {
+  afterEach(() => {
     rmSync(tempDir, { recursive: true, force: true });
   });
 
-  test('should merge scripts and keep them in alphabetical order', () => {
-    const caseDir = path.join(tempDir, 'case-sort');
-    mkdirSync(caseDir, { recursive: true });
+  it('merges scripts and sorts script keys alphabetically', () => {
     writeFileSync(
-      path.join(caseDir, 'package.json'),
+      path.join(tempDir, 'package.json'),
       JSON.stringify({
         name: 'test-app',
         scripts: {
@@ -33,7 +30,7 @@ describe('didUpdatePackageJson', () => {
     );
 
     const updated = didUpdatePackageJson({
-      cwd: caseDir,
+      cwd: tempDir,
       scripts: {
         lint: 'eslint .',
         check: 'pnpm lint',
@@ -42,18 +39,19 @@ describe('didUpdatePackageJson', () => {
 
     expect(updated).toBe(true);
     const result = JSON.parse(
-      readFileSync(path.join(caseDir, 'package.json'), 'utf8')
+      readFileSync(path.join(tempDir, 'package.json'), 'utf8')
     );
-
-    const scriptKeys = Object.keys(result.scripts);
-    expect(scriptKeys).toEqual(['build', 'check', 'lint', 'test']);
+    expect(Object.keys(result.scripts)).toEqual([
+      'build',
+      'check',
+      'lint',
+      'test',
+    ]);
   });
 
-  test('should merge extra configuration objects recursively', () => {
-    const caseDir = path.join(tempDir, 'case-extra');
-    mkdirSync(caseDir, { recursive: true });
+  it('shallow-merges nested object keys in extra configuration', () => {
     writeFileSync(
-      path.join(caseDir, 'package.json'),
+      path.join(tempDir, 'package.json'),
       JSON.stringify({
         name: 'test-extra',
         config: {
@@ -62,8 +60,8 @@ describe('didUpdatePackageJson', () => {
       })
     );
 
-    didUpdatePackageJson({
-      cwd: caseDir,
+    const updated = didUpdatePackageJson({
+      cwd: tempDir,
       extra: {
         config: {
           commitizen: {
@@ -73,21 +71,32 @@ describe('didUpdatePackageJson', () => {
       },
     });
 
+    expect(updated).toBe(true);
     const result = JSON.parse(
-      readFileSync(path.join(caseDir, 'package.json'), 'utf8')
+      readFileSync(path.join(tempDir, 'package.json'), 'utf8')
     );
-    expect(result.config.existingSetting).toBe(true);
-    expect(result.config.commitizen.path).toBe('cz-git');
+    expect(result.config).toEqual({
+      existingSetting: true,
+      commitizen: {
+        path: 'cz-git',
+      },
+    });
   });
 
-  test('should return false if package.json does not exist', () => {
-    const emptyDir = path.join(tempDir, 'case-none');
-    mkdirSync(emptyDir, { recursive: true });
+  it('returns false when package.json is missing or contains invalid JSON', () => {
+    expect(
+      didUpdatePackageJson({
+        cwd: tempDir,
+        scripts: { test: 'vitest' },
+      })
+    ).toBe(false);
 
-    const updated = didUpdatePackageJson({
-      cwd: emptyDir,
-      scripts: { test: 'vitest' },
-    });
-    expect(updated).toBe(false);
+    writeFileSync(path.join(tempDir, 'package.json'), '{ invalid json');
+    expect(
+      didUpdatePackageJson({
+        cwd: tempDir,
+        scripts: { test: 'vitest' },
+      })
+    ).toBe(false);
   });
 });

@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import {
+import defaultIgnores, {
   all,
   core,
   go,
@@ -16,48 +16,96 @@ import {
 } from '../src/ignores/index.js';
 
 describe('@spellbookx/recipes/ignores', () => {
-  test('ignorePaths should contain standard essential monorepo patterns', () => {
-    expect(ignorePaths).toContain('**/node_modules/**');
-    expect(ignorePaths).toContain('**/dist/**');
-    expect(ignorePaths).toContain('**/.turbo/**');
-    expect(ignorePaths).toContain('**/pnpm-lock.yaml');
-    expect(ignorePaths).toContain('**/.git/**');
-    expect(ignorePaths).toContain('**/.cache/**');
-    expect(ignorePaths.length).toBeGreaterThan(0);
+  it('exports ignores as both default and named export', () => {
+    expect(defaultIgnores).toBe(ignores);
+    expect(ignorePaths).toEqual(all);
   });
 
-  test('ignores dictionary should contain expected ignore groups', () => {
-    expect(ignores.core).toBe(core);
-    expect(ignores.node).toBe(node);
-    expect(ignores.lockFiles).toBe(lockFiles);
-    expect(ignores.rust).toBe(rust);
-    expect(ignores.go).toBe(go);
-    expect(ignores.python).toBe(python);
-    expect(ignores.toolchains).toBe(toolchains);
-    expect(ignores.windows).toBe(windows);
-    expect(ignores.misc).toBe(misc);
+  it.each([
+    [
+      'core',
+      core,
+      ['**/*LICENSE*', '**/CHANGELOG.md', '**/.cache/**', '**/.DS_Store'],
+    ],
+    [
+      'node',
+      node,
+      [
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/build/**',
+        '**/.turbo/**',
+        '**/.next/**',
+      ],
+    ],
+    [
+      'lockFiles',
+      lockFiles,
+      [
+        '**/package-lock.json',
+        '**/pnpm-lock.yaml',
+        '**/yarn.lock',
+        '**/bun.lockb',
+      ],
+    ],
+    ['rust', rust, ['**/target/**', '**/.cargo/**', '**/Cargo.lock']],
+    ['go', go, ['**/go.sum', '**/go.work', '**/vendor/**']],
+    [
+      'python',
+      python,
+      ['**/__pycache__/**', '**/.venv/**', '**/.pytest_cache/**'],
+    ],
+    [
+      'toolchains',
+      toolchains,
+      ['**/.git/**', '**/.vscode/**', '**/.gradle/**', '**/.changeset/**'],
+    ],
+    [
+      'windows',
+      windows,
+      ['**/Thumbs.db', '**/desktop.ini', '**/$RECYCLE.BIN/**'],
+    ],
+    ['misc', misc, ['**/connect.lock', '**/*.hbs', '**/*.mustache']],
+  ] as const)(
+    'category "%s" contains expected glob patterns',
+    (key, group, expectedPatterns) => {
+      expect(ignores[key]).toBe(group);
+      expect(Array.isArray(group)).toBe(true);
+      expect(group.length).toBeGreaterThan(0);
+
+      for (const pattern of expectedPatterns) {
+        expect(group).toContain(pattern);
+      }
+    }
+  );
+
+  it('aggregates all category groups into "all" and "ignorePaths"', () => {
     expect(ignores.all).toBe(all);
-  });
+    expect(all.length).toBe(
+      core.length +
+        node.length +
+        lockFiles.length +
+        rust.length +
+        go.length +
+        python.length +
+        toolchains.length +
+        windows.length +
+        misc.length
+    );
 
-  test('node group should contain standard build output directories', () => {
-    expect(node).toContain('**/node_modules/**');
-    expect(node).toContain('**/dist/**');
-    expect(node).toContain('**/build/**');
-    expect(node).toContain('**/.turbo/**');
-    expect(node).toContain('**/.next/**');
-  });
-
-  test('lockFiles group should contain common package manager lock files', () => {
-    expect(lockFiles).toContain('**/package-lock.json');
-    expect(lockFiles).toContain('**/pnpm-lock.yaml');
-    expect(lockFiles).toContain('**/yarn.lock');
-    expect(lockFiles).toContain('**/bun.lockb');
-  });
-
-  test('all group should contain patterns from multiple categories', () => {
-    expect(all.length).toBeGreaterThan(node.length);
-    expect(all).toContain('**/node_modules/**');
-    expect(all).toContain('**/Cargo.lock');
-    expect(all).toContain('**/Thumbs.db');
+    for (const pattern of [
+      ...core,
+      ...node,
+      ...lockFiles,
+      ...rust,
+      ...go,
+      ...python,
+      ...toolchains,
+      ...windows,
+      ...misc,
+    ]) {
+      expect(all).toContain(pattern);
+      expect(ignorePaths).toContain(pattern);
+    }
   });
 });

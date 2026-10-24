@@ -1,44 +1,37 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import defaultWords, { words } from '../src/constants/words.js';
 
-describe('cspell-config-spellbookx - words', () => {
-  test('should export words as named and default exports', () => {
-    expect(words).toBeDefined();
-    expect(defaultWords).toBeDefined();
-    expect(words).toBe(defaultWords);
+describe('cspell-config-spellbookx (words)', () => {
+  it('exports words as both default and named export', () => {
+    expect(defaultWords).toBe(words);
     expect(Array.isArray(words)).toBe(true);
     expect(words.length).toBeGreaterThan(0);
   });
 
-  test('should contain valid, lowercase, non-empty, and unique words', () => {
-    const seen = new Set<string>();
+  it('maintains normalized, lowercase, non-empty, and unique words', () => {
+    const uniqueWords = new Set(words);
+    expect(uniqueWords.size).toBe(words.length);
 
     for (const word of words) {
-      expect(typeof word).toBe('string');
+      expect(word).toBeTypeOf('string');
       expect(word.length).toBeGreaterThan(0);
       expect(word).toBe(word.toLowerCase());
       expect(word.trim()).toBe(word);
-      expect(seen.has(word)).toBe(false);
-      seen.add(word);
     }
   });
 
-  test('should contain essential ecosystem words', () => {
-    const requiredWords = [
-      'spellbookx',
-      'dcdavidev',
-      'bunfig',
-      'czrc',
-      'vuoto',
-      'esmock',
-      'shadcn',
-      'dotenvx',
-      'commitlintrc',
-    ];
-
-    for (const required of requiredWords) {
-      expect(words).toContain(required);
-    }
+  it.each([
+    'spellbookx',
+    'dcdavidev',
+    'bunfig',
+    'czrc',
+    'vuoto',
+    'esmock',
+    'shadcn',
+    'dotenvx',
+    'commitlintrc',
+  ])('includes ecosystem term "%s"', (term) => {
+    expect(words).toContain(term);
   });
 });

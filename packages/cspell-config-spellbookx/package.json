@@ -55,7 +55,7 @@
   "scripts": {
     "build": "rolldown -c && tsc",
     "release": "pnpm publish --access public --no-git-checks",
-    "test": "vitest run"
+    "test": "vitest run --no-fsModuleCache"
   },
   "dependencies": {
     "@cspell/cspell-types": "^10.4.0",

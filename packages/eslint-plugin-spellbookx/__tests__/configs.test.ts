@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { configAll } from '../src/configs/all.js';
 import { configAstro } from '../src/configs/astro.js';
@@ -18,80 +18,77 @@ import { configSvelte } from '../src/configs/svelte.js';
 import { configVuoto } from '../src/configs/vuoto.js';
 
 describe('eslint-plugin-spellbookx (configs)', () => {
-  test('all 16 configuration objects should be arrays of configs', () => {
-    const allConfigs = [
-      configAll,
-      configAstro,
-      configBase,
-      configCspell,
-      configIgnores,
-      configJavascript,
-      configJson,
-      configMarkdown,
-      configNode,
-      configPrettier,
-      configReact,
-      configRecommended,
-      configRecommendedSpellcheck,
-      configStrict,
-      configSvelte,
-      configVuoto,
-    ];
-
-    for (const conf of allConfigs) {
-      expect(Array.isArray(conf)).toBe(true);
-      expect(conf.length).toBeGreaterThan(0);
-    }
+  it.each([
+    ['all', configAll],
+    ['astro', configAstro],
+    ['base', configBase],
+    ['cspell', configCspell],
+    ['ignores', configIgnores],
+    ['javascript', configJavascript],
+    ['json', configJson],
+    ['markdown', configMarkdown],
+    ['node', configNode],
+    ['prettier', configPrettier],
+    ['react', configReact],
+    ['recommended', configRecommended],
+    ['recommended-spellcheck', configRecommendedSpellcheck],
+    ['strict', configStrict],
+    ['svelte', configSvelte],
+    ['vuoto', configVuoto],
+  ] as const)('preset "%s" is a non-empty flat config array', (_name, conf) => {
+    expect(Array.isArray(conf)).toBe(true);
+    expect(conf.length).toBeGreaterThan(0);
   });
 
-  test('configIgnores should contain standard monorepo ignore patterns', () => {
+  it('includes standard monorepo ignore globs in configIgnores', () => {
     const ignoreEntry = configIgnores.find((entry) => entry.ignores);
     expect(ignoreEntry?.ignores).toBeDefined();
-    const ignores = ignoreEntry?.ignores as string[];
-    expect(ignores).toContain('**/node_modules/**');
-    expect(ignores).toContain('**/dist/**');
-    expect(ignores).toContain('**/.turbo/**');
-    expect(ignores).toContain('**/.git/**');
+    expect(ignoreEntry?.ignores).toEqual(
+      expect.arrayContaining([
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/.turbo/**',
+        '**/.git/**',
+      ])
+    );
   });
 
-  test('configReact should target TSX and JSX files', () => {
+  it('targets TSX and JSX files in configReact', () => {
     const reactEntry = configReact.find((entry) => entry.files);
-    expect(reactEntry?.files).toBeDefined();
-    const files = reactEntry?.files as string[];
-    expect(files).toContain('**/*.{tsx,jsx}');
+    expect(reactEntry?.files).toContain('**/*.{tsx,jsx}');
   });
 
-  test('configAstro should configure astro files and processor', () => {
-    const hasAstroPattern = configAstro.some(
+  it('targets .astro files in configAstro', () => {
+    const hasAstroFiles = configAstro.some(
       (entry) =>
         Array.isArray(entry.files) &&
         entry.files.some((f) => typeof f === 'string' && f.includes('astro'))
     );
-    expect(hasAstroPattern).toBe(true);
+    expect(hasAstroFiles).toBe(true);
   });
 
-  test('configSvelte should configure svelte files', () => {
-    const hasSveltePattern = configSvelte.some(
+  it('targets .svelte files in configSvelte', () => {
+    const hasSvelteFiles = configSvelte.some(
       (entry) =>
         Array.isArray(entry.files) &&
         entry.files.some((f) => typeof f === 'string' && f.includes('svelte'))
     );
-    expect(hasSveltePattern).toBe(true);
+    expect(hasSvelteFiles).toBe(true);
   });
 
-  test('configStrict should contain typescript-eslint strict rules', () => {
-    const totalRules = configStrict.flatMap((c) => Object.keys(c.rules || {}));
+  it('configures typescript-eslint strict rules in configStrict', () => {
+    const totalRules = configStrict.flatMap((c) => Object.keys(c.rules ?? {}));
     expect(totalRules.length).toBeGreaterThan(20);
   });
 
-  test('configBase should compose ignores, javascript, and prettier', () => {
-    expect(configBase.length).toBe(
+  it('composes ignores, javascript, and prettier in configBase', () => {
+    expect(configBase).toHaveLength(
       configIgnores.length + configJavascript.length + configPrettier.length
     );
   });
 
-  test('configNode should compose ignores, javascript, json, vuoto, and prettier', () => {
-    expect(configNode.length).toBe(
+  it('composes ignores, javascript, json, vuoto, and prettier in configNode', () => {
+    expect(configNode).toHaveLength(
       configIgnores.length +
         configJavascript.length +
         configJson.length +
@@ -100,7 +97,7 @@ describe('eslint-plugin-spellbookx (configs)', () => {
     );
   });
 
-  test('configAll should bundle all individual configurations', () => {
+  it('bundles all presets in configAll', () => {
     expect(configAll.length).toBeGreaterThanOrEqual(10);
   });
 });
