@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "dropdx": {
+      "source": "dcdavidev/dropdx",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/dropdx/SKILL.md",
+      "computedHash": "dfac88eeb5584f96bae468d1686a8bc3c3755cb559ccf69b9cfe2b1d46e01263"
+    },
     "eslint-plugin-vuoto": {
       "source": "dcdavidev/vuoto",
       "sourceType": "github",
