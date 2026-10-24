@@ -1,6 +1,6 @@
 {
   "name": "commitlint-config-spellbookx",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": false,
   "description": "A shareable Commitlint configuration for enforcing conventional commits.",
   "keywords": [

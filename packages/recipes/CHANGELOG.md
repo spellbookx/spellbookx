@@ -1,5 +1,11 @@
 # @spellbookx/recipes
 
+## 1.1.2
+
+### Patch Changes
+
+- chore(release): automated patch release bump
+
 ## 1.1.1
 
 ### Patch Changes
